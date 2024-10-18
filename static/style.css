@@ -1,0 +1,914 @@
+body {
+    margin: 0px;
+    background-color: #eaeaea;
+}
+
+  h2 {
+        color: #555;
+        font-size: 24px; /* Tăng kích thước chữ cho tiêu đề nhỏ hơn */
+        margin-top: 35px; /* Thêm khoảng cách trên tiêu đề */
+    }
+
+    p {
+        font-size: 16px;
+        line-height: 1.8; /* Tăng chiều cao dòng để dễ đọc hơn */
+        color: #666;
+        margin-bottom: 15px; /* Thêm khoảng cách dưới đoạn văn */
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    li {
+        background: #f9f9f9;
+        margin: 20px 0; /* Tăng khoảng cách giữa các mục */
+        padding: 25px; /* Tăng padding cho mục */
+        border-radius: 10px; /* Làm tròn các góc hơn */
+        box-shadow: 0 2px 15px #ddd;
+        transition: transform 0.3s, box-shadow 0.3s; /* Thêm hiệu ứng chuyển động */
+    }
+
+    li:hover {
+        transform: translateY(-3px); /* Hiệu ứng di chuyển nhẹ khi di chuột */
+        box-shadow: 0 2px 15px #007bff; /* Tăng cường độ bóng khi di chuột */
+    }
+
+    strong {
+        color: #333;
+    }
+
+    hr {
+        border: 0;
+        height: 1px;
+        background: #ccc;
+        margin: 25px 0; /* Tăng khoảng cách cho đường ngang */
+    }
+
+    a {
+        display: inline-block;
+        margin-top: 20px; /* Giảm khoảng cách cho liên kết */
+        padding: 12px 20px; /* Tăng kích thước cho nút */
+        background-color: #44a8ff;
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s, transform 0.3s; /* Thêm hiệu ứng chuyển động cho màu nền và di chuyển */
+    }
+
+    a:hover {
+        background-color: #007bff;
+        /* transform: translateY(-1px); Hiệu ứng di chuyển nhẹ khi di chuột */
+        text-decoration: none;
+        transform: scale(1.1);
+        color: #ffffff;
+    }
+
+/* Chân trang */
+footer {
+    background-color: rgba(51, 51, 51, 1); /* Màu nền cho footer */
+    color: white;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-top: 1px solid #eaeaea;
+    border-bottom-left-radius: 1px solid #eaeaea;
+}
+
+/* footer a:hover {
+        background-color: rgba(220, 100, 200) !important;
+    }; */
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 80px;
+    margin: 0 auto; /* Giữ nội dung căn giữa */
+    /* border-top: 1px solid #888888; */
+    border-bottom: 1px solid #888888;
+}
+
+.footer-content2 {
+    display: flex; /* Sử dụng Flexbox để căn giữa */
+    justify-content: center; /* Căn giữa theo chiều ngang */
+    align-items: center; /* Căn giữa theo chiều dọc nếu cần */
+    width: 100%; /* Chiều rộng 100% để sử dụng toàn bộ không gian */
+    height: 80px; /* Chiều cao của footer-content2 */
+    margin: 0 auto; /* Giữ nội dung căn giữa */
+    border-bottom: 1px solid #888888;
+}
+
+.footer-left img {
+    padding-left: 50px;
+    height: 70px;
+    width: 70px;
+}
+
+.footer-right {
+    display: flex;
+    align-items: center;
+    top: -15px;
+    margin-right:10px;
+}
+
+.socials a {
+    margin-right: 50px;
+    margin-top: 0px; /* Khoảng cách giữa các icon mạng xã hội */
+    font-size: 15px; /* Kích thước icon */
+    color: #333; /* Màu icon */
+    transition: color 0.3s ease;
+    top: -20px;
+}
+
+.socials a:hover {
+    color: #bebebe; /* Màu icon khi hover */
+}
+
+.footer-text {
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 15px;
+    margin-top: 20px;
+    font-size: 15px;
+    color: #bebebe;
+}
+
+.footer-text p {
+    margin: 5px 0;
+}
+
+/* Về đầu trang */
+#backToTopBtn {
+    display: none; /* Ẩn nút khi chưa cuộn xuống */
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+    z-index: 99;
+    font-size: 38px;
+    background-color: #007bff;
+    color: #333;
+    border: none;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    border-radius: 50%; /* Biến thành hình tròn */
+    text-align: center;
+    line-height: 50px;
+}
+
+#backToTopBtn:hover {
+    background-color: #333;
+    color: #007bff;
+    transform: scale(1.1);
+}
+
+
+/* Trang chủ */
+.home {
+    h1 {
+        text-align: center;
+        color: #333;
+        font-size: 38px; /* Tăng kích thước chữ cho tiêu đề lớn */
+        margin-bottom: 25px; /* Thêm khoảng cách dưới tiêu đề */
+    }
+
+    .background-image {
+        position: relative; /* Để có thể định vị các phần tử con */
+        overflow: hidden; /* Giúp ẩn các phần tử vượt ra ngoài khung */
+        background-size: contain; /* Đảm bảo ảnh giữ nguyên tỷ lệ và không bị méo */
+        background-position: center; /* Đặt ảnh ở giữa */
+        background-attachment: fixed; /* Cố định ảnh nền khi cuộn */
+        height: 100vh; /* Chiều cao bằng 100% màn hình */
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Căn giữa nội dung theo chiều dọc */
+        align-items: center; /* Căn giữa nội dung theo chiều ngang */
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    }
+
+    .background-image img {
+        position: absolute; /* Đặt hình ảnh ở vị trí tuyệt đối */
+        top: 0;
+        left: 0;
+        width: 100%; /* Đảm bảo ảnh rộng 100% */
+        height: 100%; /* Đảm bảo ảnh cao 100% */
+        object-fit: cover; /* Đảm bảo ảnh lấp đầy không gian mà không bị biến dạng */
+        z-index: -1; /* Đặt hình ảnh dưới nội dung */
+        opacity: 0.82; /* Giảm độ rõ của hình ảnh, bạn có thể điều chỉnh giá trị này */
+    }
+    
+    .container1 {
+        top: 40px;
+        position: relative; /* Để nội dung nằm trên ảnh */
+        z-index: 1; /* Đảm bảo nội dung nằm trên hình ảnh */
+        padding: 20px; /* Thêm padding cho nội dung */
+        width: 50%;
+    }
+
+    .head {
+        position: absolute; /* Để định vị thanh đầu trang trên ảnh nền */
+        height: 7%;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding: 10px; /* Thêm khoảng cách cho thanh đầu trang */
+        background-color: rgba(51, 51, 51, 0.95); /* Nền màu trắng với độ trong suốt */
+        z-index: 2; /* Đặt trên hình ảnh nền */
+        text-align: center; /* Căn giữa nội dung */
+        /* border-top: 3px solid white; */
+        border-bottom: 3px solid white;
+        /* border-radius: 5px; */
+    }
+
+    .head nav ul {
+        list-style: none;
+    }
+
+    .head ul {
+        margin: 5px;
+        padding: 2px;
+        border: 5px;
+    }
+
+    .head nav li {
+        display: inline;
+        margin: 10px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        padding-left:10px;
+        padding-right:10px;
+        border: 10px;
+        left: 80px;
+        top: -10px;
+    }
+
+    .head nav ul li a {
+        text-decoration: none;
+        /* color: #007bff; */
+    }
+
+    .head nav ul li a:hover {
+        text-decoration: underline;
+        text-decoration: none;
+    }
+
+    .brand {
+        position: absolute; /* Để định vị tên thương hiệu */
+        top: -18px; /* Khoảng cách từ trên */
+        left: 80px; /* Khoảng cách từ bên trái */
+        font-size: 1.6rem; /* Kích thước chữ cho thương hiệu */
+        font-weight: bold; /* Làm chữ đậm */
+        color: #ffffff; /* Màu chữ của thương hiệu */
+        z-index: 2; /* Đặt trên hình ảnh nền */
+        text-shadow: 2px 2px 2px rgba(30, 83, 255, 0.7);
+    }
+
+    .brand:hover {
+        /* color: #444; Màu sắc khi rê chuột */
+        transform: scale(1.05); /* Phóng to chữ khi rê chuột */
+    }
+    
+    nav ul li a.highlight {
+        font-size: 1rem; /* Tăng kích thước chữ cho thẻ Home */
+        font-weight: bold; /* Đậm chữ */
+        color: white; /* Màu chữ khác cho thẻ Home */
+        /* border-bottom: 1px solid #007bff; Thêm đường viền bên dưới */
+        padding: 20px;
+    }
+
+    .main {
+        font-size: 38px;
+        color: white;
+        text-shadow: 2px 2px 2px rgba(37, 36, 36, 0.7);
+    }
+
+    .search-container {
+        display: flex; /* Sử dụng Flexbox để căn chỉnh ô nhập và nút tìm kiếm */
+        align-items: center; /* Căn giữa theo chiều dọc */
+        margin-top: 5px; /* Thêm khoảng cách trên */
+    }
+    
+    .search-container2 {
+        display: flex; /* Sử dụng Flexbox để căn chỉnh ô nhập và nút tìm kiếm */
+        align-items: center; /* Căn giữa theo chiều dọc */
+        margin-top: 20px; /* Thêm khoảng cách trên */
+    }
+
+    #input1 {
+        flex: 1; /* Để ô nhập chiếm toàn bộ không gian còn lại */
+        padding: 10px; /* Thêm padding cho ô nhập */
+        border: 1px solid #ccc; /* Đường viền cho ô nhập */
+        border-radius: 5px; /* Bo tròn góc cho ô nhập */
+        font-size: 16px; /* Kích thước chữ cho ô nhập */
+        margin-right: 10px; /* Khoảng cách giữa ô nhập và nút tìm kiếm */
+        height: 15px;
+    }
+
+    #input2 {
+        flex: 1; /* Để ô nhập chiếm toàn bộ không gian còn lại */
+        padding: 10px; /* Thêm padding cho ô nhập */
+        border: 1px solid #ccc; /* Đường viền cho ô nhập */
+        border-radius: 5px; /* Bo tròn góc cho ô nhập */
+        font-size: 16px; /* Kích thước chữ cho ô nhập */
+        margin-right: 10px; /* Khoảng cách giữa ô nhập và nút tìm kiếm */
+        height: 60px;
+    }
+    
+    .search-button {
+        background-color: #007bff; /* Màu nền cho nút tìm kiếm */
+        color: white; /* Màu chữ cho nút */
+        border: none; /* Xóa đường viền */
+        border-radius: 5px; /* Bo tròn góc cho nút */
+        padding: 10px 15px; /* Padding cho nút tìm kiếm */
+        font-size: 16px; /* Kích thước chữ cho nút */
+        cursor: pointer; /* Thay đổi con trỏ khi di chuột qua nút */
+        transition: background-color 0.5s; /* Hiệu ứng chuyển màu nền khi di chuột */
+    }
+    
+    .search-button:hover {
+        background-color: #005aa8; /* Màu nền khi di chuột */
+        transform: scale(1.1);
+    }
+
+    .search-button2 {
+        background-color: #007bff; /* Màu nền cho nút tìm kiếm */
+        color: white; /* Màu chữ cho nút */
+        border: none; /* Xóa đường viền */
+        border-radius: 5px; /* Bo tròn góc cho nút */
+        padding: 10px 15px; /* Padding cho nút tìm kiếm */
+        font-size: 40px; /* Kích thước chữ cho nút */
+        cursor: pointer; /* Thay đổi con trỏ khi di chuột qua nút */
+        transition: background-color 0.5s; /* Hiệu ứng chuyển màu nền khi di chuột */
+    }
+
+    .search-button2:hover {
+        background-color: #005aa8; /* Màu nền khi di chuột */
+        transform: scale(1.1);
+    }
+
+    .search-container3 {
+        display: flex; /* Sử dụng Flexbox để căn chỉnh ô nhập và nút tìm kiếm */
+        flex-direction: column; /* Sắp xếp theo chiều dọc */
+        align-items: center; /* Căn giữa theo chiều ngang */
+        margin-top: 5px; /* Thêm khoảng cách trên */
+    }
+    
+    .search-button-both {
+        margin-top: 10px;              /* Khoảng cách trên nút */
+        text-align: center;             /* Căn giữa chữ trong nút */
+        background-color: #007bff;     /* Màu nền cho nút tìm kiếm */
+        color: white;                   /* Màu chữ cho nút */
+        border: none;                   /* Xóa đường viền */
+        border-radius: 5px;            /* Bo tròn góc cho nút */
+        padding: 10px 15px;            /* Padding cho nút tìm kiếm */
+        font-size: 20px;                /* Kích thước chữ cho nút */
+        cursor: pointer;                /* Thay đổi con trỏ khi di chuột qua nút */
+        transition: background-color 0.5s; /* Hiệu ứng chuyển màu nền khi di chuột */
+    }
+    
+    /* Hiệu ứng hover cho nút */
+    .search-button-both:hover {
+        background-color: #0056b3;     /* Màu nền khi hover */
+    }    
+
+    .toggle-button {
+        font-size: 16px;
+        background-color: #f0f0f0;
+        color: #007bff;
+        border: 1px solid #007bff;
+        border-radius: 5px;
+        padding: 10px 15px;
+        cursor: pointer;
+        position: absolute; /* Đặt vị trí tuyệt đối */
+        bottom: 20px; /* Cách đáy phần tử chứa 30px */
+        left: 50%; /* Căn giữa */
+        transform: translateX(-50%); /* Căn giữa hoàn hảo */
+        z-index: 1000; /* Đảm bảo nút nằm trên các thành phần khác */
+    }
+
+    .toggle-button:hover {
+        background-color: #007bff; /* Màu nền khi di chuột */
+        color: white; /* Màu chữ khi di chuột */
+    }
+
+    .toggle {
+        font-size: 17px;
+        color: #eaeaea;
+        padding: 10px 15px;
+        cursor: pointer;
+        position: absolute; /* Đặt vị trí tuyệt đối */
+        bottom: 40px; /* Cách đáy phần tử chứa 30px */
+        left: 50%; /* Căn giữa */
+        transform: translateX(-49%); /* Căn giữa hoàn hảo */
+        z-index: 1000; /* Đảm bảo nút nằm trên các thành phần khác */
+    }
+}
+
+/* Trang Kết quả tìm */
+.result {
+    h1 {
+        text-align: center;
+        color: #333;
+        font-size: 38px; /* Tăng kích thước chữ cho tiêu đề lớn */
+        margin-bottom: 25px; /* Thêm khoảng cách dưới tiêu đề */
+    }
+
+    .container1 {
+        top: 5px;
+        position: relative; /* Để nội dung nằm trên ảnh */
+        z-index: 1; /* Đảm bảo nội dung nằm trên hình ảnh */
+        padding: 20px; /* Thêm padding cho nội dung */
+        width: 50%;
+    }
+
+    .containers {
+        padding: 75px 50px 10px 50px;
+        border: 1px solid #9b9b9b;
+    }
+
+    .head {
+        position: absolute; /* Để định vị thanh đầu trang trên ảnh nền */
+        height: 7%;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding: 10px; /* Thêm khoảng cách cho thanh đầu trang */
+        background-color: rgba(51, 51, 51, 1); /* Nền màu trắng với độ trong suốt */
+        z-index: 2; /* Đặt trên hình ảnh nền */
+        text-align: center; /* Căn giữa nội dung */
+        /* border-top: 3px solid white; */
+        border-bottom: 3px solid white;
+    }
+    
+    .head nav ul {
+        list-style: none;
+        padding-top: 9px;
+    }
+
+    .head ul {
+        margin: 5px;
+        padding: 2px;
+        border: 5px;
+    }
+
+    .head nav li {
+        display: inline;
+        margin: 10px;
+        padding-top: 20px;
+        padding-bottom: 22px;
+        padding-left:10px;
+        padding-right:10px;
+        border: 10px;
+        left: 80px;
+        top: 10px;
+    }
+
+    .head nav ul li a {
+        text-decoration: none;
+        /* color: #007bff; */
+    }
+
+    .head nav ul li a:hover {
+        text-decoration: underline;
+        text-decoration: none;
+    }
+
+    .brand {
+        position: absolute; /* Để định vị tên thương hiệu */
+        top: -18px; /* Khoảng cách từ trên */
+        left: 80px; /* Khoảng cách từ bên trái */
+        font-size: 1.6rem; /* Kích thước chữ cho thương hiệu */
+        font-weight: bold; /* Làm chữ đậm */
+        color: #ffffff; /* Màu chữ của thương hiệu */
+        z-index: 2; /* Đặt trên hình ảnh nền */
+        text-shadow: 2px 2px 2px rgba(30, 83, 255, 0.7);
+    }
+
+    .brand:hover {
+        /* color: #444; Màu sắc khi rê chuột */
+        transform: scale(1.1); /* Phóng to chữ khi rê chuột */
+    }
+    
+    nav ul li a.highlight {
+        font-size: 0.9rem; /* Tăng kích thước chữ cho thẻ Home */
+        font-weight: bold; /* Đậm chữ */
+        color: white; /* Màu chữ khác cho thẻ Home */
+        /* border-bottom: 1px solid #007bff; Thêm đường viền bên dưới */
+        padding: 20px;
+    }
+
+    .main {
+        font-size: 38px;
+        color: white;
+        text-shadow: 2px 2px 2px rgba(37, 36, 36, 0.7);
+    }
+
+    .search-container {
+        display: flex; /* Sử dụng Flexbox để căn chỉnh ô nhập và nút tìm kiếm */
+        align-items: center; /* Căn giữa theo chiều dọc */
+        margin: 40px 300px 20px 300px; /* Thêm khoảng cách trên */
+    }
+    
+    #input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+        margin-right: 10px;
+    }
+    
+    .search-button {
+        background-color: #007bff; /* Màu nền cho nút tìm kiếm */
+        color: white; /* Màu chữ cho nút */
+        border: none; /* Xóa đường viền */
+        border-radius: 5px; /* Bo tròn góc cho nút */
+        padding: 10px 15px;
+        font-size: 17px; /* Kích thước chữ cho nút */
+        cursor: pointer; /* Thay đổi con trỏ khi di chuột qua nút */
+        transition: background-color 0.5s; /* Hiệu ứng chuyển màu nền khi di chuột */
+    }
+    
+    .search-button:hover {
+        background-color: #005aa8; /* Màu nền khi di chuột */
+        color: rgba(51, 51, 51, 1);
+        /* transform: scale(1.05);
+        border: 2px solid #007bff; */
+    }
+
+    .main-container {
+        display: flex;
+        justify-content: space-between;
+        padding: 20px 20px 20px 30px;
+    }
+
+    /* Cột bên trái cho bộ lọc */
+    .filter-column {
+        width: 30%;
+        background-color: #f9f9f9;
+        padding: 10px 20px 5px 20px;
+        border-right: 1px solid #ddd;
+        border-radius: 10px;
+        height: 80%;
+    }
+
+    /* Cột bên phải cho kết quả */
+    .result-column {
+        width: 65%;
+        padding: 10px 20px 20px 20px;
+    }
+
+    /* Phong cách cho danh sách lọc */
+    .filter-list {
+        list-style-type: none;
+        padding: 0;
+        height: auto;
+    }
+
+    .filter-list li {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        height: auto;
+        max-height: 300px;
+    }
+
+    /* Phong cách cho ô input và nút xóa */
+    .input-wrapper {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+        padding-top: 7px;
+        height: 80px;
+    }
+
+    .input-box {
+        display: flex;
+        align-items: center;
+        border: 1px solid #ccc; /* Khung bao */
+        padding: 5px;
+        border-radius: 4px;
+        width: 100%; /* Chiều rộng khung */
+        box-sizing: border-box;
+        height: 100%;
+    }
+
+    #search_terms {
+        flex-grow: 1;
+        border: none;
+        outline: none;
+        padding: 5px;
+        min-width: 200px; /* Chiều rộng tối thiểu */
+        width: auto;
+    }
+
+    .clear-btn {
+        cursor: pointer;
+        color: gray;
+        font-size: 18px;
+        margin-left: 10px; /* Khoảng cách giữa input và icon thùng rác */
+    }
+
+    .clear-btn:hover {
+        color: black;
+    }
+
+    .fa-trash-can {
+        font-size: 16px; /* Kích thước icon thùng rác */
+    }
+
+    .filter-button {
+        display: block; /* Đặt button thành block để có thể căn giữa */
+        text-align: center; /* Căn giữa văn bản bên trong button */
+        width: 60%; /* Chiều rộng của button */
+        min-height: 40px;
+        font-size: 14px; /* Kích thước font chữ */
+        margin: 20px auto; /* Căn giữa button và thêm khoảng cách trên/dưới */
+        padding: 5px; /* Padding bên trong button */
+        border: 1px solid #007bff; /* Đường viền */
+        border-radius: 3px; /* Bo góc */
+        background-color: #007bff; /* Màu nền */
+        color: white; /* Màu chữ bên trong button */
+        cursor: pointer; /* Hiển thị con trỏ chuột khi hover */
+    }
+    
+    .filter-button:hover {
+        background-color: #0056b3; /* Màu nền khi hover */
+    }
+    
+
+    /* Phong cách cho phần kết quả */
+    .result-item {
+        margin-bottom: 20px;
+        border-bottom: 1px solid #ddd;
+        padding-top: 8px;
+        padding-bottom: 20px;
+    }
+
+    .description {
+        display: -webkit-box;
+        display: box; /* Standard property for newer browsers */
+        -webkit-line-clamp: 5; /* WebKit-based browsers */
+        line-clamp: 5; /* Standard property */
+        -webkit-box-orient: vertical;
+        box-orient: vertical; /* Standard property */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.4;
+        max-height: calc(1.6em * 5); /* Limit height for 3 lines */
+    }
+
+    .no-style {
+        text-decoration: none; /* Tắt gạch chân */
+        color: inherit;       /* Sử dụng màu sắc của văn bản chứa */
+        background: none;     /* Không có nền */
+        font-size: inherit;   /* Giữ nguyên kích thước chữ */
+        padding-bottom: 20px;           /* Đặt padding về 0 để không có không gian thêm */
+        margin: 0;            /* Đặt margin về 0 để không có không gian thêm */
+    }
+    
+    .no-style:hover {
+        color: inherit;       /* Giữ nguyên màu sắc khi hover */
+        background: none;     /* Giữ nguyên nền khi hover */
+        text-decoration: none; /* Giữ nguyên trạng thái không gạch chân */
+        transition: none;     /* Tắt hiệu ứng chuyển tiếp */
+        transform: none;      /* Tắt hiệu ứng phóng to hoặc thay đổi kích thước */
+    }
+}
+
+/* Trang Kết quả tìm */
+.result {
+    h1 {
+        text-align: center;
+        color: #333;
+        font-size: 38px; /* Tăng kích thước chữ cho tiêu đề lớn */
+        margin-bottom: 25px; /* Thêm khoảng cách dưới tiêu đề */
+    }
+
+    .container1 {
+        top: 5px;
+        position: relative; /* Để nội dung nằm trên ảnh */
+        z-index: 1; /* Đảm bảo nội dung nằm trên hình ảnh */
+        padding: 20px; /* Thêm padding cho nội dung */
+        width: 50%;
+    }
+
+    .containers2 {
+        padding: 10px 80px;
+        border-top: 1px solid #9b9b9b;
+        border-bottom: 2px solid #9b9b9b;
+        position: relative; /* Đặt vị trí tương đối cho phần tử cha */
+        background-color:#6bbaff;
+    }
+
+    .head {
+        position: absolute; /* Để định vị thanh đầu trang trên ảnh nền */
+        height: 7%;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding: 10px; /* Thêm khoảng cách cho thanh đầu trang */
+        background-color: rgba(51, 51, 51, 1); /* Nền màu trắng với độ trong suốt */
+        z-index: 2; /* Đặt trên hình ảnh nền */
+        text-align: center; /* Căn giữa nội dung */
+        /* border-top: 3px solid white; */
+        border-bottom: 3px solid white;
+    }
+    
+    .head nav ul {
+        list-style: none;
+        padding-top: 9px;
+    }
+
+    .head ul {
+        margin: 5px;
+        padding: 2px;
+        border: 5px;
+    }
+
+    .head nav li {
+        display: inline;
+        margin: 10px;
+        padding-top: 20px;
+        padding-bottom: 22px;
+        padding-left:10px;
+        padding-right:10px;
+        border: 10px;
+        left: 80px;
+        top: 10px;
+    }
+
+    .head nav ul li a {
+        text-decoration: none;
+        /* color: #007bff; */
+    }
+
+    .head nav ul li a:hover {
+        text-decoration: underline;
+        text-decoration: none;
+    }
+
+    .brand {
+        position: absolute; /* Để định vị tên thương hiệu */
+        top: -18px; /* Khoảng cách từ trên */
+        left: 80px; /* Khoảng cách từ bên trái */
+        font-size: 1.6rem; /* Kích thước chữ cho thương hiệu */
+        font-weight: bold; /* Làm chữ đậm */
+        color: #ffffff; /* Màu chữ của thương hiệu */
+        z-index: 2; /* Đặt trên hình ảnh nền */
+        text-shadow: 2px 2px 2px rgba(30, 83, 255, 0.7);
+    }
+
+    .brand:hover {
+        /* color: #444; Màu sắc khi rê chuột */
+        transform: scale(1.1); /* Phóng to chữ khi rê chuột */
+    }
+    
+    nav ul li a.highlight {
+        font-size: 0.9rem; /* Tăng kích thước chữ cho thẻ Home */
+        font-weight: bold; /* Đậm chữ */
+        color: white; /* Màu chữ khác cho thẻ Home */
+        /* border-bottom: 1px solid #007bff; Thêm đường viền bên dưới */
+        padding: 20px;
+    }
+
+    .main {
+        font-size: 38px;
+        color: white;
+        text-shadow: 2px 2px 2px rgba(37, 36, 36, 0.7);
+    }
+
+    .search-container {
+        display: flex; /* Sử dụng Flexbox để căn chỉnh ô nhập và nút tìm kiếm */
+        align-items: center; /* Căn giữa theo chiều dọc */
+        margin: 40px 300px 20px 300px; /* Thêm khoảng cách trên */
+    }
+    
+    #input {
+        flex: 1; /* Để ô nhập chiếm toàn bộ không gian còn lại */
+        padding: 10px; /* Thêm padding cho ô nhập */
+        border: 1px solid #ccc; /* Đường viền cho ô nhập */
+        border-radius: 5px; /* Bo tròn góc cho ô nhập */
+        font-size: 16px; /* Kích thước chữ cho ô nhập */
+        margin-right: 10px; /* Khoảng cách giữa ô nhập và nút tìm kiếm */
+    }
+    
+    .search-button {
+        background-color: #007bff; /* Màu nền cho nút tìm kiếm */
+        color: white; /* Màu chữ cho nút */
+        border: none; /* Xóa đường viền */
+        border-radius: 5px; /* Bo tròn góc cho nút */
+        padding: 10px 15px;
+        font-size: 17px; /* Kích thước chữ cho nút */
+        cursor: pointer; /* Thay đổi con trỏ khi di chuột qua nút */
+        transition: background-color 0.5s; /* Hiệu ứng chuyển màu nền khi di chuột */
+    }
+    
+    .search-button:hover {
+        background-color: #005aa8;
+        color: rgba(51, 51, 51, 1);
+        /* transform: scale(1.05); */
+        /* border: 2px solid #007bff; */
+    }
+
+    .main-container {
+        display: flex;
+        justify-content: space-between;
+        padding: 20px 20px 20px 30px;
+    }
+
+    /* Phần container chính chia cột trái và phải */
+    .main-content {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 80px 5px 80px;
+    }
+
+    .conference-details-left {
+        width: 70%;
+        padding-right: 20px;
+    }
+
+    .conference-actions-right {
+        width: 25%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 20px auto;
+    }
+
+    .follow-btn, .link-btn {
+        padding: 10px 20px;
+        background-color: #44a8ff;
+        color: white;
+        border: none;
+        cursor: pointer;
+        text-align: center;
+        font-size: 16px;
+        border-radius: 5px;
+    }
+
+    .link-btn a {
+        color: white;
+        text-decoration: none;
+    }
+
+    .follow-btn:hover, .link-btn:hover {
+        background-color: #007bff;
+    }
+
+
+
+    .description {
+        display: -webkit-box;
+        display: box; /* Standard property for newer browsers */
+        -webkit-line-clamp: 5; /* WebKit-based browsers */
+        line-clamp: 5; /* Standard property */
+        -webkit-box-orient: vertical;
+        box-orient: vertical; /* Standard property */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.4;
+        max-height: calc(1.6em * 5); /* Limit height for 3 lines */
+    }
+
+    .no-style {
+        text-decoration: none; /* Tắt gạch chân */
+        color: inherit;       /* Sử dụng màu sắc của văn bản chứa */
+        background: none;     /* Không có nền */
+        font-size: inherit;   /* Giữ nguyên kích thước chữ */
+        padding-bottom: 20px;           /* Đặt padding về 0 để không có không gian thêm */
+        margin: 0;            /* Đặt margin về 0 để không có không gian thêm */
+    }
+
+    .no-style:hover {
+        color: inherit;       /* Giữ nguyên màu sắc khi hover */
+        background: none;     /* Giữ nguyên nền khi hover */
+        text-decoration: none; /* Giữ nguyên trạng thái không gạch chân */
+        transition: none;     /* Tắt hiệu ứng chuyển tiếp */
+        transform: none;      /* Tắt hiệu ứng phóng to hoặc thay đổi kích thước */
+    }
+
+    .end {
+        position: relative; /* Đặt vị trí cho div */
+        color: white; /* Màu chữ */
+        padding: 20px; /* Padding cho nội dung */
+        text-align: center; /* Căn giữa nội dung */
+        overflow: hidden; /* Đảm bảo nội dung không ra ngoài div */
+    }
+    
+    .background-image {
+        position: absolute; /* Đặt ảnh nền tuyệt đối */
+        top: 0; /* Căn ảnh về phía trên cùng */
+        left: 0; /* Căn ảnh về phía bên trái */
+        width: 100%; /* Đặt chiều rộng của ảnh là 100% */
+        height: auto; /* Giữ tỷ lệ của ảnh */
+        max-height: 300px; /* Đặt chiều cao tối đa của ảnh */
+        object-fit: cover; /* Đảm bảo ảnh không bị méo */
+        z-index: -1; /* Đưa ảnh ra phía sau nội dung */
+        filter: blur(1.5px); /* Điều chỉnh giá trị này để tăng hoặc giảm độ mờ */
+    }
+}
+

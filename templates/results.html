@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='image/logo.png') }}">
+    <title>Suggested Results</title>
+</head>
+
+<script>
+    // Hiển thị nút khi cuộn xuống 20px
+    window.onscroll = function() {scrollFunction()};
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+            document.getElementById("backToTopBtn").style.display = "block";
+        } else {
+            document.getElementById("backToTopBtn").style.display = "none";
+        }
+    }
+
+    // Hàm chuyển hướng đến trang chính
+    function goToHome() {
+        window.location.href = "{{ url_for('index') }}";
+    }
+
+    // Hàm cuộn lên đầu trang
+    function scrollToTop() {
+        document.body.scrollTop = 0; // Dành cho Safari
+        document.documentElement.scrollTop = 0; // Dành cho Chrome, Firefox, IE và Opera
+    }
+</script>
+
+<body class="result">
+    <div class="container">
+        <div class="head">
+            <div onclick="goToHome()">
+                <img style="height:70px; width:70px; position: absolute; left:10px; top:-5px" src="{{ url_for('static', filename='image/LG.ico') }}" alt="Logo">
+                <p class="brand">GatherConf</p> <!-- Thêm biểu tượng thương hiệu -->
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="containers">
+            <form action="/recommend-search" method="POST">
+                <div class="search-container">
+                    <input type="text" id="input" name="input"
+                            placeholder="Enter the title or abstract of the article you want to search for..." required>
+                    <button type="submit" class="search-button" title="Tìm kiếm">
+                        <i class="fa fa-search"></i> <!-- Biểu tượng tìm kiếm từ Font Awesome -->
+                    </button>
+                </div>
+            </form>
+
+            <style>
+                .h2-ellipsis {
+                    overflow: hidden;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 5; /* Giới hạn số dòng hiển thị */
+                    line-clamp: 5;
+                }
+            </style>
+
+            {# <h2 style="font-size:1.3rem; margin-top:5px; margin-bottom:5px"><strong>{{ num_results }} result</strong> found for: <i>{{ user_input }}</i></h2> #}
+            <h2 class="h2-ellipsis" style="font-size:1.3rem; margin-top:5px; margin-bottom:5px">
+                <strong>{{ num_results }} result</strong> found for:
+                {% if title_input and abstract_input %}
+                    <i>{{ title_input }}</i> <strong>and</strong> <i>{{ abstract_input }}</i>
+                {% elif title_input %}
+                    <i>{{ title_input }}</i>
+                {% elif abstract_input %}
+                    <i>{{ abstract_input }}</i>
+                {% else %}
+                    No input provided.
+                {% endif %}
+            </h2>
+
+            {# <p>Số kết quả tìm được: <strong>{{ num_results }}</strong></p> #}
+            {# <p>Thời gian thực thi: <strong>{{ execution_time }}</strong> giây</p> #}
+        </div>
+
+        <button onclick="scrollToTop()" id="backToTopBtn" title="Về đầu trang"><i class="fa-regular fa-circle-up"></i></button>
+
+        <div class="main-container">
+            <!-- Cột lọc bên trái -->
+            <div class="filter-column">
+                <h2 style="padding-bottom:10px; border-bottom: 1px solid #9b9b9b; margin-top:10px;">Filters</h2>
+                <form action="/filter" method="POST">
+                    <ul class="filter-list">
+                        <li style="margin-top: 10px;
+                                    margin-bottom: 10px;
+                                    height: auto;
+                                    min-height: 250px;">
+                            <label for="search_terms"><strong>Search terms</strong></label>
+                            <br><br>
+                            <div class="input-wrapper">
+                                <label><strong>Title</strong></label>
+                                <div class="input-box">
+                                    <textarea id="title_input" name="title_input"
+                                                placeholder="Enter search terms..." oninput="adjustHeight(this)"
+                                                style="font-family: Arial, sans-serif; min-width:50%; margin-right:0px; max-width:80%; height:70%; resize: none; flex: 1;
+                                                        padding: 10px;
+                                                        border: 1px solid #ccc;
+                                                        font-size: 16px;">{{ title_input }}</textarea>
+                                    <span class="clear-btn" onclick="clearInput('title_input')">
+                                        <i class="fa-solid fa-trash-can" title="Delete"></i>
+                                    </span>
+                                </div>
+                                <br>
+
+                                <label><strong>Abstract</strong></label>
+                                <br>
+                                <div class="input-box">
+                                    <textarea id="abstract_input" name="abstract_input"
+                                                placeholder="Enter search terms..." oninput="adjustHeight(this)"
+                                                style="font-family: Arial, sans-serif; min-width:50%; margin-right:0px; max-width:80%; height:70%; resize: none; flex: 1;
+                                                        padding: 10px;
+                                                        border: 1px solid #ccc;
+                                                        font-size: 16px;">{{ abstract_input }}</textarea>
+                                    <span class="clear-btn" onclick="clearInput('abstract_input')">
+                                        <i class="fa-solid fa-trash-can" title="Delete"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </li>
+                        
+                        <script>
+                             // Hàm điều chỉnh chiều rộng của input dựa trên số ký tự nhập vào
+                            function adjustWidth(input) {
+                                const length = input.value.length;
+                                input.style.width = length > 0 ? (length + 2) + "ch" : "200px"; // Tính chiều rộng theo số ký tự
+                            }
+
+                            // Hàm xóa nội dung input khi nhấn vào biểu tượng thùng rác
+                            function clearInput(id) {
+                                const inputField = document.getElementById(id);
+                                inputField.value = ''; // Xóa nội dung input
+                                adjustHeight(inputField); // Cập nhật chiều cao sau khi xóa
+                                
+                                // Nếu bạn muốn submit form ngay sau khi xóa nội dung:
+                                inputField.form.submit(); // Tùy chọn này sẽ gửi form sau khi xóa
+                            }
+                        </script>
+
+                        <li>
+                            <label for="rank"><strong>Rank</strong></label>
+                            <br>
+                            <div style="text-align: center;">
+                                <select id="rank" name="rank" style="width:100%; height:30px; margin-top:7px; border-radius:5px">
+                                    <option value="" {% if selected_rank is none %}selected{% endif %}>...</option>
+                                    <option value="A" {% if selected_rank == 'A' %}selected{% endif %}>A</option>
+                                    <option value="B" {% if selected_rank == 'B' %}selected{% endif %}>B</option>
+                                    <option value="C" {% if selected_rank == 'C' %}selected{% endif %}>C</option>
+                                </select>
+                            </div>
+                        </li>
+
+                        <li>
+                            <label for="field"><strong>Topics</strong></label>
+                            <br>
+                            <div style="text-align: center;">
+                                <select id="field" name="field" style="width:100%; height:30px; margin-top:7px; border-radius:5px">
+                                    <option value="" {% if selected_field is none %}selected{% endif %}>...</option>
+                                    <option value="Building" {% if selected_field == 'Building' %}selected{% endif %}>Building</option>
+                                    <option value="Artificial Intelligence and Image Processing" {% if selected_field == 'Artificial Intelligence and Image Processing' %}selected{% endif %}>Artificial Intelligence and Image Processing</option>
+                                    <option value="Computation Theory and Mathematics" {% if selected_field == 'Computation Theory and Mathematics' %}selected{% endif %}>Computation Theory and Mathematics</option><!-- Thêm các tùy chọn khác tương ứng với các giá trị FoR1 Name -->
+                                    <option value="Information Systems" {% if selected_field == 'Information Systems' %}selected{% endif %}>Information Systems</option>
+                                    <option value="Computer Software" {% if selected_field == 'Computer Software' %}selected{% endif %}>Computer Software</option>
+                                    <option value="Information and Computing Sciences" {% if selected_field == 'Information and Computing Sciences' %}selected{% endif %}>Information and Computing Sciences</option>
+                                    <option value="Computer Hardware" {% if selected_field == 'Computer Hardware' %}selected{% endif %}>Computer Hardware</option>
+                                    <option value="Communications Technologies" {% if selected_field == 'Communications Technologies' %}selected{% endif %}>Communications Technologies</option>
+                                    <option value="Distributed Computing" {% if selected_field == 'Distributed Computing' %}selected{% endif %}>Distributed Computing</option>
+                                    <option value="Design Practice and Management" {% if selected_field == 'Design Practice and Management' %}selected{% endif %}>Design Practice and Management</option>
+                                    <option value="Data Format" {% if selected_field == 'Data Format' %}selected{% endif %}>Data Format</option>
+                                    <option value="Other Information and Computing Sciences" {% if selected_field == 'Other Information and Computing Sciences' %}selected{% endif %}>Other Information and Computing Sciences</option>
+                                    <option value="Aerospace Engineering" {% if selected_field == 'Aerospace Engineering' %}selected{% endif %}>Aerospace Engineering</option>
+                                    <option value="Mechanical Engineering" {% if selected_field == 'Mechanical Engineering' %}selected{% endif %}>Mechanical Engineering</option>
+                                    <option value="Civil Engineering" {% if selected_field == 'Civil Engineering' %}selected{% endif %}>Civil Engineering</option>
+                                    <option value="Geomatic Engineering" {% if selected_field == 'Geomatic Engineering' %}selected{% endif %}>Geomatic Engineering</option>
+                                    <option value="Manufacturing Engineering" {% if selected_field == 'Manufacturing Engineering' %}selected{% endif %}>Manufacturing Engineering</option>
+                                    <option value="Other Engineering" {% if selected_field == 'Other Engineering' %}selected{% endif %}>Other Engineering</option>
+                                    <option value="Architecture" {% if selected_field == 'Architecture' %}selected{% endif %}>Architecture</option>
+                                    <option value="Resources Engineering and Extractive Metallurgy" {% if selected_field == 'Resources Engineering and Extractive Metallurgy' %}selected{% endif %}>Resources Engineering and Extractive Metallurgy</option>
+                                    <option value="Maritime Engineering" {% if selected_field == 'Maritime Engineering' %}selected{% endif %}>Maritime Engineering</option>
+                                    <option value="Urban and Regional Planning" {% if selected_field == 'Urban and Regional Planning' %}selected{% endif %}>Urban and Regional Planning</option>
+                                    <option value="Automotive Engineering" {% if selected_field == 'Automotive Engineering' %}selected{% endif %}>Automotive Engineering</option>
+                                    <option value="Environmental Engineering" {% if selected_field == 'Environmental Engineering' %}selected{% endif %}>Environmental Engineering</option>
+                                    <option value="Technology" {% if selected_field == 'Technology' %}selected{% endif %}>Technology</option>
+                                    <option value="Built Environment and Design" {% if selected_field == 'Built Environment and Design' %}selected{% endif %}>Built Environment and Design</option>
+                                    <option value="Other Built Environment and Design" {% if selected_field == 'Other Built Environment and Design' %}selected{% endif %}>Other Built Environment and Design</option>
+                                    <option value="Interdisciplinary Engineering" {% if selected_field == 'Interdisciplinary Engineering' %}selected{% endif %}>Interdisciplinary Engineering</option>
+                                </select>
+                            </div>
+                        </li>
+
+                        <button type="submit" class="filter-button"><b>SEARCH</b></button>
+                    </ul>
+                </form>
+            </div>
+
+            <!-- Cột kết quả bên phải -->
+            <div class="result-column">
+                <h2 style="margin-top:8px; margin-bottom:10px;">Suggested Conferences</h2>
+                {% if results %}
+                    <ul>
+                        {% for result in results %}
+                        <li class="result-item" style="cursor: pointer;" onclick="window.location.href='{{ url_for('conference_detail', article_id=result['ERAID']) }}'">
+                            <div style="display: flex; justify-content: space-between;">
+                                <p>{{ result.get('Acronym', ' ') }}</p>
+                                <p>{{ result.get('FoR1 Name', ' ') }}</p>
+                            </div>
+                            <strong style="font-size:21px;">
+                                {{ result.get('Title', 'Không có tiêu đề') }}
+                            </strong>
+                            <br>
+                            <p class="description">{{ result.get('Description', 'Không có tóm tắt') }}</p>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <strong>Rank: {{ result.get('Rank', 'Không có xếp hạng') }}</strong>
+                                <strong>Borda Score: {{ '{:.1f}'.format(borda_scores[result.name]) if result.name in borda_scores else '0.00' }}</strong>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <br>
+                    <div style="text-align:center; margin-top:30px">
+                        <img width="45%" src="{{ url_for('static', filename='image/search-.png') }}">
+                        <h2 style="margin:20px 10px 10px 10px; font-size:28px">No Results Found!</h2>
+                        <p style="margin-top:0px">Please alter your search and try again.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {# <a href="{{ url_for('index') }}" class="back-link">Quay lại trang chính</a> #}
+    </div>
+</body>
+
+<footer>
+    <div class="footer-content">
+        <div class="footer-left">
+            <img style="height:70px; width:70px;" src="{{ url_for('static', filename='image/LG.ico') }}" alt="Logo">
+        </div>
+        <div class="footer-right">
+            <!-- Các liên kết mạng xã hội -->
+            <div class="socials">
+                <a href="https://www.facebook.com" style="margin-right: 15px;"><i class="fab fa-facebook"></i></a>
+                <a href="https://www.instagram.com" ><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-content2">
+        <a style="font-size:17px; background: none; border: none;display: inline; margin-top: 0px;"
+            href="#">About</a>
+        <a style="font-size:17px; background: none; border: none;display: inline; margin-top: 0px;"
+            href="#">Legal</a>
+        <a style="font-size:17px; background: none; border: none;display: inline; margin-top: 0px;"
+            href="#">Contact</a>
+    </div>
+
+    <div class="footer-text" style="text-align: center; margin-top: 5px;">
+        <p style="color:#bebebe">GatherConf is powered by the research community. And it’s free, now and forever.</p>
+        <p style="color:#bebebe">&copy; 2024 Workshop Suggestions. Designed by GatherConf Group. All rights reserved.</p>
+    </div>
+</footer>
+</html>
