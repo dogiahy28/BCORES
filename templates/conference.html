@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='image/logo.png') }}">
+    <title>Conference Details</title>
+</head>
+
+<script>
+    // Hiển thị nút khi cuộn xuống 20px
+    window.onscroll = function() {scrollFunction()};
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+            document.getElementById("backToTopBtn").style.display = "block";
+        } else {
+            document.getElementById("backToTopBtn").style.display = "none";
+        }
+    }
+
+    // Hàm chuyển hướng đến trang chính
+    function goToHome() {
+        window.location.href = "{{ url_for('index') }}";
+    }
+
+    // Hàm cuộn lên đầu trang
+    function scrollToTop() {
+        document.body.scrollTop = 0; // Dành cho Safari
+        document.documentElement.scrollTop = 0; // Dành cho Chrome, Firefox, IE và Opera
+    }
+</script>
+
+<body class="result">
+    <div class="container">
+        <div class="head">
+            <div onclick="goToHome()">
+                <img style="height:70px; width:70px; position: absolute; left:10px; top:-5px" src="{{ url_for('static', filename='image/LG.ico') }}" alt="Logo">
+                <p class="brand">GatherConf</p> <!-- Thêm biểu tượng thương hiệu -->
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="containers">
+            <form action="/recommend" method="POST">
+                <div class="search-container">
+                    <input type="text" id="input" name="input"
+                            placeholder="Enter the title or abstract of the article you want to search for..." required>
+                    <button type="submit" class="search-button" title="Tìm kiếm">
+                        <i class="fa fa-search"></i> <!-- Biểu tượng tìm kiếm từ Font Awesome -->
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="containers2">
+            {% set acronym = conference.get('Acronym') %}
+            {% if acronym and acronym is not none and acronym != 'nan' and acronym != None and acronym == acronym %}
+                <p style="font-size:1rem; margin:5px 0px 5px 0px">{{ acronym }}</p>
+            {% endif %}
+            <h2 style="font-size:2rem; color:#272727; margin:7px 0px 5px 0px">{{ conference.get('Title', '') }}</h2>
+        </div>
+
+        <div class="main-content">
+            <div class="conference-details-left">
+                <p style="font-size:1.5rem"><strong>About Description</strong></p>
+                <p>{{ conference.get('Description', 'No Description available') }}</p>
+                <p><strong>Rank:</strong> {{ conference.get('Rank', '') }}</p>
+                
+                <p><strong>Topic:</strong>
+                    {{ conference.get('FoR1 Name', '') }}
+                    {% if conference.get('FoR2 Name') %}| {{ conference.get('FoR2 Name') }}
+                    {% endif %}
+                    {% if conference.get('FoR3 Name') %}| {{ conference.get('FoR3 Name') }}
+                    {% endif %}
+                </p>
+            </div>
+
+            <div class="conference-actions-right">
+                <button class="follow-btn" style="margin-top:30px">Follow</button>
+                <button class="link-btn"><a href="{{ conference.get('Link', '#') }}" target="_blank">Link</a></button>
+            </div>
+        </div>
+
+        <button onclick="scrollToTop()" id="backToTopBtn" title="Về đầu trang"><i class="fa-regular fa-circle-up"></i></button>
+    </div>
+
+    <div class="end">
+        <img src="{{ url_for('static', filename='image/end.jpg') }}" alt="Hình nền" class="background-image">
+        <h2 style="font-size:1.6rem; margin-bottom:5px; text-shadow: 2px 2px 4px #ffffff;">Find information with GatherConf</h2>
+        <p style="font-size:1rem; margin-top:5px; text-shadow: 1px 1px 2px #ffffff;">Find and follow your favorite conferences.</p>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-left">
+                <img style="height:70px; width:70px;" src="{{ url_for('static', filename='image/LG.ico') }}" alt="Logo">
+            </div>
+            <div class="footer-right">
+                <div class="socials">
+                    <a href="https://www.facebook.com" style="margin-right: 15px;"><i class="fab fa-facebook"></i></a>
+                    <a href="https://www.instagram.com" ><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-content2">
+            <a style="font-size:17px; background: none; border: none;display: inline; margin-top: 0px;" href="#">About</a>
+            <a style="font-size:17px; background: none; border: none;display: inline; margin-top: 0px;" href="#">Legal</a>
+            <a style="font-size:17px; background: none; border: none;display: inline; margin-top: 0px;" href="#">Contact</a>
+        </div>
+
+        <div class="footer-text" style="text-align: center; margin-top: 5px;">
+            <p style="color:#bebebe">GatherConf is powered by the research community. And it’s free, now and forever.</p>
+            <p style="color:#bebebe">&copy; 2024 Workshop Suggestions. Designed by GatherConf Group. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
