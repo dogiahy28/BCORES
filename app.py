@@ -346,8 +346,40 @@ def filter_results():
     k = 10
     borda_scores = defaultdict(float)
 
-    # Nếu ô input của tiêu đề có giá trị
-    if title_input:
+    # Nếu có đủ cả tiêu đề và tóm tắt
+    if title_input and abstract_input:
+        # Mã hóa tiêu đề và tóm tắt
+        title_embedding_input = model.encode([title_input])
+        abstract_embedding_input = model.encode([abstract_input])
+
+        # Tìm labels và distances cho tiêu đề và tóm tắt
+        labels_title_from_title, distances_title_from_title = p_title.knn_query(title_embedding_input, k=k)
+        labels_description_from_title, distances_description_from_title = p_description.knn_query(title_embedding_input, k=k)
+        labels_title_from_abstract, distances_title_from_abstract = p_title.knn_query(abstract_embedding_input, k=k)
+        labels_description_from_abstract, distances_description_from_abstract = p_description.knn_query(abstract_embedding_input, k=k)
+
+        # Borda Count cho tiêu đề từ tiêu đề
+        for i in range(len(labels_title_from_title[0])):
+            idx = labels_title_from_title[0][i]
+            borda_scores[idx] += (0.7 * (k - i))  # Trọng số cho tiêu đề từ tiêu đề
+
+        # Borda Count cho mô tả từ tiêu đề
+        for i in range(len(labels_description_from_title[0])):
+            idx = labels_description_from_title[0][i]
+            borda_scores[idx] += (0.4 * (k - i))  # Trọng số cho mô tả từ tiêu đề
+
+        # Borda Count cho tiêu đề từ tóm tắt
+        for i in range(len(labels_title_from_abstract[0])):
+            idx = labels_title_from_abstract[0][i]
+            borda_scores[idx] += (0.5 * (k - i))  # Trọng số cho tiêu đề từ tóm tắt
+
+        # Borda Count cho mô tả từ tóm tắt
+        for i in range(len(labels_description_from_abstract[0])):
+            idx = labels_description_from_abstract[0][i]
+            borda_scores[idx] += (0.7 * (k - i))  # Trọng số cho mô tả từ tóm tắt
+
+    # Nếu chỉ có tiêu đề
+    elif title_input:
         title_embedding_input = model.encode([title_input])
         # Tìm labels và distances cho tiêu đề
         labels_title_from_title, distances_title_from_title = p_title.knn_query(title_embedding_input, k=k)
@@ -363,8 +395,8 @@ def filter_results():
             idx = labels_description_from_title[0][i]
             borda_scores[idx] += (0.4 * (k - i))  # Trọng số cho mô tả
 
-    # Nếu ô input của tóm tắt có giá trị
-    if abstract_input:
+    # Nếu chỉ có tóm tắt
+    elif abstract_input:
         abstract_embedding_input = model.encode([abstract_input])
         # Tìm labels và distances cho tóm tắt
         labels_title_from_abstract, distances_title_from_abstract = p_title.knn_query(abstract_embedding_input, k=k)

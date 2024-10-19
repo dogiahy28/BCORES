@@ -373,7 +373,7 @@ footer {
     /* Hiệu ứng hover cho nút */
     .search-button-both:hover {
         background-color: #0056b3;     /* Màu nền khi hover */
-    }    
+    }
 
     .toggle-button {
         font-size: 16px;
@@ -426,7 +426,7 @@ footer {
     }
 
     .containers {
-        padding: 75px 50px 10px 50px;
+        padding: 110px 50px 10px 50px;
         border: 1px solid #9b9b9b;
     }
 
