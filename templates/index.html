@@ -77,6 +77,15 @@
                 Welcome to the Scientific Papers Conference Suggestions website
             </marquee>
         
+            <!-- Overlay làm mờ nền -->
+            <div id="overlay"></div>
+
+            <!-- Hộp thông báo lỗi -->
+            <div id="error-message-box">
+                <strong><p style="color:black; font-size:1.2rem; text-shadow:none; margin-top:5px">Please fill in both Title and Abstract before searching.</p></strong>
+                <button id="close-btn" onclick="closeErrorMessage()" style="font-size:1rem"><b>Close</b></button>
+            </div>
+
             <!-- Form tìm kiếm theo tiêu đề -->
             <form id="titleForm" method="POST" action="/recommend">
                 <div class="search-container">
@@ -95,7 +104,7 @@
                     </button>
                 </div>
             </form>
-        
+
             <div class="search-container3">
                 <button type="button" class="search-button-both" title="Search with Title and Abstract" onclick="searchBoth()">
                     <i class="fa fa-search"></i>
@@ -108,32 +117,49 @@
             function searchBoth() {
                 const titleInput = document.getElementById('input1').value.trim();
                 const abstractInput = document.getElementById('input2').value.trim();
-                
+                const overlay = document.getElementById('overlay');
+                const errorMessageBox = document.getElementById('error-message-box');
+        
                 // Kiểm tra xem cả hai ô input có dữ liệu hay không
                 if (titleInput === "" || abstractInput === "") {
-                    alert("Both the Title and Abstract input fields must contain data to search."); // Thông báo lỗi
-                    return; // Không thực hiện tìm kiếm nếu không có dữ liệu
+                    overlay.style.display = 'block'; // Hiển thị overlay làm mờ nền
+                    errorMessageBox.style.display = 'block'; // Hiển thị hộp thông báo lỗi
+        
+                    // Vô hiệu hóa cuộn trang
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    overlay.style.display = 'none'; // Ẩn overlay nếu đủ dữ liệu
+                    errorMessageBox.style.display = 'none'; // Ẩn hộp thông báo lỗi nếu đủ dữ liệu
+        
+                    // Tạo form ẩn để gửi dữ liệu tìm kiếm
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/recommend_both'; // URL cho tìm kiếm theo cả tiêu đề và abstract
+        
+                    const inputTitle = document.createElement('input');
+                    inputTitle.type = 'hidden';
+                    inputTitle.name = 'title_input';
+                    inputTitle.value = titleInput;
+                    form.appendChild(inputTitle);
+        
+                    const inputAbstract = document.createElement('input');
+                    inputAbstract.type = 'hidden';
+                    inputAbstract.name = 'abstract_input';
+                    inputAbstract.value = abstractInput;
+                    form.appendChild(inputAbstract);
+        
+                    document.body.appendChild(form);
+                    form.submit(); // Gửi form
                 }
-                
-                // Tạo form ẩn để gửi dữ liệu tìm kiếm
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = '/recommend_both'; // URL cho tìm kiếm theo cả tiêu đề và abstract
+            }
         
-                const inputTitle = document.createElement('input');
-                inputTitle.type = 'hidden';
-                inputTitle.name = 'title_input';
-                inputTitle.value = titleInput;
-                form.appendChild(inputTitle);
+            // Hàm đóng hộp thông báo lỗi
+            function closeErrorMessage() {
+                document.getElementById('overlay').style.display = 'none'; // Ẩn overlay
+                document.getElementById('error-message-box').style.display = 'none'; // Ẩn hộp thông báo
         
-                const inputAbstract = document.createElement('input');
-                inputAbstract.type = 'hidden';
-                inputAbstract.name = 'abstract_input';
-                inputAbstract.value = abstractInput;
-                form.appendChild(inputAbstract);
-        
-                document.body.appendChild(form);
-                form.submit(); // Gửi form
+                // Khôi phục cuộn trang
+                document.body.style.overflow = 'auto';
             }
         </script>
 
