@@ -449,7 +449,51 @@ footer {
 
     #close-btn:hover {
         background-color: red;
+        transform: scale(1.1);
     }
+
+    .search-container-rank {
+        margin-top: 20px;
+        text-align: center;
+    }
+    
+    .search-button-rank {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        padding: 0px 20px;
+        font-size: 16px;
+    }
+    
+    .search-button-rank i {
+        margin-right: 5px;
+    }
+    
+    #rank_input {
+        padding: 5px;
+        font-size: 14px;
+        margin-right: 10px;
+    }
+    
+    .rank-toggle-button {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.2rem;
+        cursor: pointer;
+    }
+    
+    .rank-toggle-button:focus {
+        outline: none;
+    }
+    
+    #rankSelection select {
+        padding: 5px;
+        margin-top: 5px;
+        font-size: 1rem;
+    }
+    
 }
 
 /* Trang Kết quả tìm */
@@ -628,7 +672,7 @@ footer {
         height: 80px;
     }
 
-    .input-box {
+    .input-box-title {
         display: flex;
         align-items: center;
         border: 1px solid #ccc; /* Khung bao */
@@ -636,7 +680,18 @@ footer {
         border-radius: 4px;
         width: 100%; /* Chiều rộng khung */
         box-sizing: border-box;
-        height: 100%;
+        height: 70%;
+    }
+
+    .input-box-abstract {
+        display: flex;
+        align-items: center;
+        border: 1px solid #ccc; /* Khung bao */
+        padding: 5px;
+        border-radius: 4px;
+        width: 100%; /* Chiều rộng khung */
+        box-sizing: border-box;
+        height: 140%;
     }
 
     #search_terms {
@@ -956,3 +1011,1072 @@ footer {
     }
 }
 
+/* Trang Kết quả tìm */
+.about {
+    h1 {
+        text-align: center;
+        color: #333;
+        font-size: 38px; /* Tăng kích thước chữ cho tiêu đề lớn */
+        margin-bottom: 25px; /* Thêm khoảng cách dưới tiêu đề */
+    }
+
+    .background-image {
+        position: relative; /* Để có thể định vị các phần tử con */
+        overflow: hidden; /* Giúp ẩn các phần tử vượt ra ngoài khung */
+        background-size: contain; /* Đảm bảo ảnh giữ nguyên tỷ lệ và không bị méo */
+        background-position: center; /* Đặt ảnh ở giữa */
+        background-attachment: fixed; /* Cố định ảnh nền khi cuộn */
+        height: 80vh; /* Chiều cao bằng 100% màn hình */
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Căn giữa nội dung theo chiều dọc */
+        align-items: center; /* Căn giữa nội dung theo chiều ngang */
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    }
+
+    .background-image img {
+        position: absolute; /* Đặt hình ảnh ở vị trí tuyệt đối */
+        top: 0;
+        left: 0;
+        width: 100%; /* Đảm bảo ảnh rộng 100% */
+        height: 100%; /* Đảm bảo ảnh cao 100% */
+        object-fit: cover; /* Đảm bảo ảnh lấp đầy không gian mà không bị biến dạng */
+        z-index: -1; /* Đặt hình ảnh dưới nội dung */
+        opacity: 0.8; /* Giảm độ rõ của hình ảnh, bạn có thể điều chỉnh giá trị này */
+    }
+    
+    .container1 {
+        top: 40px;
+        position: relative; /* Để nội dung nằm trên ảnh */
+        z-index: 1; /* Đảm bảo nội dung nằm trên hình ảnh */
+        padding: 20px; /* Thêm padding cho nội dung */
+        width: 50%;
+        text-align:center;
+    }
+
+    .head {
+        position: absolute; /* Để định vị thanh đầu trang trên ảnh nền */
+        height: 8.7%;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding: 10px; /* Thêm khoảng cách cho thanh đầu trang */
+        background-color: rgba(51, 51, 51, 0.95); /* Nền màu trắng với độ trong suốt */
+        z-index: 2; /* Đặt trên hình ảnh nền */
+        text-align: center; /* Căn giữa nội dung */
+        /* border-top: 3px solid white; */
+        border-bottom: 3px solid white;
+        /* border-radius: 5px; */
+    }
+
+    .head nav ul {
+        list-style: none;
+    }
+
+    .head ul {
+        margin: 5px;
+        padding: 2px;
+        border: 5px;
+    }
+
+    .head nav li {
+        display: inline;
+        margin: 10px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        padding-left:10px;
+        padding-right:10px;
+        border: 10px;
+        left: 80px;
+        top: -10px;
+    }
+
+    .head nav ul li a {
+        text-decoration: none;
+        /* color: #007bff; */
+    }
+
+    .head nav ul li a:hover {
+        text-decoration: underline;
+        text-decoration: none;
+    }
+
+    .brand {
+        position: absolute; /* Để định vị tên thương hiệu */
+        top: -18px; /* Khoảng cách từ trên */
+        left: 80px; /* Khoảng cách từ bên trái */
+        font-size: 1.6rem; /* Kích thước chữ cho thương hiệu */
+        font-weight: bold; /* Làm chữ đậm */
+        color: #ffffff; /* Màu chữ của thương hiệu */
+        z-index: 2; /* Đặt trên hình ảnh nền */
+        text-shadow: 2px 2px 2px rgba(30, 83, 255, 0.7);
+    }
+
+    .brand:hover {
+        /* color: #444; Màu sắc khi rê chuột */
+        transform: scale(1.05); /* Phóng to chữ khi rê chuột */
+    }
+    
+    nav ul li a.highlight {
+        font-size: 1rem; /* Tăng kích thước chữ cho thẻ Home */
+        font-weight: bold; /* Đậm chữ */
+        color: white; /* Màu chữ khác cho thẻ Home */
+        /* border-bottom: 1px solid #007bff; Thêm đường viền bên dưới */
+        padding: 20px;
+    }
+
+    .main {
+        font-size: 38px;
+        color: white;
+        text-shadow: 2px 2px 2px rgba(37, 36, 36, 0.7);
+    }
+
+    .search-container {
+        display: flex; /* Sử dụng Flexbox để căn chỉnh ô nhập và nút tìm kiếm */
+        align-items: center; /* Căn giữa theo chiều dọc */
+        margin-top: 5px; /* Thêm khoảng cách trên */
+    }
+    
+    .search-container2 {
+        display: flex; /* Sử dụng Flexbox để căn chỉnh ô nhập và nút tìm kiếm */
+        align-items: center; /* Căn giữa theo chiều dọc */
+        margin-top: 20px; /* Thêm khoảng cách trên */
+    }
+
+    #input1 {
+        flex: 1; /* Để ô nhập chiếm toàn bộ không gian còn lại */
+        padding: 10px; /* Thêm padding cho ô nhập */
+        border: 1px solid #ccc; /* Đường viền cho ô nhập */
+        border-radius: 5px; /* Bo tròn góc cho ô nhập */
+        font-size: 16px; /* Kích thước chữ cho ô nhập */
+        margin-right: 10px; /* Khoảng cách giữa ô nhập và nút tìm kiếm */
+        height: 15px;
+    }
+
+    #input2 {
+        flex: 1; /* Để ô nhập chiếm toàn bộ không gian còn lại */
+        padding: 10px; /* Thêm padding cho ô nhập */
+        border: 1px solid #ccc; /* Đường viền cho ô nhập */
+        border-radius: 5px; /* Bo tròn góc cho ô nhập */
+        font-size: 16px; /* Kích thước chữ cho ô nhập */
+        margin-right: 10px; /* Khoảng cách giữa ô nhập và nút tìm kiếm */
+        height: 60px;
+    }
+    
+    .search-button {
+        background-color: #007bff; /* Màu nền cho nút tìm kiếm */
+        color: white; /* Màu chữ cho nút */
+        border: none; /* Xóa đường viền */
+        border-radius: 5px; /* Bo tròn góc cho nút */
+        padding: 10px 15px; /* Padding cho nút tìm kiếm */
+        font-size: 16px; /* Kích thước chữ cho nút */
+        cursor: pointer; /* Thay đổi con trỏ khi di chuột qua nút */
+        transition: background-color 0.5s; /* Hiệu ứng chuyển màu nền khi di chuột */
+    }
+    
+    .search-button:hover {
+        background-color: #005aa8; /* Màu nền khi di chuột */
+        transform: scale(1.1);
+    }
+
+    .search-button2 {
+        background-color: #007bff; /* Màu nền cho nút tìm kiếm */
+        color: white; /* Màu chữ cho nút */
+        border: none; /* Xóa đường viền */
+        border-radius: 5px; /* Bo tròn góc cho nút */
+        padding: 10px 15px; /* Padding cho nút tìm kiếm */
+        font-size: 40px; /* Kích thước chữ cho nút */
+        cursor: pointer; /* Thay đổi con trỏ khi di chuột qua nút */
+        transition: background-color 0.5s; /* Hiệu ứng chuyển màu nền khi di chuột */
+    }
+
+    .search-button2:hover {
+        background-color: #005aa8; /* Màu nền khi di chuột */
+        transform: scale(1.1);
+    }
+
+    .search-container3 {
+        display: flex; /* Sử dụng Flexbox để căn chỉnh ô nhập và nút tìm kiếm */
+        flex-direction: column; /* Sắp xếp theo chiều dọc */
+        align-items: center; /* Căn giữa theo chiều ngang */
+        margin-top: 5px; /* Thêm khoảng cách trên */
+    }
+    
+    .search-button-both {
+        margin-top: 10px;              /* Khoảng cách trên nút */
+        text-align: center;             /* Căn giữa chữ trong nút */
+        background-color: #007bff;     /* Màu nền cho nút tìm kiếm */
+        color: white;                   /* Màu chữ cho nút */
+        border: none;                   /* Xóa đường viền */
+        border-radius: 5px;            /* Bo tròn góc cho nút */
+        padding: 10px 15px;            /* Padding cho nút tìm kiếm */
+        font-size: 20px;                /* Kích thước chữ cho nút */
+        cursor: pointer;                /* Thay đổi con trỏ khi di chuột qua nút */
+        transition: background-color 0.5s; /* Hiệu ứng chuyển màu nền khi di chuột */
+    }
+    
+    /* Hiệu ứng hover cho nút */
+    .search-button-both:hover {
+        background-color: #0056b3;     /* Màu nền khi hover */
+    }
+
+    .toggle-button {
+        font-size: 16px;
+        background-color: #f0f0f0;
+        color: #007bff;
+        border: 1px solid #007bff;
+        border-radius: 5px;
+        padding: 10px 15px;
+        cursor: pointer;
+        position: absolute; /* Đặt vị trí tuyệt đối */
+        bottom: 20px; /* Cách đáy phần tử chứa 30px */
+        left: 50%; /* Căn giữa */
+        transform: translateX(-50%); /* Căn giữa hoàn hảo */
+        z-index: 1000; /* Đảm bảo nút nằm trên các thành phần khác */
+    }
+
+    .toggle-button:hover {
+        background-color: #007bff; /* Màu nền khi di chuột */
+        color: white; /* Màu chữ khi di chuột */
+    }
+
+    .toggle {
+        font-size: 17px;
+        color: #eaeaea;
+        padding: 10px 15px;
+        cursor: pointer;
+        position: absolute; /* Đặt vị trí tuyệt đối */
+        bottom: 40px; /* Cách đáy phần tử chứa 30px */
+        left: 50%; /* Căn giữa */
+        transform: translateX(-49%); /* Căn giữa hoàn hảo */
+        z-index: 1000; /* Đảm bảo nút nằm trên các thành phần khác */
+    }
+
+    /* CSS cho overlay */
+    #overlay {
+        position: fixed;
+        display: none; /* Ban đầu ẩn overlay */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Làm mờ với độ trong suốt */
+        z-index: 2; /* Đảm bảo overlay ở trên nội dung khác */
+    }
+
+    /* CSS cho hộp thông báo lỗi */
+    #error-message-box {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 20px;
+        border: 3px solid #007bff;
+        border-radius: 8px;
+        /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+        display: none; /* Ban đầu ẩn hộp thông báo */
+        z-index: 3; /* Đặt hộp thông báo ở trên overlay */
+        text-align: center;
+    }
+
+    /* CSS cho nút đóng hộp thông báo */
+    #close-btn {
+        text-align: center;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    #close-btn:hover {
+        background-color: red;
+        transform: scale(1.1);
+    }
+
+    .search-container-rank {
+        margin-top: 20px;
+        text-align: center;
+    }
+    
+    .search-button-rank {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        padding: 0px 20px;
+        font-size: 16px;
+    }
+    
+    .search-button-rank i {
+        margin-right: 5px;
+    }
+    
+    #rank_input {
+        padding: 5px;
+        font-size: 14px;
+        margin-right: 10px;
+    }
+    
+    .rank-toggle-button {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.2rem;
+        cursor: pointer;
+    }
+    
+    .rank-toggle-button:focus {
+        outline: none;
+    }
+    
+    #rankSelection select {
+        padding: 5px;
+        margin-top: 5px;
+        font-size: 1rem;
+    }
+    
+    .end {
+        position: relative; /* Đặt vị trí cho div */
+        color: white; /* Màu chữ */
+        padding: 20px; /* Padding cho nội dung */
+        text-align: center; /* Căn giữa nội dung */
+        overflow: hidden; /* Đảm bảo nội dung không ra ngoài div */
+    }
+
+    .background-image2 {
+        position: absolute; /* Đặt ảnh nền tuyệt đối */
+        top: 0; /* Căn ảnh về phía trên cùng */
+        left: 0; /* Căn ảnh về phía bên trái */
+        width: 100%; /* Đặt chiều rộng của ảnh là 100% */
+        height: auto; /* Giữ tỷ lệ của ảnh */
+        max-height: 300px; /* Đặt chiều cao tối đa của ảnh */
+        object-fit: cover; /* Đảm bảo ảnh không bị méo */
+        z-index: -1; /* Đưa ảnh ra phía sau nội dung */
+        filter: blur(1.5px); /* Điều chỉnh giá trị này để tăng hoặc giảm độ mờ */
+    }
+}
+
+/* Trang contact */
+.contact {
+    h1 {
+        text-align: center;
+        color: #333;
+        font-size: 38px; /* Tăng kích thước chữ cho tiêu đề lớn */
+        margin-bottom: 25px; /* Thêm khoảng cách dưới tiêu đề */
+    }
+
+    .background-image {
+        position: relative; /* Để có thể định vị các phần tử con */
+        overflow: hidden; /* Giúp ẩn các phần tử vượt ra ngoài khung */
+        background-size: contain; /* Đảm bảo ảnh giữ nguyên tỷ lệ và không bị méo */
+        background-position: center; /* Đặt ảnh ở giữa */
+        background-attachment: fixed; /* Cố định ảnh nền khi cuộn */
+        height: 80vh; /* Chiều cao bằng 100% màn hình */
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Căn giữa nội dung theo chiều dọc */
+        align-items: center; /* Căn giữa nội dung theo chiều ngang */
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    }
+
+    .background-image img {
+        position: absolute; /* Đặt hình ảnh ở vị trí tuyệt đối */
+        top: 0;
+        left: 0;
+        width: 100%; /* Đảm bảo ảnh rộng 100% */
+        height: 100%; /* Đảm bảo ảnh cao 100% */
+        object-fit: cover; /* Đảm bảo ảnh lấp đầy không gian mà không bị biến dạng */
+        z-index: -1; /* Đặt hình ảnh dưới nội dung */
+        opacity: 0.8; /* Giảm độ rõ của hình ảnh, bạn có thể điều chỉnh giá trị này */
+    }
+    
+    .container1 {
+        top: 0px;
+        position: relative; /* Để nội dung nằm trên ảnh */
+        z-index: 1; /* Đảm bảo nội dung nằm trên hình ảnh */
+        padding: 20px; /* Thêm padding cho nội dung */
+        width: 50%;
+        text-align:center;
+    }
+
+    .head {
+        position: absolute; /* Để định vị thanh đầu trang trên ảnh nền */
+        height: 8.7%;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding: 10px; /* Thêm khoảng cách cho thanh đầu trang */
+        background-color: rgba(51, 51, 51, 0.95); /* Nền màu trắng với độ trong suốt */
+        z-index: 2; /* Đặt trên hình ảnh nền */
+        text-align: center; /* Căn giữa nội dung */
+        /* border-top: 3px solid white; */
+        border-bottom: 3px solid white;
+        /* border-radius: 5px; */
+    }
+
+    .head nav ul {
+        list-style: none;
+    }
+
+    .head ul {
+        margin: 5px;
+        padding: 2px;
+        border: 5px;
+    }
+
+    .head nav li {
+        display: inline;
+        margin: 10px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        padding-left:10px;
+        padding-right:10px;
+        border: 10px;
+        left: 80px;
+        top: -10px;
+    }
+
+    .head nav ul li a {
+        text-decoration: none;
+        /* color: #007bff; */
+    }
+
+    .head nav ul li a:hover {
+        text-decoration: underline;
+        text-decoration: none;
+    }
+
+    .brand {
+        position: absolute; /* Để định vị tên thương hiệu */
+        top: -18px; /* Khoảng cách từ trên */
+        left: 80px; /* Khoảng cách từ bên trái */
+        font-size: 1.6rem; /* Kích thước chữ cho thương hiệu */
+        font-weight: bold; /* Làm chữ đậm */
+        color: #ffffff; /* Màu chữ của thương hiệu */
+        z-index: 2; /* Đặt trên hình ảnh nền */
+        text-shadow: 2px 2px 2px rgba(30, 83, 255, 0.7);
+    }
+
+    .brand:hover {
+        /* color: #444; Màu sắc khi rê chuột */
+        transform: scale(1.05); /* Phóng to chữ khi rê chuột */
+    }
+    
+    nav ul li a.highlight {
+        font-size: 1rem; /* Tăng kích thước chữ cho thẻ Home */
+        font-weight: bold; /* Đậm chữ */
+        color: white; /* Màu chữ khác cho thẻ Home */
+        /* border-bottom: 1px solid #007bff; Thêm đường viền bên dưới */
+        padding: 20px;
+    }
+
+    .main {
+        font-size: 38px;
+        color: white;
+        text-shadow: 2px 2px 2px rgba(37, 36, 36, 0.7);
+    }
+
+    .search-container {
+        display: flex; /* Sử dụng Flexbox để căn chỉnh ô nhập và nút tìm kiếm */
+        align-items: center; /* Căn giữa theo chiều dọc */
+        margin-top: 5px; /* Thêm khoảng cách trên */
+    }
+    
+    .search-container2 {
+        display: flex; /* Sử dụng Flexbox để căn chỉnh ô nhập và nút tìm kiếm */
+        align-items: center; /* Căn giữa theo chiều dọc */
+        margin-top: 20px; /* Thêm khoảng cách trên */
+    }
+
+    #input1 {
+        flex: 1; /* Để ô nhập chiếm toàn bộ không gian còn lại */
+        padding: 10px; /* Thêm padding cho ô nhập */
+        border: 1px solid #ccc; /* Đường viền cho ô nhập */
+        border-radius: 5px; /* Bo tròn góc cho ô nhập */
+        font-size: 16px; /* Kích thước chữ cho ô nhập */
+        margin-right: 10px; /* Khoảng cách giữa ô nhập và nút tìm kiếm */
+        height: 15px;
+    }
+
+    #input2 {
+        flex: 1; /* Để ô nhập chiếm toàn bộ không gian còn lại */
+        padding: 10px; /* Thêm padding cho ô nhập */
+        border: 1px solid #ccc; /* Đường viền cho ô nhập */
+        border-radius: 5px; /* Bo tròn góc cho ô nhập */
+        font-size: 16px; /* Kích thước chữ cho ô nhập */
+        margin-right: 10px; /* Khoảng cách giữa ô nhập và nút tìm kiếm */
+        height: 60px;
+    }
+    
+    .search-button {
+        background-color: #007bff; /* Màu nền cho nút tìm kiếm */
+        color: white; /* Màu chữ cho nút */
+        border: none; /* Xóa đường viền */
+        border-radius: 5px; /* Bo tròn góc cho nút */
+        padding: 10px 15px; /* Padding cho nút tìm kiếm */
+        font-size: 16px; /* Kích thước chữ cho nút */
+        cursor: pointer; /* Thay đổi con trỏ khi di chuột qua nút */
+        transition: background-color 0.5s; /* Hiệu ứng chuyển màu nền khi di chuột */
+    }
+    
+    .search-button:hover {
+        background-color: #005aa8; /* Màu nền khi di chuột */
+        transform: scale(1.1);
+    }
+
+    .search-button2 {
+        background-color: #007bff; /* Màu nền cho nút tìm kiếm */
+        color: white; /* Màu chữ cho nút */
+        border: none; /* Xóa đường viền */
+        border-radius: 5px; /* Bo tròn góc cho nút */
+        padding: 10px 15px; /* Padding cho nút tìm kiếm */
+        font-size: 40px; /* Kích thước chữ cho nút */
+        cursor: pointer; /* Thay đổi con trỏ khi di chuột qua nút */
+        transition: background-color 0.5s; /* Hiệu ứng chuyển màu nền khi di chuột */
+    }
+
+    .search-button2:hover {
+        background-color: #005aa8; /* Màu nền khi di chuột */
+        transform: scale(1.1);
+    }
+
+    .search-container3 {
+        display: flex; /* Sử dụng Flexbox để căn chỉnh ô nhập và nút tìm kiếm */
+        flex-direction: column; /* Sắp xếp theo chiều dọc */
+        align-items: center; /* Căn giữa theo chiều ngang */
+        margin-top: 5px; /* Thêm khoảng cách trên */
+    }
+    
+    .search-button-both {
+        margin-top: 10px;              /* Khoảng cách trên nút */
+        text-align: center;             /* Căn giữa chữ trong nút */
+        background-color: #007bff;     /* Màu nền cho nút tìm kiếm */
+        color: white;                   /* Màu chữ cho nút */
+        border: none;                   /* Xóa đường viền */
+        border-radius: 5px;            /* Bo tròn góc cho nút */
+        padding: 10px 15px;            /* Padding cho nút tìm kiếm */
+        font-size: 20px;                /* Kích thước chữ cho nút */
+        cursor: pointer;                /* Thay đổi con trỏ khi di chuột qua nút */
+        transition: background-color 0.5s; /* Hiệu ứng chuyển màu nền khi di chuột */
+    }
+    
+    /* Hiệu ứng hover cho nút */
+    .search-button-both:hover {
+        background-color: #0056b3;     /* Màu nền khi hover */
+    }
+
+    .toggle-button {
+        font-size: 16px;
+        background-color: #f0f0f0;
+        color: #007bff;
+        border: 1px solid #007bff;
+        border-radius: 5px;
+        padding: 10px 15px;
+        cursor: pointer;
+        position: absolute; /* Đặt vị trí tuyệt đối */
+        bottom: 20px; /* Cách đáy phần tử chứa 30px */
+        left: 50%; /* Căn giữa */
+        transform: translateX(-50%); /* Căn giữa hoàn hảo */
+        z-index: 1000; /* Đảm bảo nút nằm trên các thành phần khác */
+    }
+
+    .toggle-button:hover {
+        background-color: #007bff; /* Màu nền khi di chuột */
+        color: white; /* Màu chữ khi di chuột */
+    }
+
+    .toggle {
+        font-size: 17px;
+        color: #eaeaea;
+        padding: 10px 15px;
+        cursor: pointer;
+        position: absolute; /* Đặt vị trí tuyệt đối */
+        bottom: 40px; /* Cách đáy phần tử chứa 30px */
+        left: 50%; /* Căn giữa */
+        transform: translateX(-49%); /* Căn giữa hoàn hảo */
+        z-index: 1000; /* Đảm bảo nút nằm trên các thành phần khác */
+    }
+
+    /* CSS cho overlay */
+    #overlay {
+        position: fixed;
+        display: none; /* Ban đầu ẩn overlay */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Làm mờ với độ trong suốt */
+        z-index: 2; /* Đảm bảo overlay ở trên nội dung khác */
+    }
+
+    /* CSS cho hộp thông báo lỗi */
+    #error-message-box {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 20px;
+        border: 3px solid #007bff;
+        border-radius: 8px;
+        /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+        display: none; /* Ban đầu ẩn hộp thông báo */
+        z-index: 3; /* Đặt hộp thông báo ở trên overlay */
+        text-align: center;
+    }
+
+    /* CSS cho nút đóng hộp thông báo */
+    #close-btn {
+        text-align: center;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    #close-btn:hover {
+        background-color: red;
+        transform: scale(1.1);
+    }
+
+    .search-container-rank {
+        margin-top: 20px;
+        text-align: center;
+    }
+    
+    .search-button-rank {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        padding: 0px 20px;
+        font-size: 16px;
+    }
+    
+    .search-button-rank i {
+        margin-right: 5px;
+    }
+    
+    #rank_input {
+        padding: 5px;
+        font-size: 14px;
+        margin-right: 10px;
+    }
+    
+    .rank-toggle-button {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.2rem;
+        cursor: pointer;
+    }
+    
+    .rank-toggle-button:focus {
+        outline: none;
+    }
+    
+    #rankSelection select {
+        padding: 5px;
+        margin-top: 5px;
+        font-size: 1rem;
+    }
+    
+    .end {
+        position: relative; /* Đặt vị trí cho div */
+        color: white; /* Màu chữ */
+        padding: 20px; /* Padding cho nội dung */
+        text-align: center; /* Căn giữa nội dung */
+        overflow: hidden; /* Đảm bảo nội dung không ra ngoài div */
+    }
+
+    .background-image2 {
+        position: absolute; /* Đặt ảnh nền tuyệt đối */
+        top: 0; /* Căn ảnh về phía trên cùng */
+        left: 0; /* Căn ảnh về phía bên trái */
+        width: 100%; /* Đặt chiều rộng của ảnh là 100% */
+        height: auto; /* Giữ tỷ lệ của ảnh */
+        max-height: 300px; /* Đặt chiều cao tối đa của ảnh */
+        object-fit: cover; /* Đảm bảo ảnh không bị méo */
+        z-index: -1; /* Đưa ảnh ra phía sau nội dung */
+        filter: blur(1.5px); /* Điều chỉnh giá trị này để tăng hoặc giảm độ mờ */
+    }
+}
+
+/* Trang Legal */
+.legal {
+    h1 {
+        text-align: center;
+        color: #333;
+        font-size: 38px; /* Tăng kích thước chữ cho tiêu đề lớn */
+        margin-bottom: 25px; /* Thêm khoảng cách dưới tiêu đề */
+    }
+
+    .background-image {
+        position: relative; /* Để có thể định vị các phần tử con */
+        overflow: hidden; /* Giúp ẩn các phần tử vượt ra ngoài khung */
+        background-size: contain; /* Đảm bảo ảnh giữ nguyên tỷ lệ và không bị méo */
+        background-position: center; /* Đặt ảnh ở giữa */
+        background-attachment: fixed; /* Cố định ảnh nền khi cuộn */
+        height: 460px; /* Chiều cao bằng 100% màn hình */
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Căn giữa nội dung theo chiều dọc */
+        align-items: center; /* Căn giữa nội dung theo chiều ngang */
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    }
+    
+    .container1 {
+        top: 40px;
+        position: relative; /* Để nội dung nằm trên ảnh */
+        z-index: 1; /* Đảm bảo nội dung nằm trên hình ảnh */
+        padding: 20px; /* Thêm padding cho nội dung */
+        width: 50%;
+        text-align:center;
+        border-bottom: 1px solid #555;
+    }
+
+    .art {
+        font-size: 2.5rem; /* Kích thước chữ */
+        color: #007bff; /* Màu chữ xanh */
+        text-align: center; /* Căn giữa chữ */
+        text-shadow:
+            1px 1px 0px white, /* Viền bên trái và bên dưới */
+            -2px -2px 0px white, /* Viền bên phải và phía trên */
+            1px -1px 0px white, /* Viền bên phải và phía trên */
+            -1px 1px 0px white; /* Viền bên trái và bên dưới */
+        padding-bottom: 13px;    
+    }
+
+    .art:hover {
+        color: #005aa8;
+        transform: scale(1.1);
+        text-shadow:
+            1px 1px 0px white, /* Viền bên trái và bên dưới */
+            -2px -2px 0px white, /* Viền bên phải và phía trên */
+            1px -1px 0px white, /* Viền bên phải và phía trên */
+            -1px 1px 0px white; /* Viền bên trái và bên dưới */
+    }
+
+    .link {
+        color:#000000;
+        font-size: 1.3rem;
+        cursor: pointer;
+        text-shadow: none; 
+    }
+
+    .link:hover {
+        color:#0056b3;
+    }
+
+    .head {
+        position: absolute; /* Để định vị thanh đầu trang trên ảnh nền */
+        height: 8.7%;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding: 10px; /* Thêm khoảng cách cho thanh đầu trang */
+        background-color: rgba(51, 51, 51, 0.95); /* Nền màu trắng với độ trong suốt */
+        z-index: 2; /* Đặt trên hình ảnh nền */
+        text-align: center; /* Căn giữa nội dung */
+        /* border-top: 3px solid white; */
+        border-bottom: 3px solid white;
+        /* border-radius: 5px; */
+    }
+
+    .head nav ul {
+        list-style: none;
+    }
+
+    .head ul {
+        margin: 5px;
+        padding: 2px;
+        border: 5px;
+    }
+
+    .head nav li {
+        display: inline;
+        margin: 10px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        padding-left:10px;
+        padding-right:10px;
+        border: 10px;
+        left: 80px;
+        top: -10px;
+    }
+
+    .head nav ul li a {
+        text-decoration: none;
+        /* color: #007bff; */
+    }
+
+    .head nav ul li a:hover {
+        text-decoration: underline;
+        text-decoration: none;
+    }
+
+    .brand {
+        position: absolute; /* Để định vị tên thương hiệu */
+        top: -18px; /* Khoảng cách từ trên */
+        left: 80px; /* Khoảng cách từ bên trái */
+        font-size: 1.6rem; /* Kích thước chữ cho thương hiệu */
+        font-weight: bold; /* Làm chữ đậm */
+        color: #ffffff; /* Màu chữ của thương hiệu */
+        z-index: 2; /* Đặt trên hình ảnh nền */
+        text-shadow: 2px 2px 2px rgba(30, 83, 255, 0.7);
+    }
+
+    .brand:hover {
+        /* color: #444; Màu sắc khi rê chuột */
+        transform: scale(1.05); /* Phóng to chữ khi rê chuột */
+    }
+    
+    nav ul li a.highlight {
+        font-size: 1rem; /* Tăng kích thước chữ cho thẻ Home */
+        font-weight: bold; /* Đậm chữ */
+        color: white; /* Màu chữ khác cho thẻ Home */
+        /* border-bottom: 1px solid #007bff; Thêm đường viền bên dưới */
+        padding: 20px;
+    }
+
+    .main {
+        font-size: 38px;
+        color: white;
+        text-shadow: 2px 2px 2px rgba(37, 36, 36, 0.7);
+    }
+
+    .search-container {
+        display: flex; /* Sử dụng Flexbox để căn chỉnh ô nhập và nút tìm kiếm */
+        align-items: center; /* Căn giữa theo chiều dọc */
+        margin-top: 5px; /* Thêm khoảng cách trên */
+    }
+    
+    .search-container2 {
+        display: flex; /* Sử dụng Flexbox để căn chỉnh ô nhập và nút tìm kiếm */
+        align-items: center; /* Căn giữa theo chiều dọc */
+        margin-top: 20px; /* Thêm khoảng cách trên */
+    }
+
+    #input1 {
+        flex: 1; /* Để ô nhập chiếm toàn bộ không gian còn lại */
+        padding: 10px; /* Thêm padding cho ô nhập */
+        border: 1px solid #ccc; /* Đường viền cho ô nhập */
+        border-radius: 5px; /* Bo tròn góc cho ô nhập */
+        font-size: 16px; /* Kích thước chữ cho ô nhập */
+        margin-right: 10px; /* Khoảng cách giữa ô nhập và nút tìm kiếm */
+        height: 15px;
+    }
+
+    #input2 {
+        flex: 1; /* Để ô nhập chiếm toàn bộ không gian còn lại */
+        padding: 10px; /* Thêm padding cho ô nhập */
+        border: 1px solid #ccc; /* Đường viền cho ô nhập */
+        border-radius: 5px; /* Bo tròn góc cho ô nhập */
+        font-size: 16px; /* Kích thước chữ cho ô nhập */
+        margin-right: 10px; /* Khoảng cách giữa ô nhập và nút tìm kiếm */
+        height: 60px;
+    }
+    
+    .search-button {
+        background-color: #007bff; /* Màu nền cho nút tìm kiếm */
+        color: white; /* Màu chữ cho nút */
+        border: none; /* Xóa đường viền */
+        border-radius: 5px; /* Bo tròn góc cho nút */
+        padding: 10px 15px; /* Padding cho nút tìm kiếm */
+        font-size: 16px; /* Kích thước chữ cho nút */
+        cursor: pointer; /* Thay đổi con trỏ khi di chuột qua nút */
+        transition: background-color 0.5s; /* Hiệu ứng chuyển màu nền khi di chuột */
+    }
+    
+    .search-button:hover {
+        background-color: #005aa8; /* Màu nền khi di chuột */
+        transform: scale(1.1);
+    }
+
+    .search-button2 {
+        background-color: #007bff; /* Màu nền cho nút tìm kiếm */
+        color: white; /* Màu chữ cho nút */
+        border: none; /* Xóa đường viền */
+        border-radius: 5px; /* Bo tròn góc cho nút */
+        padding: 10px 15px; /* Padding cho nút tìm kiếm */
+        font-size: 40px; /* Kích thước chữ cho nút */
+        cursor: pointer; /* Thay đổi con trỏ khi di chuột qua nút */
+        transition: background-color 0.5s; /* Hiệu ứng chuyển màu nền khi di chuột */
+    }
+
+    .search-button2:hover {
+        background-color: #005aa8; /* Màu nền khi di chuột */
+        transform: scale(1.1);
+    }
+
+    .search-container3 {
+        display: flex; /* Sử dụng Flexbox để căn chỉnh ô nhập và nút tìm kiếm */
+        flex-direction: column; /* Sắp xếp theo chiều dọc */
+        align-items: center; /* Căn giữa theo chiều ngang */
+        margin-top: 5px; /* Thêm khoảng cách trên */
+    }
+    
+    .search-button-both {
+        margin-top: 10px;              /* Khoảng cách trên nút */
+        text-align: center;             /* Căn giữa chữ trong nút */
+        background-color: #007bff;     /* Màu nền cho nút tìm kiếm */
+        color: white;                   /* Màu chữ cho nút */
+        border: none;                   /* Xóa đường viền */
+        border-radius: 5px;            /* Bo tròn góc cho nút */
+        padding: 10px 15px;            /* Padding cho nút tìm kiếm */
+        font-size: 20px;                /* Kích thước chữ cho nút */
+        cursor: pointer;                /* Thay đổi con trỏ khi di chuột qua nút */
+        transition: background-color 0.5s; /* Hiệu ứng chuyển màu nền khi di chuột */
+    }
+    
+    /* Hiệu ứng hover cho nút */
+    .search-button-both:hover {
+        background-color: #0056b3;     /* Màu nền khi hover */
+    }
+
+    .toggle-button {
+        font-size: 16px;
+        background-color: #f0f0f0;
+        color: #007bff;
+        border: 1px solid #007bff;
+        border-radius: 5px;
+        padding: 10px 15px;
+        cursor: pointer;
+        position: absolute; /* Đặt vị trí tuyệt đối */
+        bottom: 20px; /* Cách đáy phần tử chứa 30px */
+        left: 50%; /* Căn giữa */
+        transform: translateX(-50%); /* Căn giữa hoàn hảo */
+        z-index: 1000; /* Đảm bảo nút nằm trên các thành phần khác */
+    }
+
+    .toggle-button:hover {
+        background-color: #007bff; /* Màu nền khi di chuột */
+        color: white; /* Màu chữ khi di chuột */
+    }
+
+    .toggle {
+        font-size: 17px;
+        color: #eaeaea;
+        padding: 10px 15px;
+        cursor: pointer;
+        position: absolute; /* Đặt vị trí tuyệt đối */
+        bottom: 40px; /* Cách đáy phần tử chứa 30px */
+        left: 50%; /* Căn giữa */
+        transform: translateX(-49%); /* Căn giữa hoàn hảo */
+        z-index: 1000; /* Đảm bảo nút nằm trên các thành phần khác */
+    }
+
+    /* CSS cho overlay */
+    #overlay {
+        position: fixed;
+        display: none; /* Ban đầu ẩn overlay */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Làm mờ với độ trong suốt */
+        z-index: 2; /* Đảm bảo overlay ở trên nội dung khác */
+    }
+
+    /* CSS cho hộp thông báo lỗi */
+    #error-message-box {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 20px;
+        border: 3px solid #007bff;
+        border-radius: 8px;
+        /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+        display: none; /* Ban đầu ẩn hộp thông báo */
+        z-index: 3; /* Đặt hộp thông báo ở trên overlay */
+        text-align: center;
+    }
+
+    /* CSS cho nút đóng hộp thông báo */
+    #close-btn {
+        text-align: center;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    #close-btn:hover {
+        background-color: red;
+        transform: scale(1.1);
+    }
+
+    .search-container-rank {
+        margin-top: 20px;
+        text-align: center;
+    }
+    
+    .search-button-rank {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        padding: 0px 20px;
+        font-size: 16px;
+    }
+    
+    .search-button-rank i {
+        margin-right: 5px;
+    }
+    
+    #rank_input {
+        padding: 5px;
+        font-size: 14px;
+        margin-right: 10px;
+    }
+    
+    .rank-toggle-button {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.2rem;
+        cursor: pointer;
+    }
+    
+    .rank-toggle-button:focus {
+        outline: none;
+    }
+    
+    #rankSelection select {
+        padding: 5px;
+        margin-top: 5px;
+        font-size: 1rem;
+    }
+    
+    .end {
+        position: relative; /* Đặt vị trí cho div */
+        color: white; /* Màu chữ */
+        padding: 20px; /* Padding cho nội dung */
+        text-align: center; /* Căn giữa nội dung */
+        overflow: hidden; /* Đảm bảo nội dung không ra ngoài div */
+    }
+
+    .background-image2 {
+        position: absolute; /* Đặt ảnh nền tuyệt đối */
+        top: 0; /* Căn ảnh về phía trên cùng */
+        left: 0; /* Căn ảnh về phía bên trái */
+        width: 100%; /* Đặt chiều rộng của ảnh là 100% */
+        height: auto; /* Giữ tỷ lệ của ảnh */
+        max-height: 300px; /* Đặt chiều cao tối đa của ảnh */
+        object-fit: cover; /* Đảm bảo ảnh không bị méo */
+        z-index: -1; /* Đưa ảnh ra phía sau nội dung */
+        filter: blur(1.5px); /* Điều chỉnh giá trị này để tăng hoặc giảm độ mờ */
+    }
+}
