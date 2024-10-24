@@ -101,12 +101,12 @@
                                     height: auto;
                                     min-height: 250px;">
                             <label for="search_terms"><strong>Search terms</strong></label>
-                            <br><br>
-                            <div class="input-wrapper">
+                            <br>
+                            <div class="input-wrapper" style="margin-top:10px">
                                 <label><strong>Title</strong></label>
-                                <div class="input-box">
+                                <div class="input-box-title">
                                     <textarea id="title_input" name="title_input"
-                                                placeholder="Enter search terms..." oninput="adjustHeight(this)"
+                                                placeholder="Enter title keyword to search..." oninput="adjustHeight(this)"
                                                 style="font-family: Arial, sans-serif; min-width:50%; margin-right:0px; max-width:80%; height:70%; resize: none; flex: 1;
                                                         padding: 10px;
                                                         border: 1px solid #ccc;
@@ -119,9 +119,9 @@
 
                                 <label><strong>Abstract</strong></label>
                                 <br>
-                                <div class="input-box">
+                                <div class="input-box-abstract">
                                     <textarea id="abstract_input" name="abstract_input"
-                                                placeholder="Enter search terms..." oninput="adjustHeight(this)"
+                                                placeholder="Enter abstract keyword to search..." oninput="adjustHeight(this)"
                                                 style="font-family: Arial, sans-serif; min-width:50%; margin-right:0px; max-width:80%; height:70%; resize: none; flex: 1;
                                                         padding: 10px;
                                                         border: 1px solid #ccc;
@@ -260,11 +260,11 @@
     </div>
     <div class="footer-content2">
         <a style="font-size:17px; background: none; border: none;display: inline; margin-top: 0px;"
-            href="#">About</a>
+            href="/about">About</a>
         <a style="font-size:17px; background: none; border: none;display: inline; margin-top: 0px;"
-            href="#">Legal</a>
+            href="/legal">Legal</a>
         <a style="font-size:17px; background: none; border: none;display: inline; margin-top: 0px;"
-            href="#">Contact</a>
+            href="/contact">Contact</a>
     </div>
 
     <div class="footer-text" style="text-align: center; margin-top: 5px;">
