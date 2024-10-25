@@ -49,17 +49,38 @@
             </nav>
         </div>
 
-        <div class="containers">
-            <form action="/recommend" method="POST">
-                <div class="search-container">
-                    <input type="text" id="input" name="input"
-                            placeholder="Enter the title or abstract of the article you want to search for..." required>
-                    <button type="submit" class="search-button" title="Tìm kiếm">
-                        <i class="fa fa-search"></i> <!-- Biểu tượng tìm kiếm từ Font Awesome -->
-                    </button>
-                </div>
+        <!-- <div class="containers">
+            <form action="/filter" method="POST" class="search-form">
+                <input type="text" id="title_input" name="title_input"
+                        placeholder="Enter title keyword to search..."
+                        style="width:20%; height:25px">
+                
+                <textarea id="abstract_input" name="abstract_input"
+                        placeholder="Enter abstract keyword to search..." oninput="adjustHeight(this)"
+                        style="width:20%; height:35px"></textarea>
+                
+                <button type="submit" class="search -button1"><b>SEARCH</b></button>
+            </form>
+        </div> -->
+
+        <div class="containers" style="display: flex; justify-content: center; margin: 5px 0px 0px 0px;">
+            <form action="/filter" method="POST" style="display: flex; align-items: center; width: 80%;">
+                <input type="text" id="title_input" name="title_input"
+                        placeholder="Enter title keyword to search..."
+                        style="flex: 1; padding: 10px; font-size: 16px; border: 1px solid #ccc; margin-right: 10px;
+                                width: 100px; height: 20px; border-radius: 5px">
+        
+                <textarea id="abstract_input" name="abstract_input"
+                          placeholder="Enter abstract keyword to search..." oninput="adjustHeight(this)"
+                          style="flex: 2; padding: 10px; font-size: 16px; border: 1px solid #ccc; margin-right: 10px;
+                                width: 40%; height: 35px; resize: none; font-family: Arial; border-radius: 5px"></textarea>
+        
+                <button type="submit" class="bt">
+                    <b>SEARCH</b>
+                </button>
             </form>
         </div>
+        
 
         <div class="containers2">
             {% set acronym = conference.get('Acronym') %}

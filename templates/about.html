@@ -32,27 +32,37 @@
         document.getElementById('toggleArticles').innerHTML = '<i class="fa fa-chevron-down"></i>'; // Đặt biểu tượng thành mũi tên chỉ xuống
     }
 
-    // Hàm toggle để hiển thị/ẩn các bài báo và cuộn màn hình
-    function toggleArticles() {
-        const articlesList = document.getElementById('articlesList');
-        if (articlesList.style.display === "none" || articlesList.style.display === "") {
-            articlesList.style.display = "block";
-            document.getElementById('toggleArticles').innerHTML = '<i class="fa fa-chevron-up"></i>'; // Thay đổi biểu tượng thành mũi tên chỉ lên
-            // Cuộn đến danh sách bài báo
-            articlesList.scrollIntoView({ behavior: 'smooth' });
-        } else {
-            articlesList.style.display = "none";
-            document.getElementById('toggleArticles').innerHTML = '<i class="fa fa-chevron-down"></i>'; // Thay đổi biểu tượng thành mũi tên chỉ xuống
+    // Hiển thị/ẩn hộp thông báo lỗi
+    function closeErrorMessage() {
+        document.getElementById('error-message-box').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none'; // Ẩn lớp nền
+        document.body.style.overflow = 'auto';
+    }
+
+    function validateForm() {
+        const title = document.getElementById('title_input').value.trim();
+        const abstract = document.getElementById('abstract_input').value.trim();
+        
+        // Kiểm tra xem cả hai trường đều trống
+        if (title === "" && abstract === "") {
+            // Hiển thị hộp thông báo lỗi
+            document.getElementById('error-message-box').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block'; // Hiển thị lớp nền mờ
+            document.body.style.overflow = 'hidden';
+            return false;  // Ngăn chặn việc gửi form
         }
+        return true;  // Cho phép gửi form nếu một trong hai trường có dữ liệu
     }
 </script>
 
 <body class="about">
     <div class="background-image">
         <div class="head">
-            <img style="height:70px; width:70px; position: absolute; left:10px; top:-5px"
-                    src="{{ url_for('static', filename='image/LG.ico') }}" alt="Logo">
-            <p class="brand"></i> GatherConf</p> <!-- Thêm biểu tượng thương hiệu -->
+            <div onclick="window.location.href='/'">
+                <img style="height:70px; width:70px; position: absolute; left:10px; top:-5px"
+                        src="{{ url_for('static', filename='image/LG.ico') }}" alt="Logo">
+                <p class="brand"></i> GatherConf</p>
+            </div>
             <nav>
                 <ul>
                     <li><a href="/about" class="highlight">About</a></li>
@@ -62,6 +72,51 @@
             </nav>
         </div>
 
+        <!-- Overlay làm mờ nền -->
+        <div id="overlay"></div>
+
+        <!-- Hộp thông báo lỗi -->
+        <div id="error-message-box">
+            <strong><p style="font-size:1.2rem; text-shadow:none; margin-top:5px">Please enter Title or Abstract to search.</p></strong>
+            <button id="close-btn" onclick="closeErrorMessage()" style="font-size:1rem"><b>Close</b></button>
+        </div>
+
+        <div class="containers" style="display: flex; justify-content: center; margin: -20px 0px 0px 0px;">
+            <form action="/filter" method="POST" onsubmit="return validateForm()" style="display: flex; align-items: center; width: 700px; flex-wrap: nowrap;">
+                <input type="text" id="title_input" name="title_input"
+                       placeholder="Enter title keyword..."
+                       style="flex: 1; padding: 10px; font-size: 16px; border: 1px solid #ccc; margin-right: 10px;
+                              width: 40%; height: 20px; border-radius: 5px;">
+                
+                <input id="abstract_input" name="abstract_input"
+                          placeholder="Enter abstract keyword..." oninput="adjustHeight(this)"
+                          style="flex: 2; padding: 10px; font-size: 16px; border: 1px solid #ccc; margin-right: 10px;
+                                 width: 60%; height: 20px; resize: none; font-family: Arial; border-radius: 5px;">
+                
+                <button type="submit" class="bt"
+                        style="padding: 10px 20px; background-color: blue; color: white; border: 2px solid white; border-radius: 5px;
+                               font-size: 16px; cursor: pointer;"
+                        onmouseover="hoverEffect(this)"
+                        onmouseout="resetEffect(this)">
+                    <b>SEARCH</b>
+                </button>
+            </form>
+        </div>
+
+        <script>
+            // Hiệu ứng khi rê chuột vào nút
+            function hoverEffect(button) {
+                button.style.backgroundColor = 'darkblue'; // Đổi màu nền khi hover
+                button.style.borderColor = 'white';       // Đổi màu viền khi hover
+            }
+
+            // Reset lại màu gốc khi không còn hover
+            function resetEffect(button) {
+                button.style.backgroundColor = 'blue';   // Trở về màu nền gốc
+                button.style.borderColor = 'white';      // Trở về màu viền gốc
+            }
+        </script>
+        
         <button onclick="scrollToTop()" id="backToTopBtn" title="Về đầu trang"><i class="fa-regular fa-circle-up"></i></button>
 
         <img src="{{ url_for('static', filename='image/hop.jpg') }}" alt="Hình nền">
@@ -73,9 +128,11 @@
     </div>
 
     <div style="padding:30px 400px 30px 400px">
-        <p style="font-size:1rem">GatherConf is a conference recommendation system designed for researchers to find the most suitable academic conferences for presenting their scientific papers. Using the title and abstract of a paper, the system employs natural language processing (NLP) and deep learning models to analyze and suggest conferences with high relevance.</p>
-    <br>
-        <p>GatherConf takes into account various factors such as the weight of the title, abstract, and conference rankings, providing precise and efficient recommendations. By simplifying the search process, the system helps researchers save time and increase their chances of submitting to reputable and relevant conferences.</p>
+        <p style="font-size:1rem;  text-align:justify;">GatherConf is a conference recommendation system designed for researchers to find the most suitable academic conferences for presenting their scientific papers. Using the title and abstract of a paper, the system employs natural language processing (NLP) and deep learning models to analyze and suggest conferences with high relevance.</p>
+        <br>
+        <hr style="margin: 10px 0; border-bottom: 1px solid #555;">
+        <br>
+        <p style="font-size: 1rem; text-align:justify;">GatherConf takes into account various factors such as the weight of the title, abstract, and conference rankings, providing precise and efficient recommendations. By simplifying the search process, the system helps researchers save time and increase their chances of submitting to reputable and relevant conferences.</p>
     </div>
 
     <div class="end">
