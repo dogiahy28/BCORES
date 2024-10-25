@@ -50,15 +50,41 @@
         </div>
 
         <div class="containers">
-            <!--<form action="/recommend" method="POST">
-                <div class="search-container">
-                    <input type="text" id="input" name="input"
-                            placeholder="Enter the title or abstract of the article you want to search for..." required>
-                    <button type="submit" class="search-button" title="Tìm kiếm">
-                        <i class="fa fa-search"></i>
+            <div style="display: flex; justify-content: center; margin: 10px 0px 0px 0px;">
+                <form action="/filter" method="POST" onsubmit="return validateForm()" style="display: flex; align-items: center; width: 700px; flex-wrap: nowrap;">
+                    <input type="text" id="title_input" name="title_input"
+                        placeholder="Enter title keyword..."
+                        style="flex: 1; padding: 10px; font-size: 16px; border: 1px solid #ccc; margin-right: 10px;
+                                width: 40%; height: 20px; border-radius: 5px;">
+                    
+                    <input id="abstract_input" name="abstract_input"
+                            placeholder="Enter abstract keyword..." oninput="adjustHeight(this)"
+                            style="flex: 2; padding: 10px; font-size: 16px; border: 1px solid #ccc; margin-right: 10px;
+                                    width: 60%; height: 20px; resize: none; font-family: Arial; border-radius: 5px;">
+                    
+                    <button type="submit" class="bt"
+                            style="padding: 10px 20px; background-color: blue; color: white; border: 2px solid white; border-radius: 5px;
+                                font-size: 16px; cursor: pointer;"
+                            onmouseover="hoverEffect(this)"
+                            onmouseout="resetEffect(this)">
+                        <b>SEARCH</b>
                     </button>
-                </div>
-            </form>--> 
+                </form>
+            </div>
+
+            <script>
+                // Hiệu ứng khi rê chuột vào nút SEARCH
+                function hoverEffect(button) {
+                    button.style.backgroundColor = 'darkblue'; // Đổi màu nền khi hover
+                    button.style.borderColor = 'white';       // Đổi màu viền khi hover
+                }
+    
+                // Reset lại màu gốc khi không còn hover
+                function resetEffect(button) {
+                    button.style.backgroundColor = 'blue';   // Trở về màu nền gốc
+                    button.style.borderColor = 'white';      // Trở về màu viền gốc
+                }
+            </script>
 
             <style>
                 .h2-ellipsis {
@@ -71,7 +97,7 @@
             </style>
 
             {# <h2 style="font-size:1.3rem; margin-top:5px; margin-bottom:5px"><strong>{{ num_results }} result</strong> found for: <i>{{ user_input }}</i></h2> #}
-            <h2 class="h2-ellipsis" style="font-size:1.3rem; margin-top:5px; margin-bottom:5px">
+            <h2 class="h2-ellipsis" style="font-size:1.3rem; margin-top:15px; margin-bottom:5px">
                 <strong>{{ num_results }} result</strong> found for:
                 {% if title_input and abstract_input %}
                     <i>{{ title_input }}</i> <strong>and</strong> <i>{{ abstract_input }}</i>

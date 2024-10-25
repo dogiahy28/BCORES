@@ -387,7 +387,7 @@ footer {
         bottom: 20px; /* Cách đáy phần tử chứa 30px */
         left: 50%; /* Căn giữa */
         transform: translateX(-50%); /* Căn giữa hoàn hảo */
-        z-index: 1000; /* Đảm bảo nút nằm trên các thành phần khác */
+        z-index: 10; /* Đảm bảo nút nằm trên các thành phần khác */
     }
 
     .toggle-button:hover {
@@ -431,7 +431,7 @@ footer {
         border-radius: 8px;
         /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
         display: none; /* Ban đầu ẩn hộp thông báo */
-        z-index: 3; /* Đặt hộp thông báo ở trên overlay */
+        z-index: 99; /* Đặt hộp thông báo ở trên overlay */
         text-align: center;
     }
 
@@ -516,6 +516,20 @@ footer {
     .containers {
         padding: 110px 50px 10px 50px;
         border: 1px solid #9b9b9b;
+    }
+
+    .bt {
+        padding: 10px 20px;
+        background-color: blue;
+        color: white;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    .bt:hover {
+        background-color: #00458f;
     }
 
     .head {
@@ -1042,7 +1056,7 @@ footer {
         height: 100%; /* Đảm bảo ảnh cao 100% */
         object-fit: cover; /* Đảm bảo ảnh lấp đầy không gian mà không bị biến dạng */
         z-index: -1; /* Đặt hình ảnh dưới nội dung */
-        opacity: 0.8; /* Giảm độ rõ của hình ảnh, bạn có thể điều chỉnh giá trị này */
+        opacity: 0.75; /* Giảm độ rõ của hình ảnh, bạn có thể điều chỉnh giá trị này */
     }
     
     .container1 {
@@ -1232,7 +1246,7 @@ footer {
         bottom: 20px; /* Cách đáy phần tử chứa 30px */
         left: 50%; /* Căn giữa */
         transform: translateX(-50%); /* Căn giữa hoàn hảo */
-        z-index: 1000; /* Đảm bảo nút nằm trên các thành phần khác */
+        z-index: 10; /* Đảm bảo nút nằm trên các thành phần khác */
     }
 
     .toggle-button:hover {
@@ -1276,7 +1290,7 @@ footer {
         border-radius: 8px;
         /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
         display: none; /* Ban đầu ẩn hộp thông báo */
-        z-index: 3; /* Đặt hộp thông báo ở trên overlay */
+        z-index: 20; /* Đặt hộp thông báo ở trên overlay */
         text-align: center;
     }
 
@@ -1391,7 +1405,7 @@ footer {
         height: 100%; /* Đảm bảo ảnh cao 100% */
         object-fit: cover; /* Đảm bảo ảnh lấp đầy không gian mà không bị biến dạng */
         z-index: -1; /* Đặt hình ảnh dưới nội dung */
-        opacity: 0.8; /* Giảm độ rõ của hình ảnh, bạn có thể điều chỉnh giá trị này */
+        opacity: 0.75; /* Giảm độ rõ của hình ảnh, bạn có thể điều chỉnh giá trị này */
     }
     
     .container1 {
@@ -1401,6 +1415,11 @@ footer {
         padding: 20px; /* Thêm padding cho nội dung */
         width: 50%;
         text-align:center;
+    }
+
+    .containers {
+        padding: 110px 50px 10px 50px;
+        /* border: 1px solid #9b9b9b; */
     }
 
     .head {
@@ -1724,7 +1743,7 @@ footer {
         background-size: contain; /* Đảm bảo ảnh giữ nguyên tỷ lệ và không bị méo */
         background-position: center; /* Đặt ảnh ở giữa */
         background-attachment: fixed; /* Cố định ảnh nền khi cuộn */
-        height: 460px; /* Chiều cao bằng 100% màn hình */
+        height: 90vh; /* Chiều cao bằng 100% màn hình */
         display: flex;
         flex-direction: column;
         justify-content: center; /* Căn giữa nội dung theo chiều dọc */
@@ -1733,13 +1752,12 @@ footer {
     }
     
     .container1 {
-        top: 40px;
+        top: -10px;
         position: relative; /* Để nội dung nằm trên ảnh */
         z-index: 1; /* Đảm bảo nội dung nằm trên hình ảnh */
-        padding: 20px; /* Thêm padding cho nội dung */
+        padding: 20px 0px 0px 0px; /* Thêm padding cho nội dung */
         width: 50%;
         text-align:center;
-        border-bottom: 1px solid #555;
     }
 
     .art {
@@ -1777,7 +1795,7 @@ footer {
 
     .head {
         position: absolute; /* Để định vị thanh đầu trang trên ảnh nền */
-        height: 8.7%;
+        height: 8%;
         top: 0;
         left: 0;
         right: 0;
