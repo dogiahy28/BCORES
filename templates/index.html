@@ -45,6 +45,15 @@
             document.getElementById('toggleArticles').innerHTML = '<i class="fa fa-chevron-down"></i>'; // Thay đổi biểu tượng thành mũi tên chỉ xuống
         }
     }
+
+    // Hàm mở/đóng thanh lọc bên phải
+    function toggleFilterSidebar() {
+        const sidebar = document.getElementById("filterSidebar");
+        const filterToggle = document.querySelector(".filter-toggle");
+        sidebar.classList.toggle("active");
+        filterToggle.classList.toggle("hidden"); // Ẩn nút khi thanh lọc hiển thị
+    }
+
 </script>
 
 <body class="home">
@@ -73,6 +82,74 @@
         <img src="{{ url_for('static', filename='image/anhnen10.jpg') }}" alt="Hình nền">
 
         <div class="container1">
+
+        <!--
+        <button class="filter-toggle" onclick="toggleFilterSidebar()">Search with Filter</button> -->
+        <div class="filter-toggle" onclick="toggleFilterSidebar()">
+            <p style="color:white"><u>Search with filter</u></p>
+            <button class="bt-open"><i class="fa-solid fa-angles-left"></i></button>
+        </div>
+
+        <!-- Thanh lọc bên phải -->
+        <div id="filterSidebar" class="filter-sidebar">
+            <h2 style="text-align:center; margin-top:0px; color:#007bff">Filters For Search</h2>
+            
+            <h3>Rank</h3>
+            <label><input type="checkbox" name="rank[]" value="A" onchange="applyFilter()"> A</label>
+            <label><input type="checkbox" name="rank[]" value="B" onchange="applyFilter()"> B</label>
+            <label><input type="checkbox" name="rank[]" value="C" onchange="applyFilter()"> C</label>
+        
+            <h3>Topic</h3>
+            <select id="field" name="field" onchange="applyFilter()" style="width:100%; height:30px; margin-top:7px; border-radius:5px">
+                <option value="" {% if selected_field is none %}selected{% endif %}>...</option>
+                <option value="Building" {% if selected_field == 'Building' %}selected{% endif %}>Building</option>
+                <option value="Artificial Intelligence and Image Processing" {% if selected_field == 'Artificial Intelligence and Image Processing' %}selected{% endif %}>Artificial Intelligence and Image Processing</option>
+                <option value="Computation Theory and Mathematics" {% if selected_field == 'Computation Theory and Mathematics' %}selected{% endif %}>Computation Theory and Mathematics</option>
+                <option value="Information Systems" {% if selected_field == 'Information Systems' %}selected{% endif %}>Information Systems</option>
+                <option value="Computer Software" {% if selected_field == 'Computer Software' %}selected{% endif %}>Computer Software</option>
+                <option value="Information and Computing Sciences" {% if selected_field == 'Information and Computing Sciences' %}selected{% endif %}>Information and Computing Sciences</option>
+                <option value="Computer Hardware" {% if selected_field == 'Computer Hardware' %}selected{% endif %}>Computer Hardware</option>
+                <option value="Communications Technologies" {% if selected_field == 'Communications Technologies' %}selected{% endif %}>Communications Technologies</option>
+                <option value="Distributed Computing" {% if selected_field == 'Distributed Computing' %}selected{% endif %}>Distributed Computing</option>
+                <option value="Design Practice and Management" {% if selected_field == 'Design Practice and Management' %}selected{% endif %}>Design Practice and Management</option>
+                <option value="Data Format" {% if selected_field == 'Data Format' %}selected{% endif %}>Data Format</option>
+                <option value="Other Information and Computing Sciences" {% if selected_field == 'Other Information and Computing Sciences' %}selected{% endif %}>Other Information and Computing Sciences</option>
+                <option value="Aerospace Engineering" {% if selected_field == 'Aerospace Engineering' %}selected{% endif %}>Aerospace Engineering</option>
+                <option value="Mechanical Engineering" {% if selected_field == 'Mechanical Engineering' %}selected{% endif %}>Mechanical Engineering</option>
+                <option value="Civil Engineering" {% if selected_field == 'Civil Engineering' %}selected{% endif %}>Civil Engineering</option>
+                <option value="Geomatic Engineering" {% if selected_field == 'Geomatic Engineering' %}selected{% endif %}>Geomatic Engineering</option>
+                <option value="Manufacturing Engineering" {% if selected_field == 'Manufacturing Engineering' %}selected{% endif %}>Manufacturing Engineering</option>
+                <option value="Other Engineering" {% if selected_field == 'Other Engineering' %}selected{% endif %}>Other Engineering</option>
+                <option value="Architecture" {% if selected_field == 'Architecture' %}selected{% endif %}>Architecture</option>
+                <option value="Resources Engineering and Extractive Metallurgy" {% if selected_field == 'Resources Engineering and Extractive Metallurgy' %}selected{% endif %}>Resources Engineering and Extractive Metallurgy</option>
+                <option value="Maritime Engineering" {% if selected_field == 'Maritime Engineering' %}selected{% endif %}>Maritime Engineering</option>
+                <option value="Urban and Regional Planning" {% if selected_field == 'Urban and Regional Planning' %}selected{% endif %}>Urban and Regional Planning</option>
+                <option value="Automotive Engineering" {% if selected_field == 'Automotive Engineering' %}selected{% endif %}>Automotive Engineering</option>
+                <option value="Environmental Engineering" {% if selected_field == 'Environmental Engineering' %}selected{% endif %}>Environmental Engineering</option>
+                <option value="Technology" {% if selected_field == 'Technology' %}selected{% endif %}>Technology</option>
+                <option value="Built Environment and Design" {% if selected_field == 'Built Environment and Design' %}selected{% endif %}>Built Environment and Design</option>
+                <option value="Other Built Environment and Design" {% if selected_field == 'Other Built Environment and Design' %}selected{% endif %}>Other Built Environment and Design</option>
+                <option value="Interdisciplinary Engineering" {% if selected_field == 'Interdisciplinary Engineering' %}selected{% endif %}>Interdisciplinary Engineering</option>
+            </select>
+            
+            <button class="cancel-button" onclick="toggleFilterSidebar()">Cancel Filter</button>
+        </div>
+        
+        <script>
+            function applyFilter() {
+                // Lấy giá trị đã chọn từ các checkbox
+                const ranks = Array.from(document.querySelectorAll('input[name="rank[]"]:checked')).map(input => input.value);
+                const selectedField = document.querySelector('select[name="field"]').value;
+        
+                // Áp dụng lọc ở đây
+                console.log('Selected Ranks:', ranks);
+                console.log('Selected Field:', selectedField);
+        
+                // Gọi hàm để lọc dữ liệu (có thể sử dụng AJAX để gọi đến server)
+            }
+        </script>
+        
+        
             <marquee behavior="scroll" direction="left" style="color: white; font-size: 17px; padding: 10px;">
                 Welcome to the Scientific Papers Conference Suggestions website
             </marquee>
