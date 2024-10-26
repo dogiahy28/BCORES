@@ -63,25 +63,43 @@
             </form>
         </div> -->
 
-        <div class="containers" style="display: flex; justify-content: center; margin: 5px 0px 0px 0px;">
-            <form action="/filter" method="POST" style="display: flex; align-items: center; width: 80%;">
-                <input type="text" id="title_input" name="title_input"
-                        placeholder="Enter title keyword to search..."
+        <div class="containers">
+            <div style="display: flex; justify-content: center; margin: 10px 0px 0px 0px;">
+                <form action="/filter" method="POST" onsubmit="return validateForm()" style="display: flex; align-items: center; width: 700px; flex-wrap: nowrap;">
+                    <input type="text" id="title_input" name="title_input"
+                        placeholder="Enter title keyword..."
                         style="flex: 1; padding: 10px; font-size: 16px; border: 1px solid #ccc; margin-right: 10px;
-                                width: 100px; height: 20px; border-radius: 5px">
-        
-                <textarea id="abstract_input" name="abstract_input"
-                          placeholder="Enter abstract keyword to search..." oninput="adjustHeight(this)"
-                          style="flex: 2; padding: 10px; font-size: 16px; border: 1px solid #ccc; margin-right: 10px;
-                                width: 40%; height: 35px; resize: none; font-family: Arial; border-radius: 5px"></textarea>
-        
-                <button type="submit" class="bt">
-                    <b>SEARCH</b>
-                </button>
-            </form>
-        </div>
-        
+                                width: 40%; height: 20px; border-radius: 5px;">
+                    
+                    <input id="abstract_input" name="abstract_input"
+                            placeholder="Enter abstract keyword..." oninput="adjustHeight(this)"
+                            style="flex: 2; padding: 10px; font-size: 16px; border: 1px solid #ccc; margin-right: 10px;
+                                    width: 60%; height: 20px; resize: none; font-family: Arial; border-radius: 5px;">
+                    
+                    <button type="submit" class="bt"
+                            style="padding: 10px 20px; background-color: blue; color: white; border: 2px solid white; border-radius: 5px;
+                                font-size: 16px; cursor: pointer;"
+                            onmouseover="hoverEffect(this)"
+                            onmouseout="resetEffect(this)">
+                        <b>SEARCH</b>
+                    </button>
+                </form>
+            </div>
 
+            <script>
+                // Hiệu ứng khi rê chuột vào nút SEARCH
+                function hoverEffect(button) {
+                    button.style.backgroundColor = 'darkblue'; // Đổi màu nền khi hover
+                    button.style.borderColor = 'white';       // Đổi màu viền khi hover
+                }
+    
+                // Reset lại màu gốc khi không còn hover
+                function resetEffect(button) {
+                    button.style.backgroundColor = 'blue';   // Trở về màu nền gốc
+                    button.style.borderColor = 'white';      // Trở về màu viền gốc
+                }
+            </script>
+        </div>
         <div class="containers2">
             {% set acronym = conference.get('Acronym') %}
             {% if acronym and acronym is not none and acronym != 'nan' and acronym != None and acronym == acronym %}
