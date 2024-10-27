@@ -46,7 +46,23 @@
         }
     }
 
-    // Hàm mở/đóng thanh lọc bên phải
+    function handleCancelFilter() {
+        // Bỏ chọn tất cả checkbox
+        const checkboxes = document.querySelectorAll('input[name="rank[]"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = false;
+        });
+    
+        // Đặt lại giá trị của select box
+        document.querySelector('select[name="field"]').selectedIndex = 0; // Giả sử tùy chọn đầu tiên là "..."
+    
+        // Gọi hàm applyFilter để cập nhật giá trị ẩn
+        applyFilter();
+        
+        // Đóng thanh lọc
+        toggleFilterSidebar();
+    }
+    
     function toggleFilterSidebar() {
         const sidebar = document.getElementById("filterSidebar");
         const filterToggle = document.querySelector(".filter-toggle");
@@ -132,20 +148,39 @@
                 <option value="Interdisciplinary Engineering" {% if selected_field == 'Interdisciplinary Engineering' %}selected{% endif %}>Interdisciplinary Engineering</option>
             </select>
             
-            <button class="cancel-button" onclick="toggleFilterSidebar()">Cancel Filter</button>
+            <button class="cancel-button" onclick="handleCancelFilter()">Cancel Filter</button>
         </div>
         
         <script>
             function applyFilter() {
-                // Lấy giá trị đã chọn từ các checkbox
+                // Lấy giá trị đã chọn từ các checkbox và select box
                 const ranks = Array.from(document.querySelectorAll('input[name="rank[]"]:checked')).map(input => input.value);
                 const selectedField = document.querySelector('select[name="field"]').value;
         
-                // Áp dụng lọc ở đây
-                console.log('Selected Ranks:', ranks);
-                console.log('Selected Field:', selectedField);
+                // Gán các giá trị vào input ẩn
+                document.getElementById('hiddenRanks').value = ranks.join(',');
+                document.getElementById('hiddenField').value = selectedField;
+            }
         
-                // Gọi hàm để lọc dữ liệu (có thể sử dụng AJAX để gọi đến server)
+            // Gọi applyFilter khi nhấn tìm kiếm
+            document.getElementById('titleForm').onsubmit = applyFilter;
+
+            // Hàm hủy bộ lọc và khôi phục tìm kiếm bình thường
+            function cancelFilter() {
+                // Bỏ chọn tất cả checkbox
+                const checkboxes = document.querySelectorAll('input[name="rank[]"]');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+
+                // Đặt lại giá trị của select box
+                document.querySelector('select[name="field"]').selectedIndex = 0; // Giả sử tùy chọn đầu tiên là "..."
+
+                // Gọi hàm applyFilter để cập nhật giá trị ẩn
+                applyFilter();
+                
+                // Đóng thanh lọc
+                toggleFilterSidebar();
             }
         </script>
         
@@ -163,7 +198,7 @@
                 <button id="close-btn" onclick="closeErrorMessage()" style="font-size:1rem"><b>Close</b></button>
             </div>
 
-            <!-- Form tìm kiếm theo tiêu đề -->
+            <!--
             <form id="titleForm" method="POST" action="/recommend">
                 <div class="search-container">
                     <input type="text" id="input1" name="title_input" placeholder="Enter the title of the article..." required>
@@ -171,8 +206,19 @@
                         <i class="fa fa-search"></i>
                     </button>
                 </div>
-            </form>
+            </form> -->
         
+            <form id="titleForm" method="POST" action="/recommend">
+                <div class="search-container">
+                    <input type="text" id="input1" name="title_input" placeholder="Enter the title of the article..." required>
+                    <button type="submit" class="search-button" title="Search with Title">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <input type="hidden" name="ranks" id="hiddenRanks">
+                <input type="hidden" name="selected_field" id="hiddenField">
+            </form>
+            
             <form id="abstractForm" method="POST" action="/recommend_abstract">
                 <div class="search-container2">
                     <textarea style="resize: none; font-family: Arial, sans-serif" id="input2" name="abstract_input" placeholder="Enter the abstract of the article..." required rows="4" cols="50"></textarea>
