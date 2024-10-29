@@ -45,31 +45,6 @@
             document.getElementById('toggleArticles').innerHTML = '<i class="fa fa-chevron-down"></i>'; // Thay đổi biểu tượng thành mũi tên chỉ xuống
         }
     }
-
-    function handleCancelFilter() {
-        // Bỏ chọn tất cả checkbox
-        const checkboxes = document.querySelectorAll('input[name="rank[]"]');
-        checkboxes.forEach(checkbox => {
-            checkbox.checked = false;
-        });
-    
-        // Đặt lại giá trị của select box
-        document.querySelector('select[name="field"]').selectedIndex = 0; // Giả sử tùy chọn đầu tiên là "..."
-    
-        // Gọi hàm applyFilter để cập nhật giá trị ẩn
-        applyFilter();
-        
-        // Đóng thanh lọc
-        toggleFilterSidebar();
-    }
-    
-    function toggleFilterSidebar() {
-        const sidebar = document.getElementById("filterSidebar");
-        const filterToggle = document.querySelector(".filter-toggle");
-        sidebar.classList.toggle("active");
-        filterToggle.classList.toggle("hidden"); // Ẩn nút khi thanh lọc hiển thị
-    }
-
 </script>
 
 <body class="home">
@@ -103,67 +78,85 @@
         <button class="filter-toggle" onclick="toggleFilterSidebar()">Search with Filter</button> -->
         <div class="filter-toggle" onclick="toggleFilterSidebar()">
             <p style="color:white"><u>Search with filter</u></p>
-            <button class="bt-open"><i class="fa-solid fa-angles-left"></i></button>
+            <button class="bt-open"><i class="fa-solid fa-angle-left"></i></button>
         </div>
 
         <!-- Thanh lọc bên phải -->
         <div id="filterSidebar" class="filter-sidebar">
-            <h2 style="text-align:center; margin-top:0px; color:#007bff">Filters For Search</h2>
+            <h2 style="font-size:1.7rem; text-align:center; margin-top:0px; margin-bottom:15px; color:#007bff">Filters For Search</h2>
             
-            <h3>Rank</h3>
-            <label><input type="checkbox" name="rank[]" value="A" onchange="applyFilter()"> A</label>
-            <label><input type="checkbox" name="rank[]" value="B" onchange="applyFilter()"> B</label>
-            <label><input type="checkbox" name="rank[]" value="C" onchange="applyFilter()"> C</label>
-        
-            <h3>Topic</h3>
-            <select id="field" name="field" onchange="applyFilter()" style="width:100%; height:30px; margin-top:7px; border-radius:5px">
-                <option value="" {% if selected_field is none %}selected{% endif %}>...</option>
-                <option value="Building" {% if selected_field == 'Building' %}selected{% endif %}>Building</option>
-                <option value="Artificial Intelligence and Image Processing" {% if selected_field == 'Artificial Intelligence and Image Processing' %}selected{% endif %}>Artificial Intelligence and Image Processing</option>
-                <option value="Computation Theory and Mathematics" {% if selected_field == 'Computation Theory and Mathematics' %}selected{% endif %}>Computation Theory and Mathematics</option>
-                <option value="Information Systems" {% if selected_field == 'Information Systems' %}selected{% endif %}>Information Systems</option>
-                <option value="Computer Software" {% if selected_field == 'Computer Software' %}selected{% endif %}>Computer Software</option>
-                <option value="Information and Computing Sciences" {% if selected_field == 'Information and Computing Sciences' %}selected{% endif %}>Information and Computing Sciences</option>
-                <option value="Computer Hardware" {% if selected_field == 'Computer Hardware' %}selected{% endif %}>Computer Hardware</option>
-                <option value="Communications Technologies" {% if selected_field == 'Communications Technologies' %}selected{% endif %}>Communications Technologies</option>
-                <option value="Distributed Computing" {% if selected_field == 'Distributed Computing' %}selected{% endif %}>Distributed Computing</option>
-                <option value="Design Practice and Management" {% if selected_field == 'Design Practice and Management' %}selected{% endif %}>Design Practice and Management</option>
-                <option value="Data Format" {% if selected_field == 'Data Format' %}selected{% endif %}>Data Format</option>
-                <option value="Other Information and Computing Sciences" {% if selected_field == 'Other Information and Computing Sciences' %}selected{% endif %}>Other Information and Computing Sciences</option>
-                <option value="Aerospace Engineering" {% if selected_field == 'Aerospace Engineering' %}selected{% endif %}>Aerospace Engineering</option>
-                <option value="Mechanical Engineering" {% if selected_field == 'Mechanical Engineering' %}selected{% endif %}>Mechanical Engineering</option>
-                <option value="Civil Engineering" {% if selected_field == 'Civil Engineering' %}selected{% endif %}>Civil Engineering</option>
-                <option value="Geomatic Engineering" {% if selected_field == 'Geomatic Engineering' %}selected{% endif %}>Geomatic Engineering</option>
-                <option value="Manufacturing Engineering" {% if selected_field == 'Manufacturing Engineering' %}selected{% endif %}>Manufacturing Engineering</option>
-                <option value="Other Engineering" {% if selected_field == 'Other Engineering' %}selected{% endif %}>Other Engineering</option>
-                <option value="Architecture" {% if selected_field == 'Architecture' %}selected{% endif %}>Architecture</option>
-                <option value="Resources Engineering and Extractive Metallurgy" {% if selected_field == 'Resources Engineering and Extractive Metallurgy' %}selected{% endif %}>Resources Engineering and Extractive Metallurgy</option>
-                <option value="Maritime Engineering" {% if selected_field == 'Maritime Engineering' %}selected{% endif %}>Maritime Engineering</option>
-                <option value="Urban and Regional Planning" {% if selected_field == 'Urban and Regional Planning' %}selected{% endif %}>Urban and Regional Planning</option>
-                <option value="Automotive Engineering" {% if selected_field == 'Automotive Engineering' %}selected{% endif %}>Automotive Engineering</option>
-                <option value="Environmental Engineering" {% if selected_field == 'Environmental Engineering' %}selected{% endif %}>Environmental Engineering</option>
-                <option value="Technology" {% if selected_field == 'Technology' %}selected{% endif %}>Technology</option>
-                <option value="Built Environment and Design" {% if selected_field == 'Built Environment and Design' %}selected{% endif %}>Built Environment and Design</option>
-                <option value="Other Built Environment and Design" {% if selected_field == 'Other Built Environment and Design' %}selected{% endif %}>Other Built Environment and Design</option>
-                <option value="Interdisciplinary Engineering" {% if selected_field == 'Interdisciplinary Engineering' %}selected{% endif %}>Interdisciplinary Engineering</option>
-            </select>
+            <div style="border: 1px solid #555; padding-left:10px; border-radius:5px">
+                <h3 style="margin:10px 0px 10px 0px">Rank
+                    <!-- <span style="font-size:1.2rem; font-weight:normal; text-shadow:none">(ICORE)</span> -->
+                </h3>
+                <label class="custom-checkbox">
+                    <input type="checkbox" name="rank[]" value="A" onchange="applyFilter()"> A
+                    <span style="padding-left:10px; font-size: 14px; color: #333; font-weight:bold; text-shadow:none"> - Excellence in the field</span>
+                </label>
+                <label class="custom-checkbox">
+                    <input type="checkbox" name="rank[]" value="B" onchange="applyFilter()"> B
+                    <span style="padding-left:10px; font-size: 14px; color: #333; font-weight:bold; text-shadow:none"> - Good reputation in the field</span>
+                </label>
+                <label class="custom-checkbox">
+                    <input type="checkbox" name="rank[]" value="C" onchange="applyFilter()"> C
+                    <span style="padding-left:10px; font-size: 14px; color: #333; font-weight:bold; text-shadow:none"> - Suitable for new research</span>
+                </label>
+            </div>
             
+
+            <div style="margin-top:20px; margin-bottom:20px; border:1px solid #555; padding-left:10px; padding-right:10px; border-radius:5px">
+                <h3 style="margin:10px 0px 10px 0px">Topic</h3>
+                <select id="field" name="field" onchange="applyFilter()" style="width:100%; height:30px; margin:0px 10px 10px 0px; border-radius:5px">
+                    <option value="" {% if selected_field is none %}selected{% endif %}>...</option>
+                    <option value="Building" {% if selected_field == 'Building' %}selected{% endif %}>Building</option>
+                    <option value="Artificial Intelligence and Image Processing" {% if selected_field == 'Artificial Intelligence and Image Processing' %}selected{% endif %}>Artificial Intelligence and Image Processing</option>
+                    <option value="Computation Theory and Mathematics" {% if selected_field == 'Computation Theory and Mathematics' %}selected{% endif %}>Computation Theory and Mathematics</option>
+                    <option value="Information Systems" {% if selected_field == 'Information Systems' %}selected{% endif %}>Information Systems</option>
+                    <option value="Computer Software" {% if selected_field == 'Computer Software' %}selected{% endif %}>Computer Software</option>
+                    <option value="Information and Computing Sciences" {% if selected_field == 'Information and Computing Sciences' %}selected{% endif %}>Information and Computing Sciences</option>
+                    <option value="Computer Hardware" {% if selected_field == 'Computer Hardware' %}selected{% endif %}>Computer Hardware</option>
+                    <option value="Communications Technologies" {% if selected_field == 'Communications Technologies' %}selected{% endif %}>Communications Technologies</option>
+                    <option value="Distributed Computing" {% if selected_field == 'Distributed Computing' %}selected{% endif %}>Distributed Computing</option>
+                    <option value="Design Practice and Management" {% if selected_field == 'Design Practice and Management' %}selected{% endif %}>Design Practice and Management</option>
+                    <option value="Data Format" {% if selected_field == 'Data Format' %}selected{% endif %}>Data Format</option>
+                    <option value="Other Information and Computing Sciences" {% if selected_field == 'Other Information and Computing Sciences' %}selected{% endif %}>Other Information and Computing Sciences</option>
+                    <option value="Aerospace Engineering" {% if selected_field == 'Aerospace Engineering' %}selected{% endif %}>Aerospace Engineering</option>
+                    <option value="Mechanical Engineering" {% if selected_field == 'Mechanical Engineering' %}selected{% endif %}>Mechanical Engineering</option>
+                    <option value="Civil Engineering" {% if selected_field == 'Civil Engineering' %}selected{% endif %}>Civil Engineering</option>
+                    <option value="Geomatic Engineering" {% if selected_field == 'Geomatic Engineering' %}selected{% endif %}>Geomatic Engineering</option>
+                    <option value="Manufacturing Engineering" {% if selected_field == 'Manufacturing Engineering' %}selected{% endif %}>Manufacturing Engineering</option>
+                    <option value="Other Engineering" {% if selected_field == 'Other Engineering' %}selected{% endif %}>Other Engineering</option>
+                    <option value="Architecture" {% if selected_field == 'Architecture' %}selected{% endif %}>Architecture</option>
+                    <option value="Resources Engineering and Extractive Metallurgy" {% if selected_field == 'Resources Engineering and Extractive Metallurgy' %}selected{% endif %}>Resources Engineering and Extractive Metallurgy</option>
+                    <option value="Maritime Engineering" {% if selected_field == 'Maritime Engineering' %}selected{% endif %}>Maritime Engineering</option>
+                    <option value="Urban and Regional Planning" {% if selected_field == 'Urban and Regional Planning' %}selected{% endif %}>Urban and Regional Planning</option>
+                    <option value="Automotive Engineering" {% if selected_field == 'Automotive Engineering' %}selected{% endif %}>Automotive Engineering</option>
+                    <option value="Environmental Engineering" {% if selected_field == 'Environmental Engineering' %}selected{% endif %}>Environmental Engineering</option>
+                    <option value="Technology" {% if selected_field == 'Technology' %}selected{% endif %}>Technology</option>
+                    <option value="Built Environment and Design" {% if selected_field == 'Built Environment and Design' %}selected{% endif %}>Built Environment and Design</option>
+                    <option value="Other Built Environment and Design" {% if selected_field == 'Other Built Environment and Design' %}selected{% endif %}>Other Built Environment and Design</option>
+                    <option value="Interdisciplinary Engineering" {% if selected_field == 'Interdisciplinary Engineering' %}selected{% endif %}>Interdisciplinary Engineering</option>
+                </select>
+            </div>
+
             <button class="cancel-button" onclick="handleCancelFilter()">Cancel Filter</button>
         </div>
         
         <script>
             function applyFilter() {
-                // Lấy giá trị đã chọn từ các checkbox và select box
                 const ranks = Array.from(document.querySelectorAll('input[name="rank[]"]:checked')).map(input => input.value);
                 const selectedField = document.querySelector('select[name="field"]').value;
         
-                // Gán các giá trị vào input ẩn
-                document.getElementById('hiddenRanks').value = ranks.join(',');
-                document.getElementById('hiddenField').value = selectedField;
+                // Áp dụng giá trị lọc cho cả hai form
+                document.getElementById('hiddenRanksTitle').value = ranks.join(',');
+                document.getElementById('hiddenFieldTitle').value = selectedField;
+                document.getElementById('hiddenRanksAbstract').value = ranks.join(',');
+                document.getElementById('hiddenFieldAbstract').value = selectedField;
             }
         
-            // Gọi applyFilter khi nhấn tìm kiếm
+            // Gọi applyFilter khi nhấn submit
             document.getElementById('titleForm').onsubmit = applyFilter;
+            document.getElementById('abstractForm').onsubmit = applyFilter;
 
             // Hàm hủy bộ lọc và khôi phục tìm kiếm bình thường
             function cancelFilter() {
@@ -182,6 +175,30 @@
                 // Đóng thanh lọc
                 toggleFilterSidebar();
             }
+
+            function handleCancelFilter() {
+                // Bỏ chọn tất cả checkbox
+                const checkboxes = document.querySelectorAll('input[name="rank[]"]');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+            
+                // Đặt lại giá trị của select box
+                document.querySelector('select[name="field"]').selectedIndex = 0; // Giả sử tùy chọn đầu tiên là "..."
+            
+                // Gọi hàm applyFilter để cập nhật giá trị ẩn
+                applyFilter();
+                
+                // Đóng thanh lọc
+                toggleFilterSidebar();
+            }
+            
+            function toggleFilterSidebar() {
+                const sidebar = document.getElementById("filterSidebar");
+                const filterToggle = document.querySelector(".filter-toggle");
+                sidebar.classList.toggle("active");
+                filterToggle.classList.toggle("hidden"); // Ẩn nút khi thanh lọc hiển thị
+            }
         </script>
         
         
@@ -197,16 +214,6 @@
                 <strong><p style="font-size:1.2rem; text-shadow:none; margin-top:5px">Please fill in both Title and Abstract before searching.</p></strong>
                 <button id="close-btn" onclick="closeErrorMessage()" style="font-size:1rem"><b>Close</b></button>
             </div>
-
-            <!--
-            <form id="titleForm" method="POST" action="/recommend">
-                <div class="search-container">
-                    <input type="text" id="input1" name="title_input" placeholder="Enter the title of the article..." required>
-                    <button type="submit" class="search-button" title="Search with Title">
-                        <i class="fa fa-search"></i>
-                    </button>
-                </div>
-            </form> -->
         
             <form id="titleForm" method="POST" action="/recommend">
                 <div class="search-container">
@@ -215,17 +222,20 @@
                         <i class="fa fa-search"></i>
                     </button>
                 </div>
-                <input type="hidden" name="ranks" id="hiddenRanks">
-                <input type="hidden" name="selected_field" id="hiddenField">
+                <input type="hidden" id="hiddenRanksTitle" name="ranks">
+                <input type="hidden" id="hiddenFieldTitle" name="selected_field">
             </form>
             
-            <form id="abstractForm" method="POST" action="/recommend_abstract">
+            <!-- Form tìm kiếm theo abstract -->
+            <form id="abstractForm" method="POST" action="/recommend_abstract" onsubmit="applyFilter()">
                 <div class="search-container2">
                     <textarea style="resize: none; font-family: Arial, sans-serif" id="input2" name="abstract_input" placeholder="Enter the abstract of the article..." required rows="4" cols="50"></textarea>
                     <button type="submit" class="search-button2" title="Search with Abstract">
                         <i class="fa fa-search"></i>
                     </button>
                 </div>
+                <input type="hidden" id="hiddenRanksAbstract" name="ranks">
+                <input type="hidden" id="hiddenFieldAbstract" name="selected_field">
             </form>
 
             <div class="search-container3">
@@ -242,39 +252,55 @@
                 const abstractInput = document.getElementById('input2').value.trim();
                 const overlay = document.getElementById('overlay');
                 const errorMessageBox = document.getElementById('error-message-box');
-        
+            
                 // Kiểm tra xem cả hai ô input có dữ liệu hay không
                 if (titleInput === "" || abstractInput === "") {
                     overlay.style.display = 'block'; // Hiển thị overlay làm mờ nền
                     errorMessageBox.style.display = 'block'; // Hiển thị hộp thông báo lỗi
-        
+            
                     // Vô hiệu hóa cuộn trang
                     document.body.style.overflow = 'hidden';
                 } else {
                     overlay.style.display = 'none'; // Ẩn overlay nếu đủ dữ liệu
                     errorMessageBox.style.display = 'none'; // Ẩn hộp thông báo lỗi nếu đủ dữ liệu
-        
+            
                     // Tạo form ẩn để gửi dữ liệu tìm kiếm
                     const form = document.createElement('form');
                     form.method = 'POST';
                     form.action = '/recommend_both'; // URL cho tìm kiếm theo cả tiêu đề và abstract
-        
+            
+                    // Truyền title_input, abstract_input, ranks và selected_field vào form ẩn
                     const inputTitle = document.createElement('input');
                     inputTitle.type = 'hidden';
                     inputTitle.name = 'title_input';
                     inputTitle.value = titleInput;
                     form.appendChild(inputTitle);
-        
+            
                     const inputAbstract = document.createElement('input');
                     inputAbstract.type = 'hidden';
                     inputAbstract.name = 'abstract_input';
                     inputAbstract.value = abstractInput;
                     form.appendChild(inputAbstract);
-        
+            
+                    const ranks = document.getElementById('hiddenRanksTitle').value;
+                    const inputRanks = document.createElement('input');
+                    inputRanks.type = 'hidden';
+                    inputRanks.name = 'ranks';
+                    inputRanks.value = ranks;
+                    form.appendChild(inputRanks);
+            
+                    const selectedField = document.getElementById('hiddenFieldTitle').value;
+                    const inputField = document.createElement('input');
+                    inputField.type = 'hidden';
+                    inputField.name = 'selected_field';
+                    inputField.value = selectedField;
+                    form.appendChild(inputField);
+            
                     document.body.appendChild(form);
                     form.submit(); // Gửi form
                 }
             }
+            
         
             // Hàm đóng hộp thông báo lỗi
             function closeErrorMessage() {

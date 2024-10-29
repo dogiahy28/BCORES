@@ -438,7 +438,7 @@ footer {
     /* CSS cho nút đóng hộp thông báo */
     #close-btn {
         text-align: center;
-        background-color: #007bff;
+        background-color: blue;
         color: white;
         border: none;
         padding: 10px;
@@ -498,10 +498,10 @@ footer {
     .filter-sidebar {
         position: absolute;
         right: -285px;
-        top: 50%;
+        top: 47%;
         transform: translate(100%, -50%);
         width: 250px;
-        height: 400px;
+        height: 355px;
         background-color: #f1f1f1;
         transition: transform 0.3s ease;
         overflow-x: hidden;
@@ -606,11 +606,12 @@ footer {
         cursor: pointer;
         width: 70%; /* Chiều rộng 90% so với phần tử cha */
         display: block; /* Đảm bảo căn giữa khi width được đặt */
-        border-radius: 3px;
+        border-radius: 5px;
     }
 
     .cancel-button:hover {
         background-color: red;
+        transform: scale(1.05)
     }
 
     .bt-open {
@@ -620,6 +621,28 @@ footer {
         padding: 4px;
         border: none;
         border-radius: 5px;
+    }
+
+    .bt-open:hover {
+        transform: scale(1.15);
+    }
+
+    .custom-checkbox {
+        display: block; /* Để mỗi checkbox nằm trên một dòng */
+        margin-bottom: 15px; /* Khoảng cách giữa các checkbox */
+        font-size: 20px; /* Kích thước chữ */
+        color: #333; /* Màu chữ */
+    }
+    
+    .custom-checkbox input[type="checkbox"] {
+        accent-color: #00458f; /* Màu của checkbox (hỗ trợ CSS) */
+        transform: scale(1.5); /* Thay đổi kích thước checkbox */
+        margin-right: 10px; /* Khoảng cách giữa checkbox và chữ */
+    }
+    
+    .custom-checkbox:hover {
+        color: #00458f; /* Màu chữ khi hover */
+        cursor: pointer; /* Con trỏ chuột thành pointer khi hover */
     }
 }
 
@@ -844,15 +867,15 @@ footer {
         width: auto;
     }
 
-    .clear-btn {
+    .edit-btn {
         cursor: pointer;
         color: gray;
-        font-size: 18px;
-        margin-left: 10px; /* Khoảng cách giữa input và icon thùng rác */
+        font-size: 22px;
+        margin-left: 8px; /* Khoảng cách giữa input và icon thùng rác */
     }
 
-    .clear-btn:hover {
-        color: black;
+    .edit-btn:hover {
+        color: #007bff;
     }
 
     .fa-trash-can {
@@ -916,9 +939,41 @@ footer {
         transition: none;     /* Tắt hiệu ứng chuyển tiếp */
         transform: none;      /* Tắt hiệu ứng phóng to hoặc thay đổi kích thước */
     }
+
+    .custom-checkbox {
+        margin-bottom: 15px; /* Khoảng cách giữa các checkbox */
+        font-size: 18px; /* Kích thước chữ */
+        color: #333; /* Màu chữ */
+        top: 5px;
+        margin-right: 15px;
+        margin-left: 10px;
+    }
+    
+    .custom-checkbox input[type="checkbox"] {
+        accent-color: #00458f; /* Màu của checkbox (hỗ trợ CSS) */
+        transform: scale(1.5); /* Thay đổi kích thước checkbox */
+        margin-right: 5px; /* Khoảng cách giữa checkbox và chữ */
+    }
+    
+    .custom-checkbox:hover {
+        color: #00458f; /* Màu chữ khi hover */
+        cursor: pointer; /* Con trỏ chuột thành pointer khi hover */
+    }
+
+    /* Thay đổi màu nền khi ô nhập liệu là readonly */
+    textarea[readonly] {
+        background-color: #f0f0f0; /* Màu nền khi không cho phép nhập liệu */
+        color: #666; /* Màu chữ khi không cho phép nhập liệu */
+    }
+
+    /* Thay đổi màu nền khi ô nhập liệu không phải là readonly */
+    textarea:not([readonly]) {
+        background-color: #ffffff; /* Màu nền khi cho phép nhập liệu */
+        color: #000; /* Màu chữ khi cho phép nhập liệu */
+    }
 }
 
-/* Trang Kết quả tìm */
+/* Trang Kết quả tìm BÀI BÁO */
 .result {
     h1 {
         text-align: center;
