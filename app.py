@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 # Load data and model
 model = SentenceTransformer('all-MiniLM-L6-v2')
-data_reference = pd.read_excel('Data-2.xlsx')  # Dữ liệu hội thảo
+data_reference = pd.read_csv('Data.csv')  # Dữ liệu hội thảo
 data_articles = pd.read_excel('data-test.xlsx')  # Dữ liệu bài báo
 
 # Thay thế toàn bộ giá trị NaN bằng chuỗi rỗng
