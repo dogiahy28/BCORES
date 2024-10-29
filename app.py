@@ -164,7 +164,7 @@ def recommend():
 
     k = 10  # Số lượng kết quả hiển thị cuối cùng
 
-    initial_k = min(len(data_reference), k * 3)  # Tăng số lượng để đảm bảo đủ kết quả
+    initial_k = min(len(data_reference), k * 5)  # Tăng số lượng để đảm bảo đủ kết quả
 
     borda_scores = defaultdict(float)
 
@@ -214,47 +214,60 @@ def recommend():
 @app.route('/recommend_abstract', methods=['POST'])
 def recommend_abstract():
     abstract_input= request.form['abstract_input']  # Lấy dữ liệu từ ô nhập liệu cho abstract
+    ranks = request.form.get('ranks', "").split(',')
+    selected_field = request.form.get('selected_field', "")
 
     start_time = time.time()
 
-    # Mã hóa input
-    input_embedding = model.encode([abstract_input])
+    # Mã hóa đầu vào abstract
+    input_embedding = model.encode([abstract_input]) if abstract_input else None
 
-    k = 10  # số lượng kết quả hiển thị
-    # Tìm kiếm hội thảo dựa trên tiêu đề
-    labels_title_from_input, _ = p_title.knn_query(input_embedding, k=k)
-    # Tìm kiếm hội thảo dựa trên mô tả
-    labels_description_from_input, _ = p_description.knn_query(input_embedding, k=k)
+    k = 10  # Số lượng kết quả hiển thị cuối cùng
+
+    initial_k = min(len(data_reference), k * 5)  # Tăng số lượng để đảm bảo đủ kết quả
 
     borda_scores = defaultdict(float)
 
     # Tạo trọng số cho từng tiêu chí (MCDM)
-    weight_title_vector = 0.5  # Trọng số cho tiêu đề
-    weight_description_sent2vec = 0.7  # Trọng số cho mô tả
+    weight_title_vector = 0.7  # Trọng số cho tiêu đề
+    weight_description_sent2vec = 0.4  # Trọng số cho mô tả
 
-    # Borda Count cho tiêu đề
-    for i in range(len(labels_title_from_input[0])):
-        idx = labels_title_from_input[0][i]
-        borda_scores[idx] += (weight_title_vector * (k - i))
+    if input_embedding is not None:
+        # Tìm kiếm hội thảo dựa trên tiêu đề với initial_k kết quả ban đầu
+        labels_title_from_input, _ = p_title.knn_query(input_embedding, k=initial_k)
+        labels_description_from_input, _ = p_description.knn_query(input_embedding, k=initial_k)
 
-    # Borda Count cho mô tả
-    for i in range(len(labels_description_from_input[0])):
-        idx = labels_description_from_input[0][i]
-        borda_scores[idx] += (weight_description_sent2vec * (k - i))
+        # Borda Count cho tiêu đề
+        for i in range(len(labels_title_from_input[0])):
+            idx = labels_title_from_input[0][i]
+            borda_scores[idx] += (weight_title_vector * (initial_k - i))
 
-    sorted_borda = sorted(borda_scores.items(), key=lambda x: x[1], reverse=True)
-    top_results = [data_reference.iloc[idx] for idx, _ in sorted_borda[:k]]  # Lấy kết quả từ data_reference
+        # Borda Count cho mô tả
+        for i in range(len(labels_description_from_input[0])):
+            idx = labels_description_from_input[0][i]
+            borda_scores[idx] += (weight_description_sent2vec * (initial_k - i))
 
-    num_results = len(top_results)  # Số lượng kết quả tìm được
+    # Lọc kết quả nếu có giá trị cho ranks hoặc selected_field
+    filtered_results = []
+    for idx, score in borda_scores.items():
+        conference = data_reference.iloc[idx]
+        if (not ranks[0] or conference['Rank'] in ranks) and (not selected_field or conference['FoR1 Name'] == selected_field):
+            filtered_results.append(conference)
+
+    # Sắp xếp và lấy top k kết quả sau khi lọc
+    sorted_borda = sorted(filtered_results, key=lambda x: borda_scores[x.name], reverse=True)[:k]
+
+    num_results = len(sorted_borda)
     execution_time = time.time() - start_time
 
-    # Truyền thêm 'user_input_abstract' vào template
     return render_template(
         'results.html',
-        results=top_results,
+        results=sorted_borda,
         execution_time=execution_time,
         num_results=num_results,
         abstract_input=abstract_input,
+        ranks = ranks,
+        selected_field = selected_field,
         borda_scores=borda_scores
     )
 
@@ -262,6 +275,8 @@ def recommend_abstract():
 def recommend_both():
     title = request.form.get('title_input')
     abstract = request.form.get('abstract_input')
+    ranks = request.form.get('ranks', "").split(',')
+    selected_field = request.form.get('selected_field', "")
 
     start_time = time.time()
 
@@ -270,12 +285,9 @@ def recommend_both():
     abstract_embedding_input = model.encode([abstract])
 
     k = 10  # Số lượng kết quả hiển thị
+    initial_k = min(len(data_reference), k * 5)
 
-    # Tìm labels và distances cho tiêu đề và tóm tắt
-    labels_title_from_title, distances_title_from_title = p_title.knn_query(title_embedding_input, k=k)
-    labels_description_from_title, distances_description_from_title = p_description.knn_query(title_embedding_input, k=k)
-    labels_title_from_abstract, distances_title_from_abstract = p_title.knn_query(abstract_embedding_input, k=k)
-    labels_description_from_abstract, distances_description_from_abstract = p_description.knn_query(abstract_embedding_input, k=k)
+    borda_scores = defaultdict(float)
 
     # Tạo trọng số cho từng tiêu chí (MCDM)
     weight_title_vector = 0.7
@@ -283,54 +295,140 @@ def recommend_both():
     weight_abstract_title_vector = 0.5
     weight_abstract_description = 0.7
 
-    borda_scores = defaultdict(float)
+    # Tìm kiếm và Borda Count cho các tiêu chí
+    labels_title_from_title, _ = p_title.knn_query(title_embedding_input, k=initial_k)
+    labels_description_from_title, _ = p_description.knn_query(title_embedding_input, k=initial_k)
+    labels_title_from_abstract, _ = p_title.knn_query(abstract_embedding_input, k=initial_k)
+    labels_description_from_abstract, _ = p_description.knn_query(abstract_embedding_input, k=initial_k)
 
-    # Borda Count cho tiêu đề (sử dụng trọng số)
     for i in range(len(labels_title_from_title[0])):
         idx = labels_title_from_title[0][i]
-        borda_scores[idx] += (k - i) * weight_title_vector
+        borda_scores[idx] += (initial_k - i) * weight_title_vector
 
-    # Borda Count cho mô tả từ tiêu đề (sử dụng trọng số)
     for i in range(len(labels_description_from_title[0])):
         idx = labels_description_from_title[0][i]
-        borda_scores[idx] += (k - i) * weight_description_sent2vec
+        borda_scores[idx] += (initial_k - i) * weight_description_sent2vec
 
-    # Borda Count cho tiêu đề từ tóm tắt (sử dụng trọng số)
     for i in range(len(labels_title_from_abstract[0])):
         idx = labels_title_from_abstract[0][i]
-        borda_scores[idx] += (k - i) * weight_abstract_title_vector
+        borda_scores[idx] += (initial_k - i) * weight_abstract_title_vector
 
-    # Borda Count cho mô tả từ tóm tắt (sử dụng trọng số)
     for i in range(len(labels_description_from_abstract[0])):
         idx = labels_description_from_abstract[0][i]
-        borda_scores[idx] += (k - i) * weight_abstract_description
+        borda_scores[idx] += (initial_k - i) * weight_abstract_description
 
-    # Sắp xếp Borda Score
-    sorted_borda = sorted(borda_scores.items(), key=lambda x: x[1], reverse=True)
-    top_results = [data_reference.iloc[idx] for idx, _ in sorted_borda[:k]]
+    # Lọc và sắp xếp kết quả theo ranks và selected_field
+    filtered_results = []
+    for idx, score in borda_scores.items():
+        conference = data_reference.iloc[idx]
+        if (not ranks[0] or conference['Rank'] in ranks) and (not selected_field or conference['FoR1 Name'] == selected_field):
+            filtered_results.append(conference)
 
-    # Thêm khoảng cách vào kết quả để hiển thị
+    sorted_borda = sorted(filtered_results, key=lambda x: borda_scores[x.name], reverse=True)[:k]
+
+    # Chuẩn bị kết quả với điểm Borda
     top_results_with_distances = []
-    for idx, result in enumerate(top_results):
+    for idx, result in enumerate(sorted_borda):
         result_with_distances = result.copy()
-        result_with_distances['Distance_Title_Title'] = distances_title_from_title[0][idx]
-        result_with_distances['Distance_Desc_Title'] = distances_description_from_title[0][idx]
-        result_with_distances['Distance_Title_Abstract'] = distances_title_from_abstract[0][idx]
-        result_with_distances['Distance_Desc_Abstract'] = distances_description_from_abstract[0][idx]
-        result_with_distances['Borda_Score'] = '{:.1f}'.format(borda_scores[result.name]) if result.name in borda_scores else '0.00'  # Thêm điểm Borda
+        result_with_distances['Borda_Score'] = '{:.1f}'.format(borda_scores[result.name]) if result.name in borda_scores else '0.00'
         top_results_with_distances.append(result_with_distances)
 
     num_results = len(top_results_with_distances)  # Số lượng kết quả tìm được
     execution_time = time.time() - start_time
 
-    # Truyền thêm 'title' và 'abstract' vào template
+    # Truyền dữ liệu vào template
     return render_template('results.html',
                             results=top_results_with_distances,
                             execution_time=execution_time,
                             num_results=num_results,
                             title_input=title,
                             abstract_input=abstract,
+                            ranks=ranks,
+                            selected_field=selected_field,
                             borda_scores=borda_scores)
+
+# @app.route('/recommend_both', methods=['POST'])
+# def recommend_both():
+#     title = request.form.get('title_input')
+#     abstract = request.form.get('abstract_input')
+#     ranks = request.form.get('ranks', "").split(',')
+#     selected_field = request.form.get('selected_field', "")
+
+#     start_time = time.time()
+
+#     # Mã hóa tiêu đề và tóm tắt
+#     title_embedding_input = model.encode([title]) if title else None
+#     abstract_embedding_input = model.encode([abstract]) if abstract else None
+
+#     k = 10  # Số lượng kết quả hiển thị
+#     initial_k = min(len(data_reference), k * 5)
+
+#     borda_scores = defaultdict(float)
+
+#     # Tạo trọng số cho từng tiêu chí (MCDM)
+#     weight_title_vector = 0.7
+#     weight_description_sent2vec = 0.4
+#     weight_abstract_title_vector = 0.5
+#     weight_abstract_description = 0.7
+
+#     if title_embedding_input is not None:
+#         # Tìm kiếm dựa trên tiêu đề
+#         labels_title_from_title, _ = p_title.knn_query(title_embedding_input, k=initial_k)
+#         labels_description_from_title, _ = p_description.knn_query(title_embedding_input, k=initial_k)
+
+#         # Borda Count cho tiêu đề và mô tả từ tiêu đề
+#         for i in range(len(labels_title_from_title[0])):
+#             idx = labels_title_from_title[0][i]
+#             borda_scores[idx] += (initial_k - i) * weight_title_vector
+
+#         for i in range(len(labels_description_from_title[0])):
+#             idx = labels_description_from_title[0][i]
+#             borda_scores[idx] += (initial_k - i) * weight_description_sent2vec
+
+#     if abstract_embedding_input is not None:
+#         # Tìm kiếm dựa trên tóm tắt
+#         labels_title_from_abstract, _ = p_title.knn_query(abstract_embedding_input, k=initial_k)
+#         labels_description_from_abstract, _ = p_description.knn_query(abstract_embedding_input, k=initial_k)
+
+#         # Borda Count cho tiêu đề và mô tả từ tóm tắt
+#         for i in range(len(labels_title_from_abstract[0])):
+#             idx = labels_title_from_abstract[0][i]
+#             borda_scores[idx] += (initial_k - i) * weight_abstract_title_vector
+
+#         for i in range(len(labels_description_from_abstract[0])):
+#             idx = labels_description_from_abstract[0][i]
+#             borda_scores[idx] += (initial_k - i) * weight_abstract_description
+
+#     # Lọc kết quả nếu có giá trị cho ranks hoặc selected_field
+#     filtered_results = []
+#     for idx, score in borda_scores.items():
+#         conference = data_reference.iloc[idx]
+#         if (not ranks[0] or conference['Rank'] in ranks) and (not selected_field or conference['FoR1 Name'] == selected_field):
+#             filtered_results.append(conference)
+
+#     # Sắp xếp và lấy top k kết quả sau khi lọc
+#     sorted_borda = sorted(filtered_results, key=lambda x: borda_scores[x.name], reverse=True)[:k]
+
+#     # Chuẩn bị kết quả với điểm Borda và thông tin khác
+#     top_results_with_distances = []
+#     for idx, result in enumerate(sorted_borda):
+#         result_with_distances = result.copy()
+#         result_with_distances['Borda_Score'] = '{:.1f}'.format(borda_scores[result.name]) if result.name in borda_scores else '0.00'
+#         top_results_with_distances.append(result_with_distances)
+
+#     num_results = len(top_results_with_distances)  # Số lượng kết quả tìm được
+#     execution_time = time.time() - start_time
+
+#     # Truyền thêm 'title' và 'abstract' vào template
+#     return render_template('results.html',
+#                             results=top_results_with_distances,
+#                             execution_time=execution_time,
+#                             num_results=num_results,
+#                             title_input=title,
+#                             abstract_input=abstract,
+#                             ranks=ranks,
+#                             selected_field=selected_field,
+#                             borda_scores=borda_scores)
 
 @app.route('/find_conference/<int:article_id>')
 def find_conference(article_id):
@@ -346,12 +444,13 @@ def find_conference(article_id):
     abstract_embedding_input = model.encode([abstract])
 
     k = 10  # Số lượng kết quả hiển thị
+    initial_k = min(len(data_reference), k * 5)
 
     # Tìm labels và distances cho tiêu đề và tóm tắt
-    labels_title_from_title, distances_title_from_title = p_title.knn_query(title_embedding_input, k=k)
-    labels_description_from_title, distances_description_from_title = p_description.knn_query(title_embedding_input, k=k)
-    labels_title_from_abstract, distances_title_from_abstract = p_title.knn_query(abstract_embedding_input, k=k)
-    labels_description_from_abstract, distances_description_from_abstract = p_description.knn_query(abstract_embedding_input, k=k)
+    labels_title_from_title, distances_title_from_title = p_title.knn_query(title_embedding_input, k=initial_k)
+    labels_description_from_title, distances_description_from_title = p_description.knn_query(title_embedding_input, k=initial_k)
+    labels_title_from_abstract, distances_title_from_abstract = p_title.knn_query(abstract_embedding_input, k=initial_k)
+    labels_description_from_abstract, distances_description_from_abstract = p_description.knn_query(abstract_embedding_input, k=initial_k)
 
     # Tạo trọng số cho từng tiêu chí (MCDM)
     weight_title_vector = 0.7
@@ -364,22 +463,22 @@ def find_conference(article_id):
     # Borda Count cho tiêu đề (sử dụng trọng số)
     for i in range(len(labels_title_from_title[0])):
         idx = labels_title_from_title[0][i]
-        borda_scores[idx] += (k - i) * weight_title_vector
+        borda_scores[idx] += (initial_k - i) * weight_title_vector
 
     # Borda Count cho mô tả từ tiêu đề (sử dụng trọng số)
     for i in range(len(labels_description_from_title[0])):
         idx = labels_description_from_title[0][i]
-        borda_scores[idx] += (k - i) * weight_description_sent2vec
+        borda_scores[idx] += (initial_k - i) * weight_description_sent2vec
 
     # Borda Count cho tiêu đề từ tóm tắt (sử dụng trọng số)
     for i in range(len(labels_title_from_abstract[0])):
         idx = labels_title_from_abstract[0][i]
-        borda_scores[idx] += (k - i) * weight_abstract_title_vector
+        borda_scores[idx] += (initial_k - i) * weight_abstract_title_vector
 
     # Borda Count cho mô tả từ tóm tắt (sử dụng trọng số)
     for i in range(len(labels_description_from_abstract[0])):
         idx = labels_description_from_abstract[0][i]
-        borda_scores[idx] += (k - i) * weight_abstract_description
+        borda_scores[idx] += (initial_k - i) * weight_abstract_description
 
     # Sắp xếp Borda Score
     sorted_borda = sorted(borda_scores.items(), key=lambda x: x[1], reverse=True)
@@ -407,12 +506,14 @@ def find_conference(article_id):
 
 @app.route('/filter', methods=['POST'])
 def filter_results():
-    selected_rank = request.form.get('rank', None)  # Lấy giá trị Rank từ form
-    selected_field = request.form.get('field', None)  # Lấy giá trị Field từ form
-    title_input = request.form['title_input']  # Lấy dữ liệu từ ô nhập liệu tiêu đề
-    abstract_input = request.form['abstract_input']  # Lấy dữ liệu từ ô nhập liệu tóm tắt
+    ranks = request.form.getlist('ranks')  # Lấy danh sách các giá trị Rank từ form
+    selected_field = request.form.get('field', None)
+    title_input = request.form['title_input']
+    abstract_input = request.form['abstract_input']
 
     k = 10
+    initial_k = min(len(data_reference), k * 5)
+
     borda_scores = defaultdict(float)
 
     # Nếu có đủ cả tiêu đề và tóm tắt
@@ -422,64 +523,64 @@ def filter_results():
         abstract_embedding_input = model.encode([abstract_input])
 
         # Tìm labels và distances cho tiêu đề và tóm tắt
-        labels_title_from_title, distances_title_from_title = p_title.knn_query(title_embedding_input, k=k)
-        labels_description_from_title, distances_description_from_title = p_description.knn_query(title_embedding_input, k=k)
-        labels_title_from_abstract, distances_title_from_abstract = p_title.knn_query(abstract_embedding_input, k=k)
-        labels_description_from_abstract, distances_description_from_abstract = p_description.knn_query(abstract_embedding_input, k=k)
+        labels_title_from_title, distances_title_from_title = p_title.knn_query(title_embedding_input, k=initial_k)
+        labels_description_from_title, distances_description_from_title = p_description.knn_query(title_embedding_input, k=initial_k)
+        labels_title_from_abstract, distances_title_from_abstract = p_title.knn_query(abstract_embedding_input, k=initial_k)
+        labels_description_from_abstract, distances_description_from_abstract = p_description.knn_query(abstract_embedding_input, k=initial_k)
 
         # Borda Count cho tiêu đề từ tiêu đề
         for i in range(len(labels_title_from_title[0])):
             idx = labels_title_from_title[0][i]
-            borda_scores[idx] += (0.7 * (k - i))  # Trọng số cho tiêu đề từ tiêu đề
+            borda_scores[idx] += (0.7 * (initial_k - i))  # Trọng số cho tiêu đề từ tiêu đề
 
         # Borda Count cho mô tả từ tiêu đề
         for i in range(len(labels_description_from_title[0])):
             idx = labels_description_from_title[0][i]
-            borda_scores[idx] += (0.4 * (k - i))  # Trọng số cho mô tả từ tiêu đề
+            borda_scores[idx] += (0.4 * (initial_k - i))  # Trọng số cho mô tả từ tiêu đề
 
         # Borda Count cho tiêu đề từ tóm tắt
         for i in range(len(labels_title_from_abstract[0])):
             idx = labels_title_from_abstract[0][i]
-            borda_scores[idx] += (0.5 * (k - i))  # Trọng số cho tiêu đề từ tóm tắt
+            borda_scores[idx] += (0.5 * (initial_k - i))  # Trọng số cho tiêu đề từ tóm tắt
 
         # Borda Count cho mô tả từ tóm tắt
         for i in range(len(labels_description_from_abstract[0])):
             idx = labels_description_from_abstract[0][i]
-            borda_scores[idx] += (0.7 * (k - i))  # Trọng số cho mô tả từ tóm tắt
+            borda_scores[idx] += (0.7 * (initial_k - i))  # Trọng số cho mô tả từ tóm tắt
 
     # Nếu chỉ có tiêu đề
     elif title_input:
         title_embedding_input = model.encode([title_input])
         # Tìm labels và distances cho tiêu đề
-        labels_title_from_title, distances_title_from_title = p_title.knn_query(title_embedding_input, k=k)
-        labels_description_from_title, distances_description_from_title = p_description.knn_query(title_embedding_input, k=k)
+        labels_title_from_title, distances_title_from_title = p_title.knn_query(title_embedding_input, k=initial_k)
+        labels_description_from_title, distances_description_from_title = p_description.knn_query(title_embedding_input, k=initial_k)
 
         # Borda Count cho tiêu đề từ tiêu đề
         for i in range(len(labels_title_from_title[0])):
             idx = labels_title_from_title[0][i]
-            borda_scores[idx] += (0.7 * (k - i))  # Trọng số cho tiêu đề
+            borda_scores[idx] += (0.7 * (initial_k - i))  # Trọng số cho tiêu đề
 
         # Borda Count cho mô tả từ tiêu đề
         for i in range(len(labels_description_from_title[0])):
             idx = labels_description_from_title[0][i]
-            borda_scores[idx] += (0.4 * (k - i))  # Trọng số cho mô tả
+            borda_scores[idx] += (0.4 * (initial_k - i))  # Trọng số cho mô tả
 
     # Nếu chỉ có tóm tắt
     elif abstract_input:
         abstract_embedding_input = model.encode([abstract_input])
         # Tìm labels và distances cho tóm tắt
-        labels_title_from_abstract, distances_title_from_abstract = p_title.knn_query(abstract_embedding_input, k=k)
-        labels_description_from_abstract, distances_description_from_abstract = p_description.knn_query(abstract_embedding_input, k=k)
+        labels_title_from_abstract, distances_title_from_abstract = p_title.knn_query(abstract_embedding_input, k=initial_k)
+        labels_description_from_abstract, distances_description_from_abstract = p_description.knn_query(abstract_embedding_input, k=initial_k)
 
         # Borda Count cho tiêu đề từ tóm tắt
         for i in range(len(labels_title_from_abstract[0])):
             idx = labels_title_from_abstract[0][i]
-            borda_scores[idx] += (0.5 * (k - i))  # Trọng số cho tiêu đề từ tóm tắt
+            borda_scores[idx] += (0.5 * (initial_k - i))  # Trọng số cho tiêu đề từ tóm tắt
 
         # Borda Count cho mô tả từ tóm tắt
         for i in range(len(labels_description_from_abstract[0])):
             idx = labels_description_from_abstract[0][i]
-            borda_scores[idx] += (0.7 * (k - i))  # Trọng số cho mô tả từ tóm tắt
+            borda_scores[idx] += (0.7 * (initial_k - i))  # Trọng số cho mô tả từ tóm tắt
 
     # Sắp xếp Borda Score
     sorted_borda = sorted(borda_scores.items(), key=lambda x: x[1], reverse=True)
@@ -488,13 +589,13 @@ def filter_results():
     # Lọc kết quả theo Rank và Field
     filtered_results = []
     for result in top_results:
-        if (not selected_rank or result['Rank'] == selected_rank) and \
+        if (not ranks or result['Rank'] in ranks) and \
             (not selected_field or result['FoR1 Name'] == selected_field):
-            result['Borda_Score'] = '{:.1f}'.format(borda_scores[result.name]) if result.name in borda_scores else '0.00'  # Thêm điểm Borda
+            result['Borda_Score'] = '{:.1f}'.format(borda_scores[result.name]) if result.name in borda_scores else '0.00'
             filtered_results.append(result)
 
     num_results = len(filtered_results)
-    return render_template('results.html', results=filtered_results, num_results=num_results, title_input=title_input, abstract_input=abstract_input, selected_rank=selected_rank, selected_field=selected_field, borda_scores=borda_scores)
+    return render_template('results.html', results=filtered_results, num_results=num_results, title_input=title_input, abstract_input=abstract_input, ranks=ranks, selected_field=selected_field, borda_scores=borda_scores)
 
 @app.route('/conference/<int:article_id>')
 def conference_detail(article_id):

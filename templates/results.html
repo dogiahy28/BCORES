@@ -122,71 +122,86 @@
                 <h2 style="padding-bottom:10px; border-bottom: 1px solid #9b9b9b; margin-top:10px;">Filters</h2>
                 <form action="/filter" method="POST">
                     <ul class="filter-list">
-                        <li style="margin-top: 10px;
-                                    margin-bottom: 10px;
-                                    height: auto;
-                                    min-height: 250px;">
+                        <li style="margin-top: 10px; margin-bottom: 10px; height: auto; min-height: 250px;">
                             <label for="search_terms"><strong>Search terms</strong></label>
                             <br>
                             <div class="input-wrapper" style="margin-top:10px">
                                 <label><strong>Title</strong></label>
                                 <div class="input-box-title">
-                                    <textarea id="title_input" name="title_input"
+                                    <textarea id="title_input2" name="title_input"
                                                 placeholder="Enter title keyword to search..." oninput="adjustHeight(this)"
                                                 style="font-family: Arial, sans-serif; min-width:50%; margin-right:0px; max-width:80%; height:70%; resize: none; flex: 1;
-                                                        padding: 10px;
-                                                        border: 1px solid #ccc;
-                                                        font-size: 16px;">{{ title_input }}</textarea>
-                                    <span class="clear-btn" onclick="clearInput('title_input')">
-                                        <i class="fa-solid fa-trash-can" title="Delete"></i>
+                                                        padding: 10px; border: 1px solid #ccc; font-size: 16px; background-color: #f0f0f0;" readonly>{{ title_input }}</textarea>
+                                    <span class="edit-btn" onclick="editInput('title_input2')">
+                                        <i class="fa-solid fa-edit" title="Edit"></i>
                                     </span>
                                 </div>
                                 <br>
-
+                        
                                 <label><strong>Abstract</strong></label>
                                 <br>
                                 <div class="input-box-abstract">
-                                    <textarea id="abstract_input" name="abstract_input"
+                                    <textarea id="abstract_input2" name="abstract_input"
                                                 placeholder="Enter abstract keyword to search..." oninput="adjustHeight(this)"
                                                 style="font-family: Arial, sans-serif; min-width:50%; margin-right:0px; max-width:80%; height:70%; resize: none; flex: 1;
-                                                        padding: 10px;
-                                                        border: 1px solid #ccc;
-                                                        font-size: 16px;">{{ abstract_input }}</textarea>
-                                    <span class="clear-btn" onclick="clearInput('abstract_input')">
-                                        <i class="fa-solid fa-trash-can" title="Delete"></i>
+                                                        padding: 10px; border: 1px solid #ccc; font-size: 16px; background-color: #f0f0f0;" readonly>{{ abstract_input }}</textarea>
+                                    <span class="edit-btn" onclick="editInput('abstract_input2')">
+                                        <i class="fa-solid fa-edit" title="Edit"></i>
                                     </span>
                                 </div>
                             </div>
                         </li>
                         
+                        <style>
+                            /* Thay đổi màu nền khi ô nhập liệu là readonly */
+                            textarea[readonly] {
+                                background-color: #f0f0f0; /* Màu nền khi không cho phép nhập liệu */
+                                color: #666; /* Màu chữ khi không cho phép nhập liệu */
+                            }
+                        
+                            /* Thay đổi màu nền khi ô nhập liệu không phải là readonly */
+                            textarea:not([readonly]) {
+                                background-color: white; /* Màu nền khi cho phép nhập liệu */
+                                color: #000; /* Màu chữ khi cho phép nhập liệu */
+                            }
+                        </style>
+                        
                         <script>
-                             // Hàm điều chỉnh chiều rộng của input dựa trên số ký tự nhập vào
-                            function adjustWidth(input) {
-                                const length = input.value.length;
-                                input.style.width = length > 0 ? (length + 2) + "ch" : "200px"; // Tính chiều rộng theo số ký tự
-                            }
-
-                            // Hàm xóa nội dung input khi nhấn vào biểu tượng thùng rác
-                            function clearInput(id) {
+                            function editInput(id) {
                                 const inputField = document.getElementById(id);
-                                inputField.value = ''; // Xóa nội dung input
-                                adjustHeight(inputField); // Cập nhật chiều cao sau khi xóa
-                                
-                                // Nếu bạn muốn submit form ngay sau khi xóa nội dung:
-                                inputField.form.submit(); // Tùy chọn này sẽ gửi form sau khi xóa
+                                if (inputField) {
+                                    inputField.removeAttribute('readonly'); // Bỏ thuộc tính readonly để có thể chỉnh sửa
+                                    inputField.focus(); // Đặt con trỏ vào ô nhập liệu
+                                } else {
+                                    console.error("Không tìm thấy phần tử với ID: ", id); // Ghi lỗi nếu không tìm thấy
+                                }
                             }
+                        
+                            // Cập nhật chiều cao cho các textarea khi trang được tải
+                            window.onload = function() {
+                                const titleInput = document.getElementById('title_input');
+                                const abstractInput = document.getElementById('abstract_input');
+                                adjustHeight(titleInput);
+                                adjustHeight(abstractInput);
+                            };
                         </script>
 
                         <li>
                             <label for="rank"><strong>Rank</strong></label>
                             <br>
-                            <div style="text-align: center;">
-                                <select id="rank" name="rank" style="width:100%; height:30px; margin-top:7px; border-radius:5px">
-                                    <option value="" {% if selected_rank is none %}selected{% endif %}>...</option>
-                                    <option value="A" {% if selected_rank == 'A' %}selected{% endif %}>A</option>
-                                    <option value="B" {% if selected_rank == 'B' %}selected{% endif %}>B</option>
-                                    <option value="C" {% if selected_rank == 'C' %}selected{% endif %}>C</option>
-                                </select>
+                            <div style="text-align: center; margin-top:5px; border:1px solid rgb(118, 118, 118); border-radius:5px; padding:5px">
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" name="ranks" value="A" {% if 'A' in ranks %}checked{% endif %}>
+                                    A
+                                </label>
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" name="ranks" value="B" {% if 'B' in ranks %}checked{% endif %}>
+                                    B
+                                </label>
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" name="ranks" value="C" {% if 'C' in ranks %}checked{% endif %}>
+                                    C
+                                </label>
                             </div>
                         </li>
 
