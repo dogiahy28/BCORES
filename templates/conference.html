@@ -110,7 +110,7 @@
 
         <div class="main-content">
             <div class="conference-details-left">
-                <p style="font-size:1.5rem"><strong>About Description</strong></p>
+                <p style="font-size:1.5rem"><strong>About {{ acronym }}</strong></p>
                 <p>{{ conference.get('Description', 'No Description available') }}</p>
                 <p><strong>Rank:</strong> {{ conference.get('Rank', '') }}</p>
                 
@@ -124,8 +124,35 @@
             </div>
 
             <div class="conference-actions-right">
-                <button class="follow-btn" style="margin-top:30px">Follow</button>
-                <button class="link-btn"><i class="fa-solid fa-globe"></i><a href="{{ conference.get('Conference_Link', '#') }}" target="_blank">Go to Conference Website</a></button>
+                <!-- <button class="follow-btn" style="margin-top:30px">Follow</button> -->
+                <a class="link-btn" href="{{ conference.get('Conference_Link', '#') }}" target="_blank">
+                    <i class="fa-solid fa-globe" style="font-size:24px; padding:10px"></i>
+                    Go to Conference Website</a>
+
+                <h2 style="font-size:1rem; padding-bottom:5px; border-bottom: 1px solid #999">CONFERENCE CATEGORY</h2>
+
+                <div style="display: flex; align-items: center; color: #333; font-size: 1rem; padding: 10px; border: 1px solid #777; border-radius: 5px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" title="{{ conference.get('Conference_Category', '') }}">
+                    <i class="fa-solid fa-tag" style="font-size: 1.5rem; margin-right: 5px;"></i>
+                    <div style="padding-left:3px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                        {{ conference.get('Conference_Category', '') }}
+                    </div>
+                </div>
+                
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const element = document.getElementById("conferenceCategory");
+                        const lineHeight = parseFloat(getComputedStyle(element).lineHeight);
+                    
+                        // Giới hạn chiều cao của phần tử với 2 hàng
+                        if (element.scrollHeight > lineHeight * 2) {
+                            element.style.display = "-webkit-box";
+                            element.style.webkitLineClamp = "2";
+                            element.style.webkitBoxOrient = "vertical";
+                            element.style.overflow = "hidden";
+                            element.style.textOverflow = "ellipsis";
+                        }
+                    });
+                </script>
             </div>
         </div>
 
