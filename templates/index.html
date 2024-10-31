@@ -31,20 +31,6 @@
         articlesList.style.display = "none"; // Ẩn danh sách bài báo
         document.getElementById('toggleArticles').innerHTML = '<i class="fa fa-chevron-down"></i>'; // Đặt biểu tượng thành mũi tên chỉ xuống
     }
-
-    // Hàm toggle để hiển thị/ẩn các bài báo và cuộn màn hình
-    function toggleArticles() {
-        const articlesList = document.getElementById('articlesList');
-        if (articlesList.style.display === "none" || articlesList.style.display === "") {
-            articlesList.style.display = "block";
-            document.getElementById('toggleArticles').innerHTML = '<i class="fa fa-chevron-up"></i>'; // Thay đổi biểu tượng thành mũi tên chỉ lên
-            // Cuộn đến danh sách bài báo
-            articlesList.scrollIntoView({ behavior: 'smooth' });
-        } else {
-            articlesList.style.display = "none";
-            document.getElementById('toggleArticles').innerHTML = '<i class="fa fa-chevron-down"></i>'; // Thay đổi biểu tượng thành mũi tên chỉ xuống
-        }
-    }
 </script>
 
 <body class="home">
@@ -301,7 +287,6 @@
                 }
             }
             
-        
             // Hàm đóng hộp thông báo lỗi
             function closeErrorMessage() {
                 document.getElementById('overlay').style.display = 'none'; // Ẩn overlay
@@ -309,6 +294,21 @@
         
                 // Khôi phục cuộn trang
                 document.body.style.overflow = 'auto';
+            }
+
+            
+            // Hàm toggle để hiển thị/ẩn các bài báo và cuộn màn hình
+            function toggleArticles() {
+                const articlesList = document.getElementById('articlesList');
+                if (articlesList.style.display === "none" || articlesList.style.display === "") {
+                    articlesList.style.display = "block";
+                    document.getElementById('toggleArticles').innerHTML = '<i class="fa fa-chevron-up"></i>'; // Thay đổi biểu tượng thành mũi tên chỉ lên
+                    // Cuộn đến danh sách bài báo
+                    articlesList.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    articlesList.style.display = "none";
+                    document.getElementById('toggleArticles').innerHTML = '<i class="fa fa-chevron-down"></i>'; // Thay đổi biểu tượng thành mũi tên chỉ xuống
+                }
             }
         </script>
 
