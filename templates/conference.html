@@ -10,7 +10,6 @@
 </head>
 
 <script>
-    // Hiển thị nút khi cuộn xuống 20px
     window.onscroll = function() {scrollFunction()};
 
     function scrollFunction() {
@@ -21,51 +20,59 @@
         }
     }
 
-    // Hàm chuyển hướng đến trang chính
     function goToHome() {
         window.location.href = "{{ url_for('index') }}";
     }
 
-    // Hàm cuộn lên đầu trang
     function scrollToTop() {
-        document.body.scrollTop = 0; // Dành cho Safari
-        document.documentElement.scrollTop = 0; // Dành cho Chrome, Firefox, IE và Opera
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+
+    function closeErrorMessage() {
+        document.getElementById('error-message-box').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    function validateForm() {
+        const title = document.getElementById('title_input').value.trim();
+        const abstract = document.getElementById('abstract_input').value.trim();
+
+        if (title === "" && abstract === "") {
+            document.getElementById('error-message-box').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+            return false;
+        }
+        return true;
     }
 </script>
 
-<body class="result">
+<body class="conference">
     <div class="container">
         <div class="head">
             <div onclick="goToHome()">
                 <img style="height:70px; width:70px; position: absolute; left:10px; top:-5px" src="{{ url_for('static', filename='image/LG.ico') }}" alt="Logo">
-                <p class="brand">GatherConf</p> <!-- Thêm biểu tượng thương hiệu -->
+                <p class="brand">BCORES</p>
             </div>
-            <nav>
-                <ul>
-                    <li><a href="/about">About</a></li>
-                    <li><a href="{{ url_for('index') }}">Home</a></li>
-                    <li><a href="/contact">Contact</a></li>
-                </ul>
-            </nav>
+            <a href="/about" class="bt-head">About</a>
+            <a href="/" class="bt-head">
+                <i class="fa-solid fa-house-chimney-window"></i>
+            </a>
+            <a href="/contact" class="bt-head">Contact</a>
+            <a href="/login" class="bt-admin"><i class="fa-solid fa-user-shield"></i></a>
         </div>
 
-        <!-- <div class="containers">
-            <form action="/filter" method="POST" class="search-form">
-                <input type="text" id="title_input" name="title_input"
-                        placeholder="Enter title keyword to search..."
-                        style="width:20%; height:25px">
-                
-                <textarea id="abstract_input" name="abstract_input"
-                        placeholder="Enter abstract keyword to search..." oninput="adjustHeight(this)"
-                        style="width:20%; height:35px"></textarea>
-                
-                <button type="submit" class="search -button1"><b>SEARCH</b></button>
-            </form>
-        </div> -->
+        <div id="overlay"></div>
+
+        <div id="error-message-box">
+            <strong><p style="font-size:1.2rem; text-shadow:none; margin-top:5px">Please enter Title or Abstract to search.</p></strong>
+            <button id="close-btn" onclick="closeErrorMessage()" style="font-size:1rem"><b>Close</b></button>
+        </div>
 
         <div class="containers">
             <div style="display: flex; justify-content: center; margin: 10px 0px 0px 0px;">
-                <form action="/filter" method="POST" onsubmit="return validateForm()" style="display: flex; align-items: center; width: 700px; flex-wrap: nowrap;">
+                <form action="/recommend_flexible" method="POST" onsubmit="return validateForm()" style="display: flex; align-items: center; width: 700px; flex-wrap: nowrap;">
                     <input type="text" id="title_input" name="title_input"
                         placeholder="Enter title keyword..."
                         style="flex: 1; padding: 10px; font-size: 16px; border: 1px solid #ccc; margin-right: 10px;
@@ -87,16 +94,14 @@
             </div>
 
             <script>
-                // Hiệu ứng khi rê chuột vào nút SEARCH
                 function hoverEffect(button) {
-                    button.style.backgroundColor = 'darkblue'; // Đổi màu nền khi hover
-                    button.style.borderColor = 'white';       // Đổi màu viền khi hover
+                    button.style.backgroundColor = 'darkblue';
+                    button.style.borderColor = 'white';
                 }
-    
-                // Reset lại màu gốc khi không còn hover
+
                 function resetEffect(button) {
-                    button.style.backgroundColor = 'blue';   // Trở về màu nền gốc
-                    button.style.borderColor = 'white';      // Trở về màu viền gốc
+                    button.style.backgroundColor = 'blue';
+                    button.style.borderColor = 'white';
                 }
             </script>
         </div>
@@ -114,7 +119,7 @@
                 <p>{{ conference.get('Description', 'No Description available') }}</p>
                 <p><strong>Rank:</strong> {{ conference.get('Rank', '') }}</p>
                 
-                <p><strong>Topic:</strong>
+                <p><strong>Field:</strong>
                     {{ conference.get('FoR1 Name', '') }}
                     {% if conference.get('FoR2 Name') %}| {{ conference.get('FoR2 Name') }}
                     {% endif %}
@@ -124,26 +129,25 @@
             </div>
 
             <div class="conference-actions-right">
-                <!-- <button class="follow-btn" style="margin-top:30px">Follow</button> -->
-                <a class="link-btn" href="{{ conference.get('Conference_Link', '#') }}" target="_blank">
+                <a class="link-btn" href="https://dblp.uni-trier.de/db/conf/{{ acronym|lower }}/index.html" target="_blank">
                     <i class="fa-solid fa-globe" style="font-size:24px; padding:10px"></i>
-                    Go to Conference Website</a>
+                    Go to Conference Website
+                </a>
 
-                <h2 style="font-size:1rem; padding-bottom:5px; border-bottom: 1px solid #999">CONFERENCE CATEGORY</h2>
+                <h2 style="font-size:1rem; padding-bottom:5px; border-bottom: 1px solid #999;">CONFERENCE CATEGORY</h2>
 
-                <div style="display: flex; align-items: center; color: #333; font-size: 1rem; padding: 10px; border: 1px solid #777; border-radius: 5px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" title="{{ conference.get('Conference_Category', '') }}">
+                <div style="display: flex; align-items: center; color: #444; font-size: 1rem; padding: 10px; border: 1px solid #888; border-radius: 5px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" title="{{ conference.get('Conference_Category', '') }}">
                     <i class="fa-solid fa-tag" style="font-size: 1.5rem; margin-right: 5px;"></i>
                     <div style="padding-left:3px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                        {{ conference.get('Conference_Category', '') }}
+                        {{ conference.get('FoR1 Name', '') }}
                     </div>
                 </div>
-                
+
                 <script>
                     document.addEventListener("DOMContentLoaded", function () {
                         const element = document.getElementById("conferenceCategory");
                         const lineHeight = parseFloat(getComputedStyle(element).lineHeight);
-                    
-                        // Giới hạn chiều cao của phần tử với 2 hàng
+
                         if (element.scrollHeight > lineHeight * 2) {
                             element.style.display = "-webkit-box";
                             element.style.webkitLineClamp = "2";
@@ -161,7 +165,7 @@
 
     <div class="end">
         <img src="{{ url_for('static', filename='image/end.jpg') }}" alt="Hình nền" class="background-image">
-        <h2 style="font-size:1.6rem; margin-bottom:5px; text-shadow: 2px 2px 4px #ffffff;">Find information with GatherConf</h2>
+        <h2 style="font-size:1.6rem; margin-bottom:5px; text-shadow: 2px 2px 4px #ffffff;">Find information with BCORES</h2>
         <p style="font-size:1rem; margin-top:5px; text-shadow: 1px 1px 2px #ffffff;">Find and follow your favorite conferences.</p>
     </div>
 
@@ -184,8 +188,8 @@
         </div>
 
         <div class="footer-text" style="text-align: center; margin-top: 5px;">
-            <p style="color:#bebebe">GatherConf is powered by the research community. And it’s free, now and forever.</p>
-            <p style="color:#bebebe">&copy; 2024 Conference Suggestions. Designed by GatherConf Group. All rights reserved.</p>
+            <p style="color:#bebebe">BCORES is powered by the research community. And it’s free, now and forever.</p>
+            <p style="color:#bebebe">&copy; 2024 Conference Suggestions. Designed by GHD. All rights reserved.</p>
         </div>
     </footer>
 </body>

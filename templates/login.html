@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='image/logo.png') }}">
+    <title>Login Admin</title>
+</head>
+
+<script>
+    window.onscroll = function() {scrollFunction()};
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+            document.getElementById("backToTopBtn").style.display = "block";
+        } else {
+            document.getElementById("backToTopBtn").style.display = "none";
+        }
+    }
+
+    function scrollToTop() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+
+        const articlesList = document.getElementById('articlesList');
+        articlesList.style.display = "none";
+        document.getElementById('toggleArticles').innerHTML = '<i class="fa fa-chevron-down"></i>';
+    }
+
+    function togglePassword() {
+        const passwordInput = document.getElementById("password");
+        const toggleIcon = document.getElementById("togglePasswordIcon");
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            toggleIcon.classList.remove("fa-eye");
+            toggleIcon.classList.add("fa-eye-slash");
+        } else {
+            passwordInput.type = "password";
+            toggleIcon.classList.remove("fa-eye-slash");
+            toggleIcon.classList.add("fa-eye");
+        }
+    }
+</script>
+
+<body class="login">
+    <div class="background-image">
+        <div class="head">
+            <img style="height:70px; width:70px; position: absolute; left:10px; top:-5px"
+                    src="{{ url_for('static', filename='image/LG.ico') }}" alt="Logo">
+            <p class="brand"></i> BCORES</p>
+
+            <a href="/about" class="bt-head">About</a>
+            <a href="/" class="bt-head">
+                <i class="fa-solid fa-house-chimney-window"></i>
+            </a>
+            <a href="/contact" class="bt-head">Contact</a>
+        </div>
+
+        <img src="{{ url_for('static', filename='image/anhnen10.jpg') }}" alt="Hình nền">
+
+        <div class="login-container">
+            <img style="height:85px; width:85px; position: static; top: 0px; left:300px; z-index: 3; border:3px solid #007bff; border-radius: 50%; box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.8); transition: none; margin-top:0px; margin-bottom:5px"
+                src="{{ url_for('static', filename='image/LG.ico') }}" alt="Logo">
+            <h2 style="padding-top:10px; margin-top:0px">Login Admin</h2>
+
+            <form id="admin-login-form" method="POST" action="/login">
+                <input class="input-ad" type="text" name="username" placeholder="Enter your username..." required>
+                <div style="position: relative;">
+                    <input class="input-ad" id="password" type="password" name="password" placeholder="Enter password..." required>
+                    <span onclick="togglePassword()" style="color:#333; position: absolute; right: 27px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+                        <i id="togglePasswordIcon" class="fa fa-eye"></i>
+                    </span>
+                </div>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                <ul class="flashes">
+                    {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% endwith %}
+                <button class="bt-dn" type="submit"><strong>LOGIN</strong></button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

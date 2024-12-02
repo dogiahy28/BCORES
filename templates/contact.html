@@ -6,11 +6,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='image/logo.png') }}">
-    <title>Contact the GatherConf</title>
+    <title>Contact the BCORES</title>
 </head>
 
 <script>
-    // Hiển thị nút khi cuộn xuống 20px
     window.onscroll = function() {scrollFunction()};
 
     function scrollFunction() {
@@ -21,37 +20,31 @@
         }
     }
 
-    // Hàm cuộn lên đầu trang
     function scrollToTop() {
-        document.body.scrollTop = 0; // Dành cho Safari
-        document.documentElement.scrollTop = 0; // Dành cho Chrome, Firefox, IE và Opera
-        
-        // Ẩn danh sách bài báo khi cuộn lên đầu trang
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+
         const articlesList = document.getElementById('articlesList');
-        articlesList.style.display = "none"; // Ẩn danh sách bài báo
-        document.getElementById('toggleArticles').innerHTML = '<i class="fa fa-chevron-down"></i>'; // Đặt biểu tượng thành mũi tên chỉ xuống
+        articlesList.style.display = "none";
+        document.getElementById('toggleArticles').innerHTML = '<i class="fa fa-chevron-down"></i>';
     }
 
-    // Hiển thị/ẩn hộp thông báo lỗi
     function closeErrorMessage() {
         document.getElementById('error-message-box').style.display = 'none';
-        document.getElementById('overlay').style.display = 'none'; // Ẩn lớp nền
+        document.getElementById('overlay').style.display = 'none';
         document.body.style.overflow = 'auto';
     }
 
     function validateForm() {
         const title = document.getElementById('title_input').value.trim();
         const abstract = document.getElementById('abstract_input').value.trim();
-        
-        // Kiểm tra xem cả hai trường đều trống
+
         if (title === "" && abstract === "") {
-            // Hiển thị hộp thông báo lỗi
             document.getElementById('error-message-box').style.display = 'block';
-            document.getElementById('overlay').style.display = 'block'; // Hiển thị lớp nền mờ
-            document.body.style.overflow = 'hidden';
-            return false;  // Ngăn chặn việc gửi form
+            document.getElementById('overlay').style.display = 'block';
+            return false;
         }
-        return true;  // Cho phép gửi form nếu một trong hai trường có dữ liệu
+        return true;
     }
 </script>
 
@@ -61,41 +54,38 @@
             <div onclick="window.location.href='/'">
                 <img style="height:70px; width:70px; position: absolute; left:10px; top:-5px"
                         src="{{ url_for('static', filename='image/LG.ico') }}" alt="Logo">
-                <p class="brand"></i> GatherConf</p>
+                <p class="brand"></i> BCORES</p>
             </div>
-            <nav>
-                <ul>
-                    <li><a href="/about">About</a></li>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/contact" class="highlight">Contact</a></li>
-                </ul>
-            </nav>
+            <a href="/about" class="bt-head">About</a>
+            <a href="/" class="bt-head">
+                <i class="fa-solid fa-house-chimney-window"></i>
+            </a>
+            <a href="/contact" class="bt-head-main">Contact</a>
+            <a href="/login" class="bt-admin"><i class="fa-solid fa-user-shield"></i></a>
         </div>
 
-        <!-- Overlay làm mờ nền -->
         <div id="overlay"></div>
 
-        <!-- Hộp thông báo lỗi -->
         <div id="error-message-box">
             <strong><p style="font-size:1.2rem; text-shadow:none; margin-top:5px">Please enter Title or Abstract to search.</p></strong>
             <button id="close-btn" onclick="closeErrorMessage()" style="font-size:1rem"><b>Close</b></button>
         </div>
 
         <div class="containers" style="display: flex; justify-content: center; margin: -15px 0px 0px 0px;">
-            <form action="/filter" method="POST" onsubmit="return validateForm()" style="display: flex; align-items: center; width: 700px; flex-wrap: nowrap;">
+            <form action="/recommend_flexible" method="POST" onsubmit="return validateForm()" style="display: flex; align-items: center; width: 700px; flex-wrap: nowrap;">
                 <input type="text" id="title_input" name="title_input"
-                       placeholder="Enter title keyword..."
-                       style="flex: 1; padding: 10px; font-size: 16px; border: 1px solid #ccc; margin-right: 10px;
-                              width: 40%; height: 20px; border-radius: 5px;">
+                        placeholder="Enter title keyword..."
+                        style="flex: 1; padding: 10px; font-size: 16px; border: 1px solid #ccc; margin-right: 10px;
+                                width: 40%; height: 20px; border-radius: 5px;">
                 
                 <input id="abstract_input" name="abstract_input"
-                          placeholder="Enter abstract keyword..." oninput="adjustHeight(this)"
-                          style="flex: 2; padding: 10px; font-size: 16px; border: 1px solid #ccc; margin-right: 10px;
-                                 width: 60%; height: 20px; resize: none; font-family: Arial; border-radius: 5px;">
+                            placeholder="Enter abstract keyword..." oninput="adjustHeight(this)"
+                            style="flex: 2; padding: 10px; font-size: 16px; border: 1px solid #ccc; margin-right: 10px;
+                                    width: 60%; height: 20px; resize: none; font-family: Arial; border-radius: 5px;">
                 
                 <button type="submit" class="bt"
                         style="padding: 10px 20px; background-color: blue; color: white; border: 2px solid white; border-radius: 5px;
-                               font-size: 16px; cursor: pointer;"
+                                font-size: 16px; cursor: pointer;"
                         onmouseover="hoverEffect(this)"
                         onmouseout="resetEffect(this)">
                     <b>SEARCH</b>
@@ -104,16 +94,14 @@
         </div>
 
         <script>
-            // Hiệu ứng khi rê chuột vào nút
             function hoverEffect(button) {
-                button.style.backgroundColor = 'darkblue'; // Đổi màu nền khi hover
-                button.style.borderColor = 'white';       // Đổi màu viền khi hover
+                button.style.backgroundColor = 'darkblue';
+                button.style.borderColor = 'white';
             }
 
-            // Reset lại màu gốc khi không còn hover
             function resetEffect(button) {
-                button.style.backgroundColor = 'blue';   // Trở về màu nền gốc
-                button.style.borderColor = 'white';      // Trở về màu viền gốc
+                button.style.backgroundColor = 'blue';
+                button.style.borderColor = 'white';
             }
         </script>
 
@@ -122,23 +110,23 @@
         <img src="{{ url_for('static', filename='image/contact.png') }}" alt="Hình nền">
 
         <div class="container1">
-            <h1 style="font-size:2.2rem; color:white; margin-top:0px; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7)">Contact GatherConf</h1>
+            <h1 style="font-size:2.2rem; color:white; margin-top:25px; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7)">Contact BCORES</h1>
             <h2 style="font-size:1.5rem; color:white; margin-top:170px; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7)">Get in Touch</h2>
         </div>
     </div>
 
     <div style="padding:30px 400px 30px 450px">
         <h2 style="margin-bottom:10px">Email us:</h2>
-        <a href="#" style="font-size:1.2rem; margin-top:0px">help@gatherconf.com</a>
+        <a href="#" style="font-size:1.2rem; margin-top:0px">help@bcores.com</a>
     <br><br><br>
     <hr style="margin: 10px 0; border-bottom: 1px solid #555;">
         <h2 style="margin-bottom:10px">Tweet us:</h2>
-        <a href="#" style="font-size:1.2rem; margin:0px 0px 20px 0px">@gatherconf</a>
+        <a href="#" style="font-size:1.2rem; margin:0px 0px 20px 0px">@bcores</a>
     </div>
 
     <div class="end">
         <img src="{{ url_for('static', filename='image/end.jpg') }}" alt="Hình nền" class="background-image2">
-        <h2 style="font-size:1.6rem; margin-bottom:5px; text-shadow: 2px 2px 4px #ffffff;">Find information with GatherConf</h2>
+        <h2 style="font-size:1.6rem; margin-bottom:5px; text-shadow: 2px 2px 4px #ffffff;">Find information with BCORES</h2>
         <p style="font-size:1rem; margin-top:5px; text-shadow: 1px 1px 2px #ffffff;">Find and follow your favorite conferences.</p>
     </div>
 
@@ -148,7 +136,6 @@
                 <img style="height:70px; width:70px;" src="{{ url_for('static', filename='image/LG.ico') }}" alt="Logo">
             </div>
             <div class="footer-right">
-                <!-- Các liên kết mạng xã hội -->
                 <div class="socials" style="color:white">
                     <a href="https://www.facebook.com" style="margin-right: 15px;"><i class="fab fa-facebook"></i></a>
                     <a href="https://www.instagram.com"><i class="fab fa-instagram"></i></a>
@@ -165,8 +152,8 @@
         </div>
 
         <div class="footer-text" style="text-align: center; margin-top: 5px;">
-            <p style="color:#bebebe">GatherConf is powered by the research community. And it’s free, now and forever.</p>
-            <p style="color:#bebebe">&copy; 2024 Conference Suggestions. Designed by GatherConf Group. All rights reserved.</p>
+            <p style="color:#bebebe">BCORES is powered by the research community. And it’s free, now and forever.</p>
+            <p style="color:#bebebe">&copy; 2024 Conference Suggestions. Designed by GHD. All rights reserved.</p>
         </div>
     </footer>
 </body>

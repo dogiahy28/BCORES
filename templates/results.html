@@ -10,7 +10,6 @@
 </head>
 
 <script>
-    // Hiển thị nút khi cuộn xuống 20px
     window.onscroll = function() {scrollFunction()};
 
     function scrollFunction() {
@@ -21,15 +20,31 @@
         }
     }
 
-    // Hàm chuyển hướng đến trang chính
     function goToHome() {
         window.location.href = "{{ url_for('index') }}";
     }
 
-    // Hàm cuộn lên đầu trang
     function scrollToTop() {
-        document.body.scrollTop = 0; // Dành cho Safari
-        document.documentElement.scrollTop = 0; // Dành cho Chrome, Firefox, IE và Opera
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+
+    function closeErrorMessage() {
+        document.getElementById('error-message-box').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    function validateForm() {
+        const title = document.getElementById('title_input').value.trim();
+        const abstract = document.getElementById('abstract_input').value.trim();
+
+        if (title === "" && abstract === "") {
+            document.getElementById('error-message-box').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+            return false;
+        }
+        return true;
     }
 </script>
 
@@ -38,20 +53,26 @@
         <div class="head">
             <div onclick="goToHome()">
                 <img style="height:70px; width:70px; position: absolute; left:10px; top:-5px" src="{{ url_for('static', filename='image/LG.ico') }}" alt="Logo">
-                <p class="brand">GatherConf</p> <!-- Thêm biểu tượng thương hiệu -->
+                <p class="brand">BCORES</p>
             </div>
-            <nav>
-                <ul>
-                    <li><a href="/about">About</a></li>
-                    <li><a href="{{ url_for('index') }}">Home</a></li>
-                    <li><a href="/contact">Contact</a></li>
-                </ul>
-            </nav>
+            <a href="/about" class="bt-head">About</a>
+            <a href="/" class="bt-head">
+                <i class="fa-solid fa-house-chimney-window"></i>
+            </a>
+            <a href="/contact" class="bt-head">Contact</a>
+            <a href="/login" class="bt-admin"><i class="fa-solid fa-user-shield"></i></a>
+        </div>
+
+        <div id="overlay"></div>
+
+        <div id="error-message-box">
+            <strong><p style="font-size:1.2rem; text-shadow:none; margin-top:5px">Please enter Title or Abstract to search.</p></strong>
+            <button id="close-btn" onclick="closeErrorMessage()" style="font-size:1rem"><b>Close</b></button>
         </div>
 
         <div class="containers">
-            <div style="display: flex; justify-content: center; margin: 10px 0px 0px 0px;">
-                <form action="/filter" method="POST" onsubmit="return validateForm()" style="display: flex; align-items: center; width: 700px; flex-wrap: nowrap;">
+            <div style="display: flex; justify-content: center; margin: 0px 0px 0px 0px;">
+                <form action="/recommend_flexible" method="POST" onsubmit="return validateForm()" style="display: flex; align-items: center; width: 700px; flex-wrap: nowrap;">
                     <input type="text" id="title_input" name="title_input"
                         placeholder="Enter title keyword..."
                         style="flex: 1; padding: 10px; font-size: 16px; border: 1px solid #ccc; margin-right: 10px;
@@ -70,16 +91,51 @@
                         <b>SEARCH</b>
                     </button>
                 </form>
+
+                <button type="button" onclick="showExportDialog()" class="bt-export">
+                    <i class="fa-solid fa-file-export"></i><b> Export File</b>
+                </button>
+
+                <div id="overlay2" onclick="closeExportDialog()"></div>
+
+                <div id="export-message-box">
+                    <h3>How do you want to export the data?</h3>
+                    <p style="margin:5px 20px 0px 20px">Select "All" to export all data, or "Current Results" to export by search results.</p>
+                    <div class="button-container">
+                        <button class="btn-confirm" onclick="exportData(true)"><b>All data</b></button>
+                        <button class="btn-cancel" onclick="exportData(false)"><b>Current results</b></button>
+                    </div>
+                </div>
+
+                <script>
+                    function showExportDialog() {
+                        document.getElementById("overlay2").style.display = "block";
+                        document.getElementById("export-message-box").style.display = "block";
+                    }
+
+                    function closeExportDialog() {
+                        document.getElementById("overlay2").style.display = "none";
+                        document.getElementById("export-message-box").style.display = "none";
+                    }
+
+                    function exportData(isExportAll) {
+                        closeExportDialog();
+                        const url = "{{ url_for('export_csv') }}";
+                        if (isExportAll) {
+                            window.location.href = url + "?export_all=true";
+                        } else {
+                            window.location.href = url + "?export_all=false";
+                        }
+                    }
+                </script>
             </div>
 
             <script>
-                // Hiệu ứng khi rê chuột vào nút SEARCH
                 function hoverEffect(button) {
                     button.style.backgroundColor = 'darkblue';
                     button.style.borderColor = 'white';
                 }
-    
-                // Reset lại màu gốc khi không còn hover
+
                 function resetEffect(button) {
                     button.style.backgroundColor = 'blue';
                     button.style.borderColor = 'white';
@@ -96,9 +152,9 @@
                 }
             </style>
 
-            {# <h2 style="font-size:1.3rem; margin-top:5px; margin-bottom:5px"><strong>{{ num_results }} result</strong> found for: <i>{{ user_input }}</i></h2> #}
-            <h2 class="h2-ellipsis" style="font-size:1.3rem; margin-top:15px; margin-bottom:5px">
-                <strong>{{ num_results }} result</strong> found for:
+            <!-- <p><strong>Execution Time: </strong>{{ execution_time }} seconds</p> -->
+            <h2 class="h2-ellipsis" style="font-size:1rem; margin-top:20px; margin-bottom:5px">
+                <strong style="font-size:1.15rem;">{{ num_results }} result</strong> found for:
                 {% if title_input and abstract_input %}
                     <i>{{ title_input }}</i> <strong>and</strong> <i>{{ abstract_input }}</i>
                 {% elif title_input %}
@@ -109,17 +165,13 @@
                     No input provided.
                 {% endif %}
             </h2>
-
-            {# <p>Số kết quả tìm được: <strong>{{ num_results }}</strong></p> #}
-            {# <p>Thời gian thực thi: <strong>{{ execution_time }}</strong> giây</p> #}
         </div>
 
         <button onclick="scrollToTop()" id="backToTopBtn" title="Về đầu trang"><i class="fa-regular fa-circle-up"></i></button>
 
         <div class="main-container">
-            <!-- Cột lọc bên trái -->
             <div class="filter-column">
-                <h2 style="padding-bottom:10px; border-bottom: 1px solid #9b9b9b; margin-top:10px;">Filters</h2>
+                <h2 style="font-size:1.25rem; padding-bottom:10px; border-bottom: 1px solid #9b9b9b; margin-top:10px;">Filters <i class="fa-solid fa-filter"></i></h2>
                 <form action="/filter" method="POST">
                     <ul class="filter-list">
                         <li style="margin-top: 10px; margin-bottom: 10px; height: auto; min-height: 250px;">
@@ -156,14 +208,13 @@
                             function editInput(id) {
                                 const inputField = document.getElementById(id);
                                 if (inputField) {
-                                    inputField.removeAttribute('readonly'); // Bỏ thuộc tính readonly để có thể chỉnh sửa
-                                    inputField.focus(); // Đặt con trỏ vào ô nhập liệu
+                                    inputField.removeAttribute('readonly');
+                                    inputField.focus();
                                 } else {
-                                    console.error("Không tìm thấy phần tử với ID: ", id); // Ghi lỗi nếu không tìm thấy
+                                    console.error("Không tìm thấy phần tử với ID: ", id);
                                 }
                             }
-                        
-                            // Cập nhật chiều cao cho các textarea khi trang được tải
+
                             window.onload = function() {
                                 const titleInput = document.getElementById('title_input');
                                 const abstractInput = document.getElementById('abstract_input');
@@ -175,7 +226,7 @@
                         <li>
                             <label for="rank"><strong>Rank</strong></label>
                             <br>
-                            <div style="text-align: center; margin-top:5px; border:1px solid rgb(118, 118, 118); border-radius:5px; padding:5px">
+                            <div style="text-align: center; margin-top:5px; border:1px solid rgb(118, 118, 118); border-radius:5px; padding:5px; display: flex; flex-wrap: wrap; justify-content: center;">
                                 <label class="custom-checkbox">
                                     <input type="checkbox" name="ranks" value="A" {% if 'A' in ranks %}checked{% endif %}>
                                     A
@@ -188,14 +239,18 @@
                                     <input type="checkbox" name="ranks" value="C" {% if 'C' in ranks %}checked{% endif %}>
                                     C
                                 </label>
+                                <label class="custom-checkbox-not">
+                                    <input type="checkbox" name="ranks" value="Not ranked" {% if 'Not ranked' in ranks %}checked{% endif %}>
+                                    Not ranked
+                                </label>
                             </div>
                         </li>
 
                         <li>
-                            <label for="field"><strong>Topics</strong></label>
+                            <label for="selected_field"><strong>Field</strong></label>
                             <br>
                             <div style="text-align: center;">
-                                <select id="field" name="field" style="width:100%; height:30px; margin-top:7px; border-radius:5px">
+                                <select id="field" name="selected_field" style="width:100%; height:30px; margin-top:7px; border-radius:5px">
                                     <option value="" {% if selected_field is none %}selected{% endif %}>...</option>
                                     <option value="Building" {% if selected_field == 'Building' %}selected{% endif %}>Building</option>
                                     <option value="Artificial Intelligence and Image Processing" {% if selected_field == 'Artificial Intelligence and Image Processing' %}selected{% endif %}>Artificial Intelligence and Image Processing</option>
@@ -234,25 +289,52 @@
                 </form>
             </div>
 
-            <!-- Cột kết quả bên phải -->
             <div class="result-column">
-                <h2 style="margin-top:8px; margin-bottom:10px;">Suggested Conferences</h2>
+                <div class="result-header" style="display: flex; align-items: center; justify-content: space-between;">
+                    <h2 style="margin-top:8px; margin-bottom:10px;">Suggested Conferences</h2>
+
+                    <form method="POST" action="{{ url_for(action, article_id=article_id) }}">
+                        <input type="hidden" name="title_input" value="{{ title_input }}">
+                        <input type="hidden" name="abstract_input" value="{{ abstract_input }}">
+                        {% for rank in ranks %}
+                            <input type="hidden" name="ranks" value="{{ rank }}">
+                        {% endfor %}
+                        <input type="hidden" name="selected_field" value="{{ selected_field }}">
+                        <input type="hidden" name="action" value="{{ action }}">
+
+                        <label for="num_results" style="color: #555; margin-right: 2px; font-size: 1rem;"><b>Show results:</b></label>
+                        <select style="margin-right: 5px; padding: 5px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;" name="num_results" id="num_results" onchange="this.form.submit()">
+                            <option value="5" {% if k == 5 %}selected{% endif %}>5</option>
+                            <option value="10" {% if k == 10 %}selected{% endif %}>10</option>
+                            <option value="20" {% if k == 20 %}selected{% endif %}>20</option>
+                            <option value="50" {% if k == 50 %}selected{% endif %}>50</option>
+                        </select>
+                    </form>
+                </div>
+
                 {% if results %}
                     <ul>
                         {% for result in results %}
                         <li class="result-item" style="cursor: pointer;" onclick="window.location.href='{{ url_for('conference_detail', article_id=result['ERAID']) }}'">
                             <div style="display: flex; justify-content: space-between;">
                                 <p>{{ result.get('Acronym', ' ') }}</p>
-                                <p>{{ result.get('FoR1 Name', ' ') }}</p>
+                                <p><strong>Rank: <b style="font-size:1.2rem; padding-right:5px">{{ result.get('Rank', 'Không có xếp hạng') }}</b></strong></p>
                             </div>
                             <strong style="font-size:21px;">
-                                {{ result.get('Title', 'Không có tiêu đề') }}
+                                {{ result.get('Title', 'Không có tiêu đề') | safe }}
                             </strong>
                             <br>
-                            <p class="description">{{ result.get('Description', 'Không có tóm tắt') }}</p>
+                            <p class="description">
+                                {{ result.get('Description', 'Không có tóm tắt') | safe }}
+                            </p>
                             <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <strong>Rank: {{ result.get('Rank', 'Không có xếp hạng') }}</strong>
-                                <strong>Borda Score: {{ '{:.1f}'.format(borda_scores[result.name]) if result.name in borda_scores else '0.00' }}</strong>
+                                <div style="display: flex; height:30px; align-items: center; margin-top:0px; color: #444; font-size: 1rem; padding: 6px; border: 1px solid #888; border-radius: 5px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" title="{{ result.get('FoR1 Name', ' ') }}">
+                                    <i class="fa-solid fa-tag" style="font-size: 1.5rem; margin-right: 5px;"></i>
+                                    <div style="padding-left:3px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                        <p style="padding-top:0px">{{ result.get('FoR1 Name', ' ') }}</p>
+                                    </div>
+                                </div>
+                                <strong style="padding-right:5px">Borda Score: <b style="font-size:1.1rem">{{ '{:.1f}'.format(borda_scores[result.name]) if result.name in borda_scores else '0.00' }}</b></strong>
                             </div>
                         </li>
                         {% endfor %}
@@ -261,14 +343,12 @@
                     <br>
                     <div style="text-align:center; margin-top:30px">
                         <img width="45%" src="{{ url_for('static', filename='image/search-.png') }}">
-                        <h2 style="margin:20px 10px 10px 10px; font-size:28px">No Results Found!</h2>
+                        <h2 style="margin:20px 10px 10px 10px; font-size:28px">No Matching Results Found!</h2>
                         <p style="margin-top:0px">Please alter your search and try again.</p>
                     </div>
                 {% endif %}
             </div>
         </div>
-
-        {# <a href="{{ url_for('index') }}" class="back-link">Quay lại trang chính</a> #}
     </div>
 </body>
 
@@ -278,7 +358,6 @@
             <img style="height:70px; width:70px;" src="{{ url_for('static', filename='image/LG.ico') }}" alt="Logo">
         </div>
         <div class="footer-right">
-            <!-- Các liên kết mạng xã hội -->
             <div class="socials">
                 <a href="https://www.facebook.com" style="margin-right: 15px;"><i class="fab fa-facebook"></i></a>
                 <a href="https://www.instagram.com" ><i class="fab fa-instagram"></i></a>
@@ -295,8 +374,8 @@
     </div>
 
     <div class="footer-text" style="text-align: center; margin-top: 5px;">
-        <p style="color:#bebebe">GatherConf is powered by the research community. And it’s free, now and forever.</p>
-        <p style="color:#bebebe">&copy; 2024 Conference Suggestions. Designed by GatherConf Group. All rights reserved.</p>
+        <p style="color:#bebebe">BCORES is powered by the research community. And it’s free, now and forever.</p>
+        <p style="color:#bebebe">&copy; 2024 Conference Suggestions. Designed by GHD. All rights reserved.</p>
     </div>
 </footer>
 </html>

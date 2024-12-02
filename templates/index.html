@@ -10,7 +10,6 @@
 </head>
 
 <script>
-    // Hiển thị nút khi cuộn xuống 20px
     window.onscroll = function() {scrollFunction()};
 
     function scrollFunction() {
@@ -21,14 +20,11 @@
         }
     }
 
-    // Hàm cuộn lên đầu trang
     function scrollToTop() {
-        document.body.scrollTop = 0; // Dành cho Safari
-        document.documentElement.scrollTop = 0; // Dành cho Chrome, Firefox, IE và Opera
-        
-        // Ẩn danh sách bài báo khi cuộn lên đầu trang
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
         const articlesList = document.getElementById('articlesList');
-        articlesList.style.display = "none"; // Ẩn danh sách bài báo
+        articlesList.style.display = "none";
         document.getElementById('toggleArticles').innerHTML = '<i class="fa fa-chevron-down"></i>'; // Đặt biểu tượng thành mũi tên chỉ xuống
     }
 </script>
@@ -38,20 +34,18 @@
         <div class="head">
             <img style="height:70px; width:70px; position: absolute; left:10px; top:-5px"
                     src="{{ url_for('static', filename='image/LG.ico') }}" alt="Logo">
-            <p class="brand"></i> GatherConf</p> <!-- Thêm biểu tượng thương hiệu -->
-            <nav>
-                <ul>
-                    <li><a href="/about">About</a></li>
-                    <li><a href="/" class="highlight">Home</a></li>
-                    <li><a href="/contact">Contact</a></li>
-                </ul>
-            </nav>
+            <p class="brand"></i> BCORES</p>
+            <a href="/about" class="bt-head">About</a>
+            <a href="/" class="bt-head-main">
+                <i style="font-size:1.5rem;" class="fa-solid fa-house-chimney-window"></i>
+            </a>
+            <a href="/contact" class="bt-head">Contact</a>
+            <a href="/login" class="bt-admin"><i class="fa-solid fa-user-shield"></i></a>
         </div>
 
         <button onclick="scrollToTop()" id="backToTopBtn" title="Về đầu trang"><i class="fa-regular fa-circle-up"></i></button>
 
-        <!-- Logo ở giữa trang, trên thanh tìm kiếm -->
-        <img style="height:80px; width:80px; position: absolute; top: 120px; left: 49.5%; transform: translateX(-50%); z-index: 3; border:3px solid #fff; border-radius: 50%; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); transition: transform 0.3s ease;" 
+        <img style="height:85px; width:85px; position: absolute; top: 100px; left: 49.5%; transform: translateX(-50%); z-index: 3; border:3px solid #fff; border-radius: 50%; box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.8); transition: transform 0.3s ease;" 
                 src="{{ url_for('static', filename='image/LG.ico') }}" alt="Logo"
                 onmouseover="this.style.transform='translateX(-50%) scale(1.1)';"
                 onmouseout="this.style.transform='translateX(-50%) scale(1)';">
@@ -60,38 +54,35 @@
 
         <div class="container1">
 
-        <!--
-        <button class="filter-toggle" onclick="toggleFilterSidebar()">Search with Filter</button> -->
         <div class="filter-toggle" onclick="toggleFilterSidebar()">
             <p style="color:white"><u>Search with filter</u></p>
             <button class="bt-open"><i class="fa-solid fa-angle-left"></i></button>
         </div>
 
-        <!-- Thanh lọc bên phải -->
         <div id="filterSidebar" class="filter-sidebar">
             <h2 style="font-size:1.7rem; text-align:center; margin-top:0px; margin-bottom:15px; color:#007bff">Filters For Search</h2>
-            
+
             <div style="border: 1px solid #555; padding-left:10px; border-radius:5px">
-                <h3 style="margin:10px 0px 10px 0px">Rank
-                    <!-- <span style="font-size:1.2rem; font-weight:normal; text-shadow:none">(ICORE)</span> -->
-                </h3>
+                <h3 style="margin:10px 0px 10px 0px">Rank</h3>
                 <label class="custom-checkbox">
-                    <input type="checkbox" name="rank[]" value="A" onchange="applyFilter()"> A
-                    <span style="padding-left:10px; font-size: 14px; color: #333; font-weight:bold; text-shadow:none"> - Excellence in the field</span>
+                    <input type="checkbox" name="rank[]" value="A" onchange="handleCheckboxChange(this)"> A
+                    <span style="padding-left:10px; font-size: 13px; color: #333; font-weight:bold; text-shadow:none"> - Excellence in the field</span>
                 </label>
                 <label class="custom-checkbox">
-                    <input type="checkbox" name="rank[]" value="B" onchange="applyFilter()"> B
-                    <span style="padding-left:10px; font-size: 14px; color: #333; font-weight:bold; text-shadow:none"> - Good reputation in the field</span>
+                    <input type="checkbox" name="rank[]" value="B" onchange="handleCheckboxChange(this)"> B
+                    <span style="padding-left:10px; font-size: 13px; color: #333; font-weight:bold; text-shadow:none"> - Good reputation in the field</span>
                 </label>
                 <label class="custom-checkbox">
-                    <input type="checkbox" name="rank[]" value="C" onchange="applyFilter()"> C
-                    <span style="padding-left:10px; font-size: 14px; color: #333; font-weight:bold; text-shadow:none"> - Suitable for new research</span>
+                    <input type="checkbox" name="rank[]" value="C" onchange="handleCheckboxChange(this)"> C
+                    <span style="padding-left:10px; font-size: 13px; color: #333; font-weight:bold; text-shadow:none"> - Suitable for new research</span>
+                </label>
+                <label class="custom-checkbox">
+                    <input type="checkbox" name="rank[]" value="Not ranked" onchange="handleCheckboxChange(this)"> Not ranked
                 </label>
             </div>
-            
 
             <div style="margin-top:20px; margin-bottom:20px; border:1px solid #555; padding-left:10px; padding-right:10px; border-radius:5px">
-                <h3 style="margin:10px 0px 10px 0px">Topic</h3>
+                <h3 style="margin:10px 0px 10px 0px">Field</h3>
                 <select id="field" name="field" onchange="applyFilter()" style="width:100%; height:30px; margin:0px 10px 10px 0px; border-radius:5px">
                     <option value="" {% if selected_field is none %}selected{% endif %}>...</option>
                     <option value="Building" {% if selected_field == 'Building' %}selected{% endif %}>Building</option>
@@ -125,82 +116,76 @@
                 </select>
             </div>
 
-            <button class="cancel-button" onclick="handleCancelFilter()">Cancel Filter</button>
+            <button class="cancel-button" onclick="handleCancelFilter()" style="font-size:1rem">Cancel Filter</button>
         </div>
-        
+
         <script>
+            function handleCheckboxChange(selectedCheckbox) {
+                const checkboxes = document.querySelectorAll('input[name="rank[]"]');
+                checkboxes.forEach(checkbox => {
+                    if (checkbox !== selectedCheckbox) {
+                        checkbox.checked = false;
+                    }
+                });
+                applyFilter();
+            }
+
             function applyFilter() {
                 const ranks = Array.from(document.querySelectorAll('input[name="rank[]"]:checked')).map(input => input.value);
                 const selectedField = document.querySelector('select[name="field"]').value;
-        
-                // Áp dụng giá trị lọc cho cả hai form
+
                 document.getElementById('hiddenRanksTitle').value = ranks.join(',');
                 document.getElementById('hiddenFieldTitle').value = selectedField;
                 document.getElementById('hiddenRanksAbstract').value = ranks.join(',');
                 document.getElementById('hiddenFieldAbstract').value = selectedField;
             }
-        
-            // Gọi applyFilter khi nhấn submit
+
             document.getElementById('titleForm').onsubmit = applyFilter;
             document.getElementById('abstractForm').onsubmit = applyFilter;
 
-            // Hàm hủy bộ lọc và khôi phục tìm kiếm bình thường
             function cancelFilter() {
-                // Bỏ chọn tất cả checkbox
                 const checkboxes = document.querySelectorAll('input[name="rank[]"]');
                 checkboxes.forEach(checkbox => {
                     checkbox.checked = false;
                 });
 
-                // Đặt lại giá trị của select box
-                document.querySelector('select[name="field"]').selectedIndex = 0; // Giả sử tùy chọn đầu tiên là "..."
+                document.querySelector('select[name="field"]').selectedIndex = 0;
 
-                // Gọi hàm applyFilter để cập nhật giá trị ẩn
                 applyFilter();
-                
-                // Đóng thanh lọc
+
                 toggleFilterSidebar();
             }
 
             function handleCancelFilter() {
-                // Bỏ chọn tất cả checkbox
                 const checkboxes = document.querySelectorAll('input[name="rank[]"]');
                 checkboxes.forEach(checkbox => {
                     checkbox.checked = false;
                 });
-            
-                // Đặt lại giá trị của select box
                 document.querySelector('select[name="field"]').selectedIndex = 0; // Giả sử tùy chọn đầu tiên là "..."
-            
-                // Gọi hàm applyFilter để cập nhật giá trị ẩn
+
                 applyFilter();
-                
-                // Đóng thanh lọc
                 toggleFilterSidebar();
             }
-            
+
             function toggleFilterSidebar() {
                 const sidebar = document.getElementById("filterSidebar");
                 const filterToggle = document.querySelector(".filter-toggle");
                 sidebar.classList.toggle("active");
-                filterToggle.classList.toggle("hidden"); // Ẩn nút khi thanh lọc hiển thị
+                filterToggle.classList.toggle("hidden");
             }
         </script>
-        
-        
+
             <marquee behavior="scroll" direction="left" style="color: white; font-size: 17px; padding: 10px;">
-                Welcome to the Scientific Papers Conference Suggestions website
+                Welcome to the Scientific Paper Conference Recommendation System
             </marquee>
-        
-            <!-- Overlay làm mờ nền -->
+
             <div id="overlay"></div>
 
-            <!-- Hộp thông báo lỗi -->
             <div id="error-message-box">
                 <strong><p style="font-size:1.2rem; text-shadow:none; margin-top:5px">Please fill in both Title and Abstract before searching.</p></strong>
                 <button id="close-btn" onclick="closeErrorMessage()" style="font-size:1rem"><b>Close</b></button>
             </div>
-        
+
             <form id="titleForm" method="POST" action="/recommend">
                 <div class="search-container">
                     <input type="text" id="input1" name="title_input" placeholder="Enter the title of the article..." required>
@@ -211,8 +196,7 @@
                 <input type="hidden" id="hiddenRanksTitle" name="ranks">
                 <input type="hidden" id="hiddenFieldTitle" name="selected_field">
             </form>
-            
-            <!-- Form tìm kiếm theo abstract -->
+
             <form id="abstractForm" method="POST" action="/recommend_abstract" onsubmit="applyFilter()">
                 <div class="search-container2">
                     <textarea style="resize: none; font-family: Arial, sans-serif" id="input2" name="abstract_input" placeholder="Enter the abstract of the article..." required rows="4" cols="50"></textarea>
@@ -227,7 +211,7 @@
             <div class="search-container3">
                 <button type="button" class="search-button-both" title="Search with Title and Abstract" onclick="searchBoth()">
                     <i class="fa fa-search"></i>
-                    Search Both
+                    Search
                 </button>
             </div>
         </div>
@@ -238,24 +222,18 @@
                 const abstractInput = document.getElementById('input2').value.trim();
                 const overlay = document.getElementById('overlay');
                 const errorMessageBox = document.getElementById('error-message-box');
-            
-                // Kiểm tra xem cả hai ô input có dữ liệu hay không
+
                 if (titleInput === "" || abstractInput === "") {
-                    overlay.style.display = 'block'; // Hiển thị overlay làm mờ nền
-                    errorMessageBox.style.display = 'block'; // Hiển thị hộp thông báo lỗi
-            
-                    // Vô hiệu hóa cuộn trang
-                    document.body.style.overflow = 'hidden';
+                    overlay.style.display = 'block';
+                    errorMessageBox.style.display = 'block';
+
                 } else {
-                    overlay.style.display = 'none'; // Ẩn overlay nếu đủ dữ liệu
-                    errorMessageBox.style.display = 'none'; // Ẩn hộp thông báo lỗi nếu đủ dữ liệu
-            
-                    // Tạo form ẩn để gửi dữ liệu tìm kiếm
+                    overlay.style.display = 'none';
+                    errorMessageBox.style.display = 'none';
                     const form = document.createElement('form');
                     form.method = 'POST';
-                    form.action = '/recommend_both'; // URL cho tìm kiếm theo cả tiêu đề và abstract
-            
-                    // Truyền title_input, abstract_input, ranks và selected_field vào form ẩn
+                    form.action = '/recommend_both';
+
                     const inputTitle = document.createElement('input');
                     inputTitle.type = 'hidden';
                     inputTitle.name = 'title_input';
@@ -283,78 +261,104 @@
                     form.appendChild(inputField);
             
                     document.body.appendChild(form);
-                    form.submit(); // Gửi form
+                    form.submit();
                 }
-            }
-            
-            // Hàm đóng hộp thông báo lỗi
-            function closeErrorMessage() {
-                document.getElementById('overlay').style.display = 'none'; // Ẩn overlay
-                document.getElementById('error-message-box').style.display = 'none'; // Ẩn hộp thông báo
-        
-                // Khôi phục cuộn trang
-                document.body.style.overflow = 'auto';
             }
 
-            
-            // Hàm toggle để hiển thị/ẩn các bài báo và cuộn màn hình
-            function toggleArticles() {
-                const articlesList = document.getElementById('articlesList');
-                if (articlesList.style.display === "none" || articlesList.style.display === "") {
-                    articlesList.style.display = "block";
-                    document.getElementById('toggleArticles').innerHTML = '<i class="fa fa-chevron-up"></i>'; // Thay đổi biểu tượng thành mũi tên chỉ lên
-                    // Cuộn đến danh sách bài báo
-                    articlesList.scrollIntoView({ behavior: 'smooth' });
-                } else {
-                    articlesList.style.display = "none";
-                    document.getElementById('toggleArticles').innerHTML = '<i class="fa fa-chevron-down"></i>'; // Thay đổi biểu tượng thành mũi tên chỉ xuống
-                }
+            function closeErrorMessage() {
+                document.getElementById('overlay').style.display = 'none';
+                document.getElementById('error-message-box').style.display = 'none';
+                document.body.style.overflow = 'auto';
             }
         </script>
 
         <div>
             <button id="toggleArticles" class="toggle-button" onclick="toggleArticles()">
-                <i class="fa fa-chevron-down"></i> <!-- Biểu tượng mũi tên chỉ xuống -->
+                <i class="fa fa-chevron-down"></i>
             </button>
             <p id="toggleArticles" onclick="toggleArticles()" class="toggle">
                 <u>Some reference articles</u></p>
         </div>
     </div>
 
-    <div id="articlesList" style="display: none; padding:20px"> <!-- Ẩn danh sách bài báo ban đầu -->
-        <h2 style="margin-top:0px;padding-left:10px">Reference Articles</h2>
+    <div id="articlesList" style="display: none; padding: 20px;">
+        <h2 id="reference-articles" style="font-size:1.7rem; margin-top:0px; padding-left:30px">
+            Reference Articles <i class="fa-regular fa-newspaper" style="font-size:1.8rem"></i></h2>
         {% if articles %}
             <ul>
                 {% for article in articles %}
-                <li style="padding-top:5px;border:none">
-                    <strong>
-                        <a style="text-decoration: none;
-                                color: inherit;
-                                font-size: inherit;
-                                padding: 10px;
-                                margin-top: 10px;
-                                margin-bottom: 10px"
+                <li style="margin:10px 180px 20px 180px; padding:20px; border:none">
+                        <a style="font-size:1.2rem; text-decoration: none;  transform:none; color: inherit; font-size: inherit; padding: 10px 10px 10px 20px; margin-top: 10px; margin-bottom: 10px"
                             href="{{ url_for('find_conference', article_id=loop.index0) }}" title="Click to find suggested conferences">
-                            {{ article['Title'] }}</a>
-                    </strong><br>
-                    {# <em>Mã số: {{ article.get('ERAID', 'N/A') }}</em><br> #}
-                    {{ article['Abstract'] }}<br>
-                    <hr>
+                            <b style="font-size:1.2rem">{{ article['Title'] }}</b></a>
+                    <br>
+                    <p class="abstract-text" style="padding: 0px 30px 0px 30px; text-indent: 2em; text-align: justify;">
+                        {{ article['Abstract'] }}</p>
                 </li>
                 {% endfor %}
             </ul>
+
+            <div class="pagination">
+                {% if total_pages > 1 %}
+                    {% if page > 1 %}
+                        <a href="{{ url_for('index', page=page - 1) }}#articlesList"><i class="fa-solid fa-angle-left"></i></a>
+                    {% endif %}
+                    <a href="{{ url_for('index', page=1) }}#articlesList" class="{{ 'active' if page == 1 else '' }}">1</a>
+                    {% if page > 3 %}
+                        <span style="border:none">...</span>
+                    {% endif %}
+                    {% for p in range(page - 1, page + 2) %}
+                        {% if p > 1 and p < total_pages %}
+                            <a href="{{ url_for('index', page=p) }}#articlesList" class="{{ 'active' if page == p else '' }}">{{ p }}</a>
+                        {% endif %}
+                    {% endfor %}
+                    {% if page < total_pages - 2 %}
+                        <span style="border:none">...</span>
+                    {% endif %}
+                    <a href="{{ url_for('index', page=total_pages) }}#articlesList" class="{{ 'active' if page == total_pages else '' }}">{{ total_pages }}</a>
+                    {% if page < total_pages %}
+                        <a href="{{ url_for('index', page=page + 1) }}#articlesList"><i class="fa-solid fa-angle-right"></i></a>
+                    {% endif %}
+                {% endif %}
+            </div>
+    
         {% else %}
             <p>There are no articles to display!</p>
         {% endif %}
     </div>
+    
+    <script>
+        function toggleArticles() {
+            const articlesList = document.getElementById('articlesList');
+            if (articlesList.style.display === "none" || articlesList.style.display === "") {
+                articlesList.style.display = "block";
+                document.getElementById('toggleArticles').innerHTML = '<i class="fa fa-chevron-up"></i>';
+                articlesList.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                articlesList.style.display = "none";
+                document.getElementById('toggleArticles').innerHTML = '<i class="fa fa-chevron-down"></i>';
+            }
+        }
 
+        window.onload = function() {
+            const hash = window.location.hash;
+
+            if (hash === "#articlesList") {
+                const articlesList = document.getElementById('articlesList');
+                articlesList.style.display = "block";
+                const referenceArticles = document.getElementById('reference-articles');
+                referenceArticles.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    </script>
+
+    
     <footer>
         <div class="footer-content">
             <div class="footer-left">
                 <img style="height:70px; width:70px;" src="{{ url_for('static', filename='image/LG.ico') }}" alt="Logo">
             </div>
             <div class="footer-right">
-                <!-- Các liên kết mạng xã hội -->
                 <div class="socials" style="color:white">
                     <a href="https://www.facebook.com" style="margin-right: 15px;"><i class="fab fa-facebook"></i></a>
                     <a href="https://www.instagram.com"><i class="fab fa-instagram"></i></a>
@@ -371,8 +375,8 @@
         </div>
 
         <div class="footer-text" style="text-align: center; margin-top: 5px;">
-            <p style="color:#bebebe">GatherConf is powered by the research community. And it’s free, now and forever.</p>
-            <p style="color:#bebebe">&copy; 2024 Conference Suggestions. Designed by GatherConf Group. All rights reserved.</p>
+            <p style="color:#bebebe">BCORES is powered by the research community. And it’s free, now and forever.</p>
+            <p style="color:#bebebe">&copy; 2024 Conference Suggestions. Designed by GHD. All rights reserved.</p>
         </div>
     </footer>
 </body>

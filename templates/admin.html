@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='image/logo.png') }}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Admin - Manage</title>
+</head>
+
+<body class="admin">
+    <div class="background-image">
+        <div class="head">
+            <img style="height:70px; width:70px; position: absolute; left:10px; top:-5px" src="{{ url_for('static', filename='image/LG.ico') }}" alt="Logo">
+            <p class="brand">BCORES</p>
+            <a href="#" class="bt-head">Conference</a>
+            <a href="#" class="bt-head-main"><i style="font-size:1.5rem;" class="fa-solid fa-user-shield"></i></a>
+            <a href="/admin_article" class="bt-head2">Article</a>
+            <a href="/admin_setting" class="bt-setting" title="Setting"><i class="fa-solid fa-gear"></i></a>
+            <p class="bt-vertical">|</p>
+            <a href="/logout" class="bt-admin" title="Log out"><i class="fa-solid fa-right-from-bracket"></i></a>
+        </div>
+
+        <img src="{{ url_for('static', filename='image/anhnen10.jpg') }}" alt="Hình nền">
+
+        <div class="admin-container">
+            <div class="file-upload-container">
+                <h2 style="text-align:center; padding-top:-20px; padding-bottom:10px;
+                            border-bottom: 2px solid #007bff">Conference Data</h2>
+                <div class="toggle-buttons">
+                </div>
+
+                <div id="conference-upload" class="file-upload-section">
+                    <h4 style="padding-bottom:20px">Import Conference File</h4>
+                    <form id="conference-upload-form" method="POST" action="/import_conference" enctype="multipart/form-data">
+                        <label for="file" class="custom-file-upload">
+                            Select Conference File <i class="fa-solid fa-file-csv" style="font-size:1.2rem"></i>
+                        </label>
+                        <input id="file" type="file" name="file" accept=".csv" required style="display: none;" onchange="updateFileName()">
+                        <span id="file-name" style="font-size:1rem; border-bottom: 2px solid #888; padding: 6px"> No file selected</span>
+                        <button class="bt-upload" type="submit"><i class="fa fa-upload"></i> Upload file</button>
+                    </form>
+                    
+                    <div id="loading-overlay" style="display: none;"></div>
+                    <div id="loading-spinner" style="display: none;">
+                        <div class="spinner"></div>
+                        <p style="font-size:1.1rem; padding-top:10px">Importing file... Please wait</p>
+                    </div>
+                    
+                    <style>
+                        #loading-overlay {
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            background-color: rgba(0, 0, 0, 0.5); /* Màu đen mờ */
+                            display: none; /* Ẩn mặc định */
+                            z-index: 9998;
+                        }
+                    
+                        #loading-spinner {
+                            background-color: #ffffff;
+                            border: 3px solid #007bff;
+                            border-radius: 10px;
+                            padding: 20px 20px 0px 20px;
+                            position: fixed;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            justify-content: center;
+                            z-index: 9999;
+                        }
+                    
+                        .spinner {
+                            border: 6px solid #f3f3f3;
+                            border-top: 6px solid #3498db;
+                            border-radius: 50%;
+                            width: 50px;
+                            height: 50px;
+                            animation: spin 1s linear infinite;
+                        }
+                    
+                        @keyframes spin {
+                            0% {
+                                transform: rotate(0deg);
+                            }
+                            100% {
+                                transform: rotate(360deg);
+                            }
+                        }
+                    </style>
+                    
+                    <script>
+                        document.getElementById('conference-upload-form').onsubmit = function () {
+                            document.getElementById('loading-overlay').style.display = 'block';  // Hiển thị overlay
+                            document.getElementById('loading-spinner').style.display = 'flex';   // Hiển thị spinner
+                        };
+                    
+                        document.getElementById('file').onchange = function () {
+                            const fileInput = this;
+                            const fileNameDisplay = document.getElementById('file-name');
+                            const maxLength = 17;
+                    
+                            if (fileInput.files.length > 0) {
+                                let fileName = fileInput.files[0].name;
+                                if (fileName.length > maxLength) {
+                                    const extension = fileName.substring(fileName.lastIndexOf('.'));
+                                    const baseName = fileName.substring(0, maxLength - extension.length - 3);
+                                    fileName = baseName + '...' + extension;
+                                }
+                                fileNameDisplay.textContent = fileName;
+                            } else {
+                                fileNameDisplay.textContent = 'No file selected';
+                            }
+                        };
+                    
+                        function updateFileName() {
+                            const fileInput = document.getElementById('file');
+                            const fileNameDisplay = document.getElementById('file-name');
+                            const maxLength = 17;
+                        
+                            if (fileInput.files.length > 0) {
+                                let fileName = fileInput.files[0].name;
+                        
+                                if (fileName.length > maxLength) {
+                                    const extension = fileName.substring(fileName.lastIndexOf('.'));
+                                    const baseName = fileName.substring(0, maxLength - extension.length - 3); // -3 để thêm '...'
+                                    fileName = baseName + '...' + extension;
+                                }
+                        
+                                fileNameDisplay.textContent = fileName;
+                            } else {
+                                fileNameDisplay.textContent = 'No file selected';
+                            }
+                        }
+                    </script>
+                    
+                </div>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <div class="flash-messages">
+                            {% for category, message in messages %}
+                                <div class="flash-message {{ category }}">
+                                    <span>{{ message }}</span>
+                                    <br>
+                                    <button class="close-btn" onclick="closeFlashMessage()">OK</button>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+
+                <script>
+                    function closeFlashMessage() {
+                        document.querySelector('.flash-messages').style.display = 'none';
+                    }
+
+                    setTimeout(function() {
+                        document.querySelector('.flash-messages').style.display = 'none';
+                    }, 10000);
+                </script>
+
+                <div style="margin-top:5px; border-top:2px solid #007bff; padding-top:20px">
+                    <p><strong><i class="fa-solid fa-floppy-disk" style="font-size:1.5rem; color:#459fff; text-shadow:none"></i> File Size:</strong> {{ file_size_mb | round(2) }} MB</p> <!-- Sử dụng file_size_mb -->
+                    <p><strong><i class="fa-solid fa-file-lines" style="font-size:1.5rem; color:#459fff; text-shadow:none"></i> Number of Rows:</strong> {{ num_rows }}</p>
+                    <p><strong><i class="fa-solid fa-file-code" style="font-size:1.5rem; color:#459fff; text-shadow:none"></i> Number of Columns:</strong> {{ num_columns }}</p>
+                    <p><strong><i class="fa-regular fa-clock" style="font-size:1.3rem; color:#459fff; text-shadow:none"></i> Last Modified:</strong> {{ last_modified_date }}</p>
+                </div>
+            </div>
+
+            <div id="csvPreview" class="preview-section">
+                <div class="preview-title" style="font-size:1.1rem">Conference Data File Content</div>
+                <div class="table-responsive" style="max-height:500px; overflow:auto;">
+                    <table id="csvTable" class="table table-striped" style="max-height:500px;">
+                        <thead>
+                            <tr>
+                                {% for column in columns %}
+                                    <th>{{ column }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for conference in conferences %}
+                                <tr>
+                                    {% for column in columns %}
+                                        <td class="single-line">{{ conference[column] }}</td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="export-section" style="padding-left:148px">
+                    <a href="{{ url_for('export_conference') }}" class="btn btn-primary">Download Conference Data (.csv)</a>
+                </div>
+            </div>
+            
+            <style>
+                #csvTable tbody tr {
+                    height: 30px; /* Đặt chiều cao cố định cho các hàng */
+                }
+
+                #csvTable tbody td {
+                    max-height: 30px;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    vertical-align: middle;
+                    padding: 5px;
+                    max-width: 150px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            
+                #csvTable th, #csvTable td {
+                    max-width: 150px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+            
+                .table-responsive {
+                    overflow-y: auto;
+                }
+            </style>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#csvTable').DataTable();
+            $('#csvPreview').show();
+        });
+
+        function showCSVPreview(type) {
+            $('#csvPreview').show();
+            return false;
+        }
+
+        function closeCSV() {
+            $('#csvPreview').hide();
+        }
+
+        function showConference() {
+            document.getElementById('conference-upload').style.display = 'block';
+            document.getElementById('article-upload').style.display = 'none';
+            document.getElementById('toggle-conference').classList.add('active');
+            document.getElementById('toggle-article').classList.remove('active');
+        }
+
+        function showArticle() {
+            document.getElementById('conference-upload').style.display = 'none';
+            document.getElementById('article-upload').style.display = 'block';
+            document.getElementById('toggle-article').classList.add('active');
+            document.getElementById('toggle-conference').classList.remove('active');
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,4 @@
+title_with_title_vector:0.35
+title_with_description_vector:0.15
+abstract_with_title_vector:0.2
+abstract_with_description_vector:0.3
